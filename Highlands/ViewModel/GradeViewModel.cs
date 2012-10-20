@@ -2,6 +2,7 @@
 using Highlands.StaticModel;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Highlands.ViewModel
 {
@@ -131,6 +132,31 @@ namespace Highlands.ViewModel
             ChangeLog.LogDiff(change);
             ApprovalStage = newStage;
             
+        }
+
+        internal UserViewModel TeacherVm 
+        {
+            get
+            {
+                return new UserViewModel(Maintenance.Teachers.SingleOrDefault(t => t.Name == Teacher));
+            }
+        }
+
+        internal string ForMail()
+        {
+            return
+                "Student: " + _gradeRow.StudentRow.Name + Environment.NewLine +
+                "Course: " + Subject + Environment.NewLine +
+                "Quarter: " + Quarter + Environment.NewLine + 
+                "Stage: " + ApprovalStage + Environment.NewLine;
+        }
+
+        public string StudentName
+        {
+            get
+            {
+                return _gradeRow.StudentRow.Name;
+            }
         }
     }
 }

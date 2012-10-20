@@ -219,11 +219,13 @@ namespace Highlands.StaticModel
                                 role = RoleEnum.Nurse;
                             else if (parts[1].StartsWith("O"))
                                 role = RoleEnum.SuperUser;
-                            _users.Add(new User(name, role, null));
+                            _users.Add(new User(name, role, parts[1] + "@highlands.com" , null));
                         }
+                        
                         foreach (RoleEnum role in Enum.GetValues(typeof(RoleEnum)))
-                            _users.Add(new User(role.ToString(), role, null));
-                        _users.Add(new User("password", RoleEnum.SuperUser, User.Hash("password", "password")));
+                            _users.Add(new User(role.ToString(), role, role.ToString() + "@highlands.com", null));
+                        _users.Add(new User("password", RoleEnum.SuperUser, "password@highlands.com", User.Hash("password", "password")));
+                        
                         WriteArrayToFile("users", User.ComposeUserStrings(_users));
                     }
                 }

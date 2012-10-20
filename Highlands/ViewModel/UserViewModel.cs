@@ -52,7 +52,7 @@ namespace Highlands.ViewModel
             }
         }
 
-        public static UserViewModel CurrentUser 
+        public static UserViewModel CurrentUser
         {
             get
             {
@@ -69,6 +69,17 @@ namespace Highlands.ViewModel
                 return _user.Name;
             }
         }
+
+        public string EmailAddress
+        {
+            get
+            {
+                if (_user == null)
+                    return "-";
+                return _user.EmailAddress;
+            }
+        }
+
         public override string ToString()
         {
             return Name;

@@ -7,10 +7,26 @@ namespace Highlands
 {
     public class ViewUtils
     {
+        public static void Mail(string address, string subject, string body)
+        {
+            System.Diagnostics.Process.Start("mailto:" + address + "?subject=" + subject +"&body=" + EncodeForMail(body));
+        }
+        
+        private static string EncodeForMail(string str)
+        {
+            str = str.Replace("%", "%25");
+            str = str.Replace("+", "%2B");
+            str = str.Replace(Environment.NewLine, "%0A");
+            str = str.Replace("\n", "%0A");
+            str = str.Replace("\"", "'");
+            return str;
+        }
+        
         static string Filename(Control control)
         {
             return control.Name + ".cfg";
         }
+
         static public void ReadFromConfig(TextBox ent)
         {
             try

@@ -237,5 +237,13 @@ namespace Highlands
             dgvGrades.ItemsSource = Grades;
         }
 
+        private void btnEmail_Click(object sender, RoutedEventArgs e)
+        {
+            var context = (sender as Button).DataContext;
+            var grade = context as GradeViewModel;
+            var teacher = grade.TeacherVm;
+            ViewUtils.Mail(teacher.EmailAddress, "Highlands School Report for " + grade.StudentName, Environment.NewLine + Environment.NewLine + grade.ForMail());
+        }
+
      }
  }
