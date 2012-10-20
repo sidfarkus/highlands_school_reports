@@ -93,6 +93,9 @@
     <Compile Include="View\ClassesControl.xaml.cs">
       <DependentUpon>ClassesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\GradesControl.xaml.cs">
+      <DependentUpon>GradesControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\StudentsControl.xaml.cs">
       <DependentUpon>StudentsControl.xaml</DependentUpon>
     </Compile>
@@ -106,6 +109,10 @@
     <Compile Include="View\StudentWindow.xaml.cs">
       <DependentUpon>StudentWindow.xaml</DependentUpon>
     </Compile>
+    <Resource Include="Theme\WhistlerBlue.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Resource>
     <Page Include="View\AttendenceControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -115,6 +122,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\EditGrade.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\GradesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

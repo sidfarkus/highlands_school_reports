@@ -20,13 +20,13 @@
                     <h:ClassesControl />
                 </TabItem>
                 <TabItem Header="Grades">
-                    
+                    <h:GradesControl />
                 </TabItem>
-                <TabItem Header="Attendees">
+                <TabItem Header="Attendence">
                     <h:AttendeesControl />
                 </TabItem>
                 <TabItem Header="Students">
-                    <h:StudentsControl />
+                    <h:StudentsControl/>
                 </TabItem>
             </TabControl>
         </Grid>
