@@ -19,9 +19,7 @@
                 <TabItem Header="Classes">
                     <h:ClassesControl x:Name="ctrlClasses"/>
                 </TabItem>
-                <TabItem Header="Grades">
-                    <h:GradesControl />
-                </TabItem>
+  
                 <TabItem Header="Attendence">
                     <h:AttendeesControl />
                 </TabItem>

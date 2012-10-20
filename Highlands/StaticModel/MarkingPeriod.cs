@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Highlands.StaticModel
 {
-    public class MarkingPeriodKey
+    public class MarkingPeriodKey : IEquatable<MarkingPeriodKey>
     {
         public int Quarter { get; set; }
         public int EndingSchoolYear { get; set; }
@@ -89,6 +89,16 @@ namespace Highlands.StaticModel
             return (EndingSchoolYear - 1) + @"/" + (EndingSchoolYear - 2000) + "-Q" + Quarter;
 
         }
+
+        #region IEquatable<MarkingPeriodKey> Members
+
+        public bool Equals(MarkingPeriodKey other)
+        {
+            return ToString().Equals(other.ToString());
+            throw new NotImplementedException();
+        }
+
+        #endregion
     }
     public class MarkingPeriod
     {
@@ -173,9 +183,9 @@ namespace Highlands.StaticModel
 
         #region IEquatable<MarkingPeriod> Members
 
-        public bool Equals(MarkingPeriodKey otherKey)
+        public bool Equals(MarkingPeriod other)
         {
-            return Key.ToString().Equals(otherKey.ToString());
+            return Key.Equals(other.Key);
         }
 
         #endregion
