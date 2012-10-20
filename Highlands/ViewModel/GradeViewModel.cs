@@ -91,8 +91,8 @@ namespace Highlands.ViewModel
             var change = new Change(this, "Approval", false.ToString(), true.ToString());
             ChangeLog.LogDiffs(new List<Change>() { change });
             ApprovalStage = (ApprovalStage) ((int)ApprovalStage + 1);
-            if (UserViewModel.CurrentUser.HasClassroomRights && ApprovalStage == Model.ApprovalStage.Instructor)
-                ApprovalStage = Model.ApprovalStage.Classroom;
+            if (UserViewModel.CurrentUser.HasClassroomRights && ApprovalStage == ApprovalStage.Instructor)
+                ApprovalStage = ApprovalStage.Classroom;
         }
 
         public override string ToString()

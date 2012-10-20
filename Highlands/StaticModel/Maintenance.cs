@@ -245,4 +245,13 @@ namespace Highlands.StaticModel
             return gradeLevel.Substring(0, 1);
         }
     }
+
+    public enum ApprovalStage
+    {
+        None,
+        Open,
+        Instructor,
+        Classroom,
+        Office
+    }
 }
