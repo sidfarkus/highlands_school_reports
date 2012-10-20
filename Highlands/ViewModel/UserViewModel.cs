@@ -198,6 +198,20 @@ namespace Highlands.ViewModel
                 return true;
             return false;
         }
+
+        internal RightsEnum CanUnApprove(GradeViewModel grade)
+        {
+            if (grade.ApprovalStage == ApprovalStage.Office)
+                return RightsEnum.StageError;
+            if (grade.ApprovalStage == ApprovalStage.None || grade.ApprovalStage == ApprovalStage.Open)
+                return RightsEnum.StageError;
+            if (grade.ApprovalStage == ApprovalStage.Classroom && HasOfficeRights)
+                return RightsEnum.Success;
+            if (grade.ApprovalStage == ApprovalStage.Instructor && HasClassroomRights)
+                return RightsEnum.Success;
+
+            return RightsEnum.UserError;
+        }
     }
     public enum RightsEnum
     {

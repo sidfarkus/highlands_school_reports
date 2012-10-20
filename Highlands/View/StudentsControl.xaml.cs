@@ -101,6 +101,8 @@ namespace Highlands
         private void lst_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var student = lst.SelectedItem as StudentViewModel;
+            if (student == null)
+                return;
             var studentWindow = new StudentWindow(student);
             studentWindow.ShowDialog();
         }

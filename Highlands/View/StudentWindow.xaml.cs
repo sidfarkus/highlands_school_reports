@@ -19,6 +19,7 @@ namespace Highlands
         public StudentWindow(StudentViewModel student)
         {
             InitializeComponent();
+           
             _student = student;
 
             Title = _student.Name;
@@ -214,6 +215,26 @@ namespace Highlands
             {
                 _student.CreateReportCard(dialog.FileName);
             }
+        }
+
+        private void btnUnApprove_Click(object sender, RoutedEventArgs e)
+        {
+            var context = (sender as Button).DataContext;
+            var grade = context as GradeViewModel;
+            var result = UserViewModel.CurrentUser.CanUnApprove(grade);
+            if (RightsEnum.Success != result)
+            {
+                if (RightsEnum.GradeError == result)
+                    MessageBox.Show("Grade is not ready to be approved/locked.");
+                else
+                    MessageBox.Show("User can not approve/lock this grade.");
+                return;
+            }
+            if (MessageBoxResult.Yes != MessageBox.Show("Are you sure you want to lock " + grade + "?", "Approval", MessageBoxButton.YesNo))
+                return;
+
+            grade.UnApprove();
+            dgvGrades.ItemsSource = Grades;
         }
 
      }

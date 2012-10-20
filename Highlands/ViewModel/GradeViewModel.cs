@@ -12,6 +12,7 @@ namespace Highlands.ViewModel
         {
             _gradeRow = gradeRow;
         }
+
         public string Subject
         {
             get
@@ -88,11 +89,13 @@ namespace Highlands.ViewModel
 
         internal void Approve()
         {
-            var change = new Change(this, "Approval", false.ToString(), true.ToString());
-            ChangeLog.LogDiffs(new List<Change>() { change });
-            ApprovalStage = (ApprovalStage) ((int)ApprovalStage + 1);
-            if (UserViewModel.CurrentUser.HasClassroomRights && ApprovalStage == ApprovalStage.Instructor)
-                ApprovalStage = ApprovalStage.Classroom;
+            var oldStage = ApprovalStage;
+            var newStage = (ApprovalStage)((int)ApprovalStage + 1);
+            if (UserViewModel.CurrentUser.HasClassroomRights && newStage == ApprovalStage.Instructor)
+                newStage = ApprovalStage.Classroom;
+            var change = new Change(this, "Approval", oldStage.ToString(), newStage.ToString());
+            ChangeLog.LogDiff(change);
+            ApprovalStage = newStage; 
         }
 
         public override string ToString()
@@ -112,12 +115,22 @@ namespace Highlands.ViewModel
             }
         }
 
-        public bool IsReadyToApprove
+        internal bool IsReadyToApprove
         {
             get
             {
                 return !string.IsNullOrWhiteSpace(LetterGrade) || !string.IsNullOrWhiteSpace(Comment); 
             }
+        }
+
+        internal void UnApprove()
+        {
+            var oldStage = ApprovalStage;
+            var newStage = (ApprovalStage)((int)ApprovalStage - 1);
+            var change = new Change(this, "Unapproval", oldStage.ToString(), newStage.ToString());
+            ChangeLog.LogDiff(change);
+            ApprovalStage = newStage;
+            
         }
     }
 }
