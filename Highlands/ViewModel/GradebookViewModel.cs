@@ -42,7 +42,10 @@ namespace Highlands.ViewModel
         {
             var gradebook = Gradebook.Read();
             if (gradebook == null)
+            {
                 gradebook = DemoFactory.CreateDemo();
+                gradebook.Save();
+            }
             return new GradebookViewModel(gradebook);
         }
 

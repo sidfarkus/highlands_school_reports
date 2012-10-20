@@ -77,6 +77,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\book.cs" />
     <Compile Include="Model\ChangeLog.cs" />
     <Compile Include="StaticModel\User.cs" />
     <Compile Include="StaticModel\Maintenance.cs" />

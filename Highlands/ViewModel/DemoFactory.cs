@@ -49,7 +49,7 @@ namespace Highlands.ViewModel
                     gradeLevel = Maintenance.GradeLevelShorts.Last();
                 }
 
-                var student = rv.Student.AddStudentRow("STU" + i.ToString("0000"), name, dob, i + " Fake St, Bel Air, MD 22222", gradeLevel, enrolled, DateTime.MaxValue);
+                var student = rv.Student.AddStudentRow("STU" + i.ToString("0000"), name, dob, i + " Fake St", "Bel Air, MD 22222", gradeLevel, enrolled, DateTime.MaxValue);
 
 
                 foreach (var course in rv.Course.OrderByDescending(c => c.Quarter))

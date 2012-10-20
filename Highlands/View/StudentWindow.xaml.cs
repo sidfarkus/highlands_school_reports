@@ -51,7 +51,7 @@ namespace Highlands
 
             entName.Text = _student.Name;
             dtpDob.SelectedDate = _student.DOB;
-            entAddress.Text = _student.Address;
+            entAddress.Text = _student.AddressLine1 + "," + student.AddressLine2;
             dtpEnrolled.SelectedDate = _student.DateEnrolled;
             if (_student.DateWithdrawn.HasValue)
                 dtpWithdrawn.SelectedDate = _student.DateWithdrawn.Value;
