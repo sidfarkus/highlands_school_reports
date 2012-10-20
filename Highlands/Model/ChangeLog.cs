@@ -21,5 +21,9 @@ namespace Highlands.Model
             File.AppendAllText("diff.log", line + Environment.NewLine);
         }
 
+        internal static void LogDiff(Change change)
+        {
+            LogDiffs(new List<Change>() { change });
+        }
     }
 }

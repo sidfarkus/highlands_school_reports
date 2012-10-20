@@ -26,10 +26,40 @@ namespace Highlands
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            var teacher = cmbUserName.Text;
-            if (!UserViewModel.ValidateTeacher(teacher, entPassword.Password))
+            var user = cmbUserName.Text;
+            UserViewModel.ValidationEnum result;
+            if (entConfirmPassword.Visibility == System.Windows.Visibility.Visible)
+                result = UserViewModel.SetPassword(user, entPassword.Password, entConfirmPassword.Password);
+            else
+                result = UserViewModel.ValidateTeacher(user, entPassword.Password);
+
+            if (result == UserViewModel.ValidationEnum.FailedUserNotFound)
             {
-                MessageBox.Show("User " + teacher + " could not be validated! Contact your adminstrator.");
+                MessageBox.Show("User " + user + " not found! Contact your adminstrator.");
+                return;
+            }
+            else if (result == UserViewModel.ValidationEnum.FailedPassword)
+            {
+                MessageBox.Show("Password invalid! Contact your adminstrator.");
+                return;
+            }
+            else if (result == UserViewModel.ValidationEnum.PasswordChanged)
+            {
+                MessageBox.Show("Password changed!");
+            }
+            else if (result == UserViewModel.ValidationEnum.PasswordsDoNotMatch)
+            {
+                MessageBox.Show("Passwords do not match! Retry.");
+            }
+            else if (result == UserViewModel.ValidationEnum.PasswordRequired)
+            {
+                MessageBox.Show("Empty passwords are not allowed.");
+            }
+            else if (result == UserViewModel.ValidationEnum.RequirePasswordReset)
+            {
+                MessageBox.Show("Password reset required!");
+                entConfirmPassword.Visibility = Visibility.Visible;
+                staConfirmPassword.Visibility = Visibility.Visible;
                 return;
             }
 

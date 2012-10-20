@@ -219,16 +219,22 @@ namespace Highlands.StaticModel
                                 role = RoleEnum.Nurse;
                             else if (parts[1].StartsWith("O"))
                                 role = RoleEnum.SuperUser;
-                            _users.Add(new User(name, role));
+                            _users.Add(new User(name, role, null));
                         }
                         foreach (RoleEnum role in Enum.GetValues(typeof(RoleEnum)))
-                            _users.Add(new User(role.ToString(), role));
+                            _users.Add(new User(role.ToString(), role, null));
+                        _users.Add(new User("password", RoleEnum.SuperUser, User.Hash("password", "password")));
                         WriteArrayToFile("users", User.ComposeUserStrings(_users));
                     }
                 }
                 return _users;
             }
         }
+        static public void SaveUsers()
+        {
+            WriteArrayToFile("users", User.ComposeUserStrings(_users));
+        }
+
 
         internal static string GradeLevelNumber(string gradeLevel)
         {

@@ -7,9 +7,10 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="75"/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Image Margin="10" Source="/Highlands;component/Images/Highlands.PNG" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
@@ -21,6 +22,8 @@
         <ComboBox Name="cmbUserName" Grid.Row="1" Grid.Column="1" IsEditable="True" Margin="3" />
         <Label VerticalAlignment="Center" Content="Password:" Grid.Row="2"/>
         <PasswordBox x:Name="entPassword" Grid.Row="2" Grid.Column="1" Margin="3" />
-       <Button Click="btnLogin_Click" Grid.Row="3" Grid.ColumnSpan="2" Margin="5" Width="80" HorizontalAlignment="Right">Login</Button>
+        <Label  x:Name="staConfirmPassword" VerticalAlignment="Center" Content="Confirm Password:" Grid.Row="3"  Visibility="Collapsed"/>
+        <PasswordBox x:Name="entConfirmPassword" Grid.Row="3" Grid.Column="1" Margin="3" Visibility="Collapsed" />
+        <Button Click="btnLogin_Click" Grid.Row="4" Grid.ColumnSpan="2" Margin="5" Width="80" HorizontalAlignment="Right">Login</Button>
     </Grid>
 </UserControl>
