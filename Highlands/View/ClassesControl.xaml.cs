@@ -1,4 +1,5 @@
-﻿using Highlands.ViewModel;
+﻿using Highlands.StaticModel;
+using Highlands.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -38,10 +39,8 @@ namespace Highlands
         {
             var rv = new Grades();
             var courses = _gradebook.Courses;
-            if (UserViewModel.CurrentUser != null)
-            {
-                courses = courses.Where(c => c.Teacher == UserViewModel.CurrentUser.Name);
-            }
+            courses = courses.Where(c => c.Teacher == UserViewModel.CurrentUser.Name);
+            courses = courses.Where(c => c.Quarter == MarkingPeriodKey.Current.ToString());
 
             foreach (var course in courses)
             {
@@ -90,7 +89,7 @@ namespace Highlands
             {
                 get
                 {
-                    return _grade.Subject + " " + _grade.Level + " " + _grade.Quarter + " " + _grade.Group;
+                    return _grade.Subject + " " + _grade.Level + " " + _grade.Group + " " + _grade.Quarter;
                 }
             }
             public string LetterGrade

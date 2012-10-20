@@ -48,7 +48,7 @@ namespace Highlands
             dgvSelfDevelopment.ItemsSource = SDScores;
 
             MarkingPeriod.MarkingPeriods.ForEach(o => cmbMarkingPeriod.Items.Add(o));
-            cmbMarkingPeriod.Text = MarkingPeriod.Current.ToString();
+            cmbMarkingPeriod.Text = MarkingPeriodKey.Current.ToString();
             
             //dgv.Items.Add(new List<string>() { "A", "B", "c" });
         }
@@ -119,8 +119,8 @@ namespace Highlands
             }
             if (_range == ShowRange.ThisQuarter)
             {
-                subsetGrades = subsetGrades.Where(g => g.Quarter == MarkingPeriod.Current.ToString());
-                subsetSDScores = subsetSDScores.Where(g => g.Quarter == MarkingPeriod.Current.ToString());
+                subsetGrades = subsetGrades.Where(g => g.Quarter == MarkingPeriodKey.Current.ToString());
+                subsetSDScores = subsetSDScores.Where(g => g.Quarter == MarkingPeriodKey.Current.ToString());
             }
             else if (_range == ShowRange.ThisYear)
             {

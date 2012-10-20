@@ -65,6 +65,11 @@ namespace Highlands.StaticModel
             }
         }
 
+        static public int GetSubjectIndex(string subject)
+        {
+            return Subjects.IndexOf(subject);
+        }
+
         static IList<string> _selfDevelopmentAreas;
         static public IList<string> SelfDevelopmentAreas
         {
@@ -141,12 +146,12 @@ namespace Highlands.StaticModel
 
         #region Private Methods
 
-        private static void WriteArrayToFile(string table, IList<string> array)
+        internal static void WriteArrayToFile(string table, IList<string> array)
         {
             System.IO.File.WriteAllLines(table + ".txt", array);
         }
 
-        private static IList<string> ReadArrayFromFile(string table)
+        internal static IList<string> ReadArrayFromFile(string table)
         {
 
             try
@@ -161,6 +166,24 @@ namespace Highlands.StaticModel
                 return null;
             }
         }
+
+        internal static void WriteToFile(string key, string value)
+        {
+            System.IO.File.WriteAllText(key + ".txt", value);
+        }
+
+        internal static string ReadFromFile(string key)
+        {
+            try
+            {
+                return System.IO.File.ReadAllText(key + ".txt");
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         #endregion
 
         static IList<string> _groups;
@@ -210,7 +233,7 @@ namespace Highlands.StaticModel
                             if (parts[1].StartsWith("J"))
                                 role = RoleEnum.ClassroomInstructor;
                             else if (parts[1].StartsWith("K"))
-                                role = RoleEnum.NonSpecialInstructor;
+                                role = RoleEnum.SmallGroupInstructor;
                             else if (parts[1].StartsWith("L"))
                                 role = RoleEnum.SpecialInstructor;
                             else if (parts[1].StartsWith("M"))

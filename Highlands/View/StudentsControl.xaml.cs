@@ -30,13 +30,13 @@ namespace Highlands
             LoadGradebook();
         }
 
-        private void FillCourses(MarkingPeriod mp, string gradeLevel)
+        private void FillCourses(MarkingPeriodKey mpk, string gradeLevel)
         {
             cmbCourse.Items.Clear();
             cmbCourse.Items.Add("All");
             var courses = Gradebook.Courses;
-            if (mp != null)
-                courses = courses.Where(c => c.Quarter == mp.ToString());
+            if (mpk != null)
+                courses = courses.Where(c => c.Quarter == mpk.ToString());
             //if (gradeLevel != "All")
             //    courses = courses.Where(c => c.Level == gradeLevel);
             if (chkMyStudents.IsChecked == true)
@@ -82,13 +82,13 @@ namespace Highlands
             chkMyStudents.IsEnabled = UserViewModel.CurrentUser.HasStudents;
             btnGradeAll.IsEnabled = UserViewModel.CurrentUser.HasStudents;
 
-            MarkingPeriod.MarkingPeriods.OrderByDescending(q => q.ApproximateEndDate).ToList().ForEach(q => cmbQuarter.Items.Add(q));
+            MarkingPeriod.MarkingPeriods.OrderByDescending(q => q.EndDate).ToList().ForEach(q => cmbQuarter.Items.Add(q));
             cmbQuarter.Text = cmbQuarter.Items[1].ToString();
 
             Maintenance.GradeLevelShorts.ToList().ForEach(g => cmbGradeLevel.Items.Add(g));
             cmbGradeLevel.Text = cmbGradeLevel.Items[0].ToString();
 
-            FillCourses(MarkingPeriod.Current, cmbGradeLevel.Text);
+            FillCourses(MarkingPeriodKey.Current, cmbGradeLevel.Text);
             FillStudents(entStudent.Text, cmbQuarter.SelectedItem as MarkingPeriod, cmbGradeLevel.Text, cmbCourse.SelectedItem as CourseViewModel);
         }
 
@@ -119,7 +119,7 @@ namespace Highlands
 
         private void cmbQuarter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            FillCourses((e.AddedItems[0] as MarkingPeriod), cmbGradeLevel.Text);
+            FillCourses((e.AddedItems[0] as MarkingPeriodKey), cmbGradeLevel.Text);
             FillStudents(entStudent.Text, cmbQuarter.SelectedItem as MarkingPeriod, cmbGradeLevel.Text, cmbCourse.SelectedItem as CourseViewModel);
         }
 
@@ -131,7 +131,7 @@ namespace Highlands
         private void cmbGradeLevel_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var gradeLevel = e.AddedItems[0] as string;
-            FillCourses(cmbQuarter.SelectedItem as MarkingPeriod, gradeLevel);
+            FillCourses(cmbQuarter.SelectedItem as MarkingPeriodKey, gradeLevel);
             FillStudents(entStudent.Text, cmbQuarter.SelectedItem as MarkingPeriod, gradeLevel, cmbCourse.SelectedItem as CourseViewModel);
 
         }

@@ -54,7 +54,7 @@ namespace Highlands.ViewModel
         {
             return (subject == "Art" || subject == "Music" || subject == "Health and Fitness");
         }
-        internal static bool NonSpecialCourse(string subject)
+        internal static bool SmallGroupCourse(string subject)
         {
             return (subject == "Reading" || subject == "Phonics/Spelling" || subject == "Written Expression" || subject == "Math");
         }

@@ -33,7 +33,7 @@ namespace Highlands.Model
             internal bool HasTeacher(string teacher)
             {
                 // TODO pass in marking period
-                return GetGradeRows().Any(c => c.CourseRow.Quarter == MarkingPeriod.Current.ToString() && c.CourseRow.Teacher == teacher);
+                return GetGradeRows().Any(c => c.CourseRow.Quarter == MarkingPeriodKey.Current.ToString() && c.CourseRow.Teacher == teacher);
             }
 
             internal bool HasCourse(CourseRow courseRow, MarkingPeriod mp)
@@ -50,7 +50,7 @@ namespace Highlands.Model
                 DateTime? withdrawn = null;
                 if (!IsDateWithdrawnNull())
                     withdrawn = DateWithdrawn;
-                return (enrolled < mp.ApproximateEndDate && (withdrawn == null || withdrawn > mp.ApproximateEndDate));
+                return (enrolled < mp.EndDate && (withdrawn == null || withdrawn > mp.EndDate));
             }
         }
 

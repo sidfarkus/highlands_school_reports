@@ -64,6 +64,8 @@ namespace Highlands
             }
 
             ViewUtils.WriteToConfig(cmbUserName);
+            entConfirmPassword.Visibility = System.Windows.Visibility.Hidden;
+            staConfirmPassword.Visibility = System.Windows.Visibility.Hidden;
             LoggedIn(this, new EventArgs());
         }
     }
