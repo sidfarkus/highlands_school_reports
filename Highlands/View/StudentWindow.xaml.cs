@@ -209,7 +209,14 @@ namespace Highlands
             var result = dialog.ShowDialog();
             if (result.HasValue && result.Value)
             {
-                _student.CreateReportCard(dialog.FileName);
+                try
+                {
+                    _student.CreateReportCard(dialog.FileName, MarkingPeriod.Current);
+                }
+                catch (System.IO.IOException)
+                {
+                    MessageBox.Show("Error writing the report card! Check to ensure you have permission to write to this folder and that the file is not currently in use.");
+                }
             }
         }
 

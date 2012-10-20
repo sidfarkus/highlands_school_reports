@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Highlands.StaticModel
 {
-    class MarkingPeriod : IEquatable<MarkingPeriod>
+    public class MarkingPeriod : IEquatable<MarkingPeriod>
     {
         static List<MarkingPeriod> _markingPeriods;
         static public MarkingPeriod Current
@@ -57,6 +57,16 @@ namespace Highlands.StaticModel
                     return new DateTime(EndingSchoolYear, 4, 1);
                 else //if (Quarter == 4)
                     return new DateTime(EndingSchoolYear, 6, 12);
+            }
+        }
+        public Tuple<int, int> SchoolYear
+        {
+            get
+            {
+                if (Quarter == 1 || Quarter == 2)
+                    return new Tuple<int, int>(EndingSchoolYear, EndingSchoolYear + 1);
+                else
+                    return new Tuple<int, int>(EndingSchoolYear - 1, EndingSchoolYear);
             }
         }
         public int EndingSchoolYear { get; private set; }

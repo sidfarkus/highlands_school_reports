@@ -14,7 +14,7 @@ namespace Highlands.ViewModel
         Gradebook.StudentRow _studentRow;
         public StudentViewModel(Gradebook.StudentRow studentRow)
         {
-            _studentRow = studentRow;  
+            _studentRow = studentRow;
         }
 
         [PDFOutputField("CommentRow1")]
@@ -43,7 +43,7 @@ namespace Highlands.ViewModel
             }
         }
 
-        public DateTime DateEnrolled 
+        public DateTime DateEnrolled
         {
             get
             {
@@ -122,14 +122,32 @@ namespace Highlands.ViewModel
             return _studentRow.HasCourse(course.CourseRow, mp);
         }
 
-        public void CreateReportCard(string outFilename)
+        public void CreateReportCard(string outFilename, MarkingPeriod period)
         {
-            var outputProperties = typeof(StudentViewModel).GetProperties()
+            var currentSubjects = Grades.GroupBy(g => g.Subject)
+                .Where(subject => subject.Any(subGrade => subGrade.IsCurrentForPeriod(period)))
+                .OrderBy(subject => subject.Key);
+            var gradeReportFields = currentSubjects.Select((subject, i) => {
+                var thisYearsGrades = subject.Where(subGrade => subGrade.ShouldShowOnReportCard(period))
+                    .Select(subGrade => subGrade.GetGradeReportFields(period, i));
+                return thisYearsGrades.SelectMany(x => x);
+            }).SelectMany(x => x);
+            var outputProperties = gradeReportFields;
+
+            PDFWriter.WritePDF(outFilename, outputProperties.ToDictionary(p => p.Key, p => p.Value));
+        }
+
+        private IEnumerable<KeyValuePair<string, string>> GetPDFFields<T>(T obj)
+        {
+            var outputProperties = typeof(T).GetProperties()
                 .Where(p => p.CanRead && p.GetCustomAttributes(typeof(PDFOutputFieldAttribute), false).Any());
-            
-            PDFWriter.WritePDF(outFilename, outputProperties.ToDictionary(
-                p => p.GetCustomAttributes(typeof(PDFOutputFieldAttribute), false).Cast<PDFOutputFieldAttribute>().First().FieldName,
-                p => p.GetValue(this).ToString()));
+
+            foreach (var prop in outputProperties)
+            {
+                yield return new KeyValuePair<string, string>(
+                    prop.GetCustomAttributes(typeof(PDFOutputFieldAttribute), false).Cast<PDFOutputFieldAttribute>().First().FieldName,
+                    prop.GetValue(obj).ToString());
+            }
         }
 
         public override string ToString()
