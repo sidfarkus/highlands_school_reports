@@ -8,9 +8,9 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition  Height="Auto"/>
             <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
+            <RowDefinition  Height="Auto"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal">
             <Label>Student:</Label>

@@ -21,7 +21,7 @@ namespace Highlands.StaticModel
                     _letterGrades = ReadArrayFromFile("letterGrades");
                     if (_letterGrades == null)
                     {
-                        _letterGrades = new List<string>() { "A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "F" };
+                        _letterGrades = new List<string>() { "A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D", "E", "-", "S", "N" };
                         WriteArrayToFile("letterGrades", _letterGrades);
                     }
                 }
