@@ -55,6 +55,9 @@
     <ApplicationIcon>Images\main.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="iTextSharp">
+      <HintPath>..\packages\iTextSharp-LGPL.4.1.6\lib\iTextSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -78,6 +81,7 @@
     <Compile Include="StaticModel\User.cs" />
     <Compile Include="StaticModel\Maintenance.cs" />
     <Compile Include="StaticModel\MarkingPeriod.cs" />
+    <Compile Include="Utils\PDFWriter.cs" />
     <Compile Include="Utils\Utils.cs" />
     <Compile Include="StaticModel\Change.cs" />
     <Compile Include="ViewModel\CourseViewModel.cs" />
@@ -192,11 +196,15 @@
     <None Include="Model\Gradebook.xss">
       <DependentUpon>Gradebook.xsd</DependentUpon>
     </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <None Include="Report Card Template.pdf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

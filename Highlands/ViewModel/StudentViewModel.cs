@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Highlands.Utils;
 
 namespace Highlands.ViewModel
 {
@@ -15,6 +16,8 @@ namespace Highlands.ViewModel
         {
             _studentRow = studentRow;  
         }
+
+        [PDFOutputField("CommentRow1")]
         public string Name
         {
             get
@@ -117,6 +120,16 @@ namespace Highlands.ViewModel
         internal bool HasCourse(CourseViewModel course, StaticModel.MarkingPeriod mp)
         {
             return _studentRow.HasCourse(course.CourseRow, mp);
+        }
+
+        public void CreateReportCard(string outFilename)
+        {
+            var outputProperties = typeof(StudentViewModel).GetProperties()
+                .Where(p => p.CanRead && p.GetCustomAttributes(typeof(PDFOutputFieldAttribute), false).Any());
+            
+            PDFWriter.WritePDF(outFilename, outputProperties.ToDictionary(
+                p => p.GetCustomAttributes(typeof(PDFOutputFieldAttribute), false).Cast<PDFOutputFieldAttribute>().First().FieldName,
+                p => p.GetValue(this).ToString()));
         }
 
         public override string ToString()

@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Student Details" Height="427" Width="830" Icon="/Highlands;component/Images/main.ico">
     <StackPanel>
- 
+        <Button Click="OnGenerateReportCard" Margin="2">Generate Report Card</Button>
         <TabControl>
             <TabItem Header="Grades">
                 <Grid>

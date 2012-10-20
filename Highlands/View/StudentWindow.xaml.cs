@@ -199,5 +199,19 @@ namespace Highlands
             dgvGrades.ItemsSource = Grades;
         }
 
+        private void OnGenerateReportCard(object sender, RoutedEventArgs e)
+        {
+            var dialog = new Microsoft.Win32.SaveFileDialog()
+            {
+                AddExtension = true,
+                Filter = "PDF Files (*.pdf)|*.pdf"
+            };
+            var result = dialog.ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+                _student.CreateReportCard(dialog.FileName);
+            }
+        }
+
      }
  }
