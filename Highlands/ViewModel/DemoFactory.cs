@@ -59,21 +59,33 @@ namespace Highlands.ViewModel
 
                     if (course.Level == Maintenance.GradeLevelNumber(AddGradeLevel(student.GradeLevel, 0 - diffYears)))
                     {
-                        if (mp == MarkingPeriod.Current)
-                            rv.Grade.AddGradeRow(student, course, string.Empty, string.Empty, string.Empty, false);
+
+                        if (mp.Equals(MarkingPeriod.Current) && _rnd.Next(0, 2) == 0)
+                        {
+                            rv.Grade.AddGradeRow(student, course, string.Empty, string.Empty, string.Empty, ApprovalStage.Open.ToString());
+                        }
                         else
                         {
+                            var stage = ApprovalStage.Office;
+                            if (mp.Equals(MarkingPeriod.Current))
+                            {
+                                if (_rnd.Next(0, 2) == 0)
+                                    stage = ApprovalStage.Instructor;
+                                else
+                                    stage = ApprovalStage.Classroom;
+                            }
+
                             var specialGrade = string.Empty;
                             if (CourseViewModel.HasSpecialGrade(course.SubjectName))
                             {
                                 if (course.SubjectName == "Reading")
                                     specialGrade = (int.Parse(course.Level) + _rnd.Next(0, 5)).ToString() + "-" + _rnd.Next(1, 10);
                                 else if (course.SubjectName == "Math")
-                                    specialGrade = (int.Parse(course.Level) + _rnd.Next(0,5)).ToString() + "(" + _rnd.Next(1, 2).ToString() + ")";
+                                    specialGrade = (int.Parse(course.Level) + _rnd.Next(0, 5)).ToString() + "(" + _rnd.Next(1, 2).ToString() + ")";
                                 else if (course.SubjectName == "Written Expression")
                                     specialGrade = "Paragraph";
                             }
-                            rv.Grade.AddGradeRow(student, course, RandString(Maintenance.LetterGrades, 3), specialGrade, Maintenance.FormatCommentFromList(RandString(Maintenance.Comments)) + " " + (i + @"/100"), false);
+                            rv.Grade.AddGradeRow(student, course, RandString(Maintenance.LetterGrades, 3), specialGrade, Maintenance.FormatCommentFromList(RandString(Maintenance.Comments)) + " " + (i + @"/100"), stage.ToString());
                         }
                     }
                 }

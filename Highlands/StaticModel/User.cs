@@ -22,14 +22,21 @@ namespace Highlands.StaticModel
     {
         static public IList<User> ParseUserStrings(IList<string> userStrings)
         {
-            if (userStrings == null)
-                return null;
-            var rv = new List<User>();
-            foreach (var userString in userStrings)
+            try
             {
-                rv.Add(new User(userString));
+                if (userStrings == null)
+                    return null;
+                var rv = new List<User>();
+                foreach (var userString in userStrings)
+                {
+                    rv.Add(new User(userString));
+                }
+                return rv;
             }
-            return rv;
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         internal static IList<string> ComposeUserStrings(IList<User> users)
@@ -37,7 +44,7 @@ namespace Highlands.StaticModel
             var rv = new List<string>();
             foreach (var user in users)
             {
-                rv.Add(user.Name + "," + user.Role + "," + user.HashedPassword);
+                rv.Add(user.Name + "," + user.Role + "," + user.EmailAddress + "," + user.HashedPassword);
             }
             return rv;
         }
@@ -72,14 +79,15 @@ namespace Highlands.StaticModel
             var parts = userInfo.Split(",".ToCharArray());
             Name = parts[0];
             Role = (RoleEnum)Enum.Parse(typeof(RoleEnum), parts[1]);
-            if (parts.Count() > 2)
-                HashedPassword = parts[2];
+            EmailAddress = parts[2];
+            HashedPassword = parts[3];
         }
 
-        public User(string name, RoleEnum role, string hashedPassword)
+        public User(string name, RoleEnum role, string emailAddress, string hashedPassword)
         {
             Name = name;
             Role = role;
+            EmailAddress = emailAddress;
             HashedPassword = hashedPassword;
         }
 
@@ -97,6 +105,7 @@ namespace Highlands.StaticModel
         
         public string Name { get; set; }
         public RoleEnum Role { get; set; }
+        public string EmailAddress { get; set; }
         public string HashedPassword { get; set; }
     }
 

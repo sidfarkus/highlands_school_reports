@@ -23,7 +23,7 @@ namespace Highlands.ViewModel
             PasswordsDoNotMatch,
             PasswordChanged
         }
-        internal static ValidationEnum ValidateTeacher(string userName, string unhashedPassword)
+        internal static ValidationEnum ValidateUser(string userName, string unhashedPassword)
         {
             var user = Maintenance.Users.SingleOrDefault(u => u.Name.ToUpper() == userName.ToUpper());           
             if (user == null)
@@ -52,7 +52,7 @@ namespace Highlands.ViewModel
             }
         }
 
-        public static UserViewModel CurrentUser 
+        public static UserViewModel CurrentUser
         {
             get
             {
@@ -69,6 +69,17 @@ namespace Highlands.ViewModel
                 return _user.Name;
             }
         }
+
+        public string EmailAddress
+        {
+            get
+            {
+                if (_user == null)
+                    return "-";
+                return _user.EmailAddress;
+            }
+        }
+
         public override string ToString()
         {
             return Name;
@@ -94,49 +105,43 @@ namespace Highlands.ViewModel
             }
         }
 
-        public bool CanEdit(string course)
+        public RightsEnum CanEdit(GradeViewModel grade)
         {
-            if (CourseViewModel.ClassroomCourse(course) && CanEditClassroomGrades)
-                return true;
-            if (CourseViewModel.SpecialCourse(course) && CanEditSpecialClassGrades)
-                return true;
-            if (CourseViewModel.NonSpecialCourse(course) && CanEditNonSpecialClassGrades)
-                return true;
-            return false;
-        }
-        public bool CanApprove(string course)
-        {
-            if (_user.Role == RoleEnum.SuperUser || _user.Role == RoleEnum.Admin)
-                return true;
-            return false;
-        }
-        public bool CanEditSpecialClassGrades
-        {
-            get
-            {
-                if (_user == null)
-                    return false;
-                return _user.Role == RoleEnum.SuperUser || _user.Role == RoleEnum.Admin || _user.Role == RoleEnum.SpecialInstructor || _user.Role == RoleEnum.ClassroomInstructor;
-            }
+            if (grade.ApprovalStage == ApprovalStage.Office)
+                return RightsEnum.StageError;
+
+            if (HasOfficeRights)
+                return RightsEnum.Success;
+
+            if (grade.ApprovalStage == ApprovalStage.Classroom)
+                return RightsEnum.UserError;
+            
+            if (HasClassroomRights)
+                return RightsEnum.Success;
+            if (Name == grade.Teacher)
+                return RightsEnum.Success;
+
+            return RightsEnum.UserError;
         }
 
-        public bool CanEditClassroomGrades
+        public bool HasOfficeRights
         {
             get
             {
-                if (_user == null)
-                    return false;
-                return _user.Role == RoleEnum.SuperUser || _user.Role == RoleEnum.Admin || _user.Role == RoleEnum.ClassroomInstructor;
+                if (_user.Role == RoleEnum.SuperUser || _user.Role == RoleEnum.Admin)
+                    return true;
+                return false;
             }
         }
-
-        public bool CanEditNonSpecialClassGrades
+        public bool HasClassroomRights
         {
             get
             {
                 if (_user == null)
                     return false;
-                return _user.Role == RoleEnum.SuperUser || _user.Role == RoleEnum.Admin || _user.Role == RoleEnum.ClassroomInstructor || _user.Role == RoleEnum.NonSpecialInstructor;
+                if (_user.Role == RoleEnum.SuperUser || _user.Role == RoleEnum.Admin || _user.Role == RoleEnum.ClassroomInstructor)
+                    return true;
+                return false;
             }
         }
 
@@ -181,5 +186,50 @@ namespace Highlands.ViewModel
             Maintenance.SaveUsers();
             return ValidationEnum.PasswordChanged;
         }
+
+        internal RightsEnum CanApprove(GradeViewModel grade)
+        {
+            if (!grade.IsReadyToApprove)
+                return RightsEnum.GradeError;
+            if (grade.ApprovalStage == ApprovalStage.Open && CanInstructorApprove(grade.Teacher))
+                return RightsEnum.Success;
+            else if (grade.ApprovalStage == ApprovalStage.Instructor && HasClassroomRights)
+                return RightsEnum.Success;
+            else if (grade.ApprovalStage == ApprovalStage.Classroom && HasOfficeRights)
+                return RightsEnum.Success;
+
+            return RightsEnum.StageError;
+        }
+
+        private bool CanInstructorApprove(string teacherName)
+        {
+            if (_user.Role == RoleEnum.SuperUser)
+                return true;
+            if (_user.Name == teacherName)
+                return true;
+            return false;
+        }
+
+        internal RightsEnum CanUnApprove(GradeViewModel grade)
+        {
+            if (grade.ApprovalStage == ApprovalStage.Office)
+                return RightsEnum.StageError;
+            if (grade.ApprovalStage == ApprovalStage.None || grade.ApprovalStage == ApprovalStage.Open)
+                return RightsEnum.StageError;
+            if (grade.ApprovalStage == ApprovalStage.Classroom && HasOfficeRights)
+                return RightsEnum.Success;
+            if (grade.ApprovalStage == ApprovalStage.Instructor && HasClassroomRights)
+                return RightsEnum.Success;
+
+            return RightsEnum.UserError;
+        }
+    }
+    public enum RightsEnum
+    {
+        None,
+        Success,
+        StageError,
+        UserError,
+        GradeError
     }
 }

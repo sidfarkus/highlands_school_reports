@@ -1,6 +1,8 @@
 ﻿using Highlands.Model;
 using Highlands.StaticModel;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Highlands.ViewModel
 {
@@ -11,6 +13,7 @@ namespace Highlands.ViewModel
         {
             _gradeRow = gradeRow;
         }
+
         public string Subject
         {
             get
@@ -98,9 +101,13 @@ namespace Highlands.ViewModel
 
         internal void Approve()
         {
-            var change = new Change(this, "Approval", false.ToString(), true.ToString());
-            ChangeLog.LogDiffs(new List<Change>() { change });
-            Approval = true;
+            var oldStage = ApprovalStage;
+            var newStage = (ApprovalStage)((int)ApprovalStage + 1);
+            if (UserViewModel.CurrentUser.HasClassroomRights && newStage == ApprovalStage.Instructor)
+                newStage = ApprovalStage.Classroom;
+            var change = new Change(this, "Approval", oldStage.ToString(), newStage.ToString());
+            ChangeLog.LogDiff(change);
+            ApprovalStage = newStage; 
         }
 
         public IEnumerable<KeyValuePair<string, string>> GetGradeReportFields(MarkingPeriod period, int rowIndex)
@@ -128,15 +135,58 @@ namespace Highlands.ViewModel
             return new CourseViewModel(_gradeRow.CourseRow).ToString();
         }
 
-        public bool Approval
+        public ApprovalStage ApprovalStage
         {
             get
             {
-                return _gradeRow.Approval;
+                return (ApprovalStage) Enum.Parse(typeof(ApprovalStage), _gradeRow.ApprovalStage);
             }
             set
             {
-                _gradeRow.Approval = value;
+                _gradeRow.ApprovalStage = value.ToString();
+            }
+        }
+
+        internal bool IsReadyToApprove
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(LetterGrade) || !string.IsNullOrWhiteSpace(Comment); 
+            }
+        }
+
+        internal void UnApprove()
+        {
+            var oldStage = ApprovalStage;
+            var newStage = (ApprovalStage)((int)ApprovalStage - 1);
+            var change = new Change(this, "Unapproval", oldStage.ToString(), newStage.ToString());
+            ChangeLog.LogDiff(change);
+            ApprovalStage = newStage;
+            
+        }
+
+        internal UserViewModel TeacherVm 
+        {
+            get
+            {
+                return new UserViewModel(Maintenance.Teachers.SingleOrDefault(t => t.Name == Teacher));
+            }
+        }
+
+        internal string ForMail()
+        {
+            return
+                "Student: " + _gradeRow.StudentRow.Name + Environment.NewLine +
+                "Course: " + Subject + Environment.NewLine +
+                "Quarter: " + Quarter + Environment.NewLine + 
+                "Stage: " + ApprovalStage + Environment.NewLine;
+        }
+
+        public string StudentName
+        {
+            get
+            {
+                return _gradeRow.StudentRow.Name;
             }
         }
     }

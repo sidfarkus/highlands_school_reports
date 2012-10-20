@@ -31,7 +31,7 @@ namespace Highlands
             if (entConfirmPassword.Visibility == System.Windows.Visibility.Visible)
                 result = UserViewModel.SetPassword(user, entPassword.Password, entConfirmPassword.Password);
             else
-                result = UserViewModel.ValidateTeacher(user, entPassword.Password);
+                result = UserViewModel.ValidateUser(user, entPassword.Password);
 
             if (result == UserViewModel.ValidationEnum.FailedUserNotFound)
             {

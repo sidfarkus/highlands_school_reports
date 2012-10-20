@@ -757,7 +757,7 @@ namespace Highlands.Model {
             
             private global::System.Data.DataColumn columnComment;
             
-            private global::System.Data.DataColumn columnApproval;
+            private global::System.Data.DataColumn columnApprovalStage;
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
@@ -834,9 +834,9 @@ namespace Highlands.Model {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn ApprovalColumn {
+            public global::System.Data.DataColumn ApprovalStageColumn {
                 get {
-                    return this.columnApproval;
+                    return this.columnApprovalStage;
                 }
             }
             
@@ -877,7 +877,7 @@ namespace Highlands.Model {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public GradeRow AddGradeRow(StudentRow parentStudentRowByStudent_Grade, CourseRow parentCourseRowByCourse_Grade, string LetterGrade, string SpecialGrade, string Comment, bool Approval) {
+            public GradeRow AddGradeRow(StudentRow parentStudentRowByStudent_Grade, CourseRow parentCourseRowByCourse_Grade, string LetterGrade, string SpecialGrade, string Comment, string ApprovalStage) {
                 GradeRow rowGradeRow = ((GradeRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
@@ -885,7 +885,7 @@ namespace Highlands.Model {
                         LetterGrade,
                         SpecialGrade,
                         Comment,
-                        Approval};
+                        ApprovalStage};
                 if ((parentStudentRowByStudent_Grade != null)) {
                     columnValuesArray[0] = parentStudentRowByStudent_Grade[0];
                 }
@@ -919,7 +919,7 @@ namespace Highlands.Model {
                 this.columnLetterGrade = base.Columns["LetterGrade"];
                 this.columnSpecialGrade = base.Columns["SpecialGrade"];
                 this.columnComment = base.Columns["Comment"];
-                this.columnApproval = base.Columns["Approval"];
+                this.columnApprovalStage = base.Columns["ApprovalStage"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -935,8 +935,8 @@ namespace Highlands.Model {
                 base.Columns.Add(this.columnSpecialGrade);
                 this.columnComment = new global::System.Data.DataColumn("Comment", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnComment);
-                this.columnApproval = new global::System.Data.DataColumn("Approval", typeof(bool), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnApproval);
+                this.columnApprovalStage = new global::System.Data.DataColumn("ApprovalStage", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnApprovalStage);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1998,17 +1998,17 @@ namespace Highlands.Model {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool Approval {
+            public string ApprovalStage {
                 get {
                     try {
-                        return ((bool)(this[this.tableGrade.ApprovalColumn]));
+                        return ((string)(this[this.tableGrade.ApprovalStageColumn]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'Approval\' in table \'Grade\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'ApprovalStage\' in table \'Grade\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tableGrade.ApprovalColumn] = value;
+                    this[this.tableGrade.ApprovalStageColumn] = value;
                 }
             }
             
@@ -2096,14 +2096,14 @@ namespace Highlands.Model {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsApprovalNull() {
-                return this.IsNull(this.tableGrade.ApprovalColumn);
+            public bool IsApprovalStageNull() {
+                return this.IsNull(this.tableGrade.ApprovalStageColumn);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetApprovalNull() {
-                this[this.tableGrade.ApprovalColumn] = global::System.Convert.DBNull;
+            public void SetApprovalStageNull() {
+                this[this.tableGrade.ApprovalStageColumn] = global::System.Convert.DBNull;
             }
         }
         

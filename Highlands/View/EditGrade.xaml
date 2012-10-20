@@ -28,7 +28,7 @@
                     <ComboBox Name="cmbComment" MinWidth="150" SelectionChanged="cmbComment_SelectionChanged"/>
                 </StackPanel>
                 <Label>Free-form</Label>
-                <TextBox Name="entComment" TextWrapping="Wrap" AcceptsReturn="True" MinHeight="50" TextChanged="entComment_TextChanged"/>
+                <TextBox Name="entComment" TextWrapping="Wrap" AcceptsReturn="True" MinHeight="50" SpellCheck.IsEnabled="True" TextChanged="entComment_TextChanged"/>
                 <StackPanel Orientation="Horizontal">
                     <Label>Complete Comment-</Label>
                     <Button Click="btnFreeForm_Click" Margin="5">^Free-form^</Button>
