@@ -1,0 +1,24 @@
+﻿<Window x:Class="Highlands.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Gradebook.Login" Height="335" Width="391" Icon="/Highlands;component/Images/main.ico">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition  Height="Auto"/>
+            <RowDefinition  Height="Auto"/>
+            <RowDefinition  Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="75"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Image Margin="10" Source="/Highlands;component/Images/Highlands.PNG" Grid.Row="0" Grid.ColumnSpan="2"/>
+        <Label Grid.Row="1">User Name:</Label>
+        <ComboBox Name="cmbUserName" Grid.Row="1" Grid.Column="1" IsEditable="True"/>
+        <Label Content="Password:"  Grid.Row="2"/>
+        <PasswordBox x:Name="entPassword" Grid.Row="2" Grid.Column="1" />
+       <Button Click="btnLogin_Click" Grid.Row="3" Grid.ColumnSpan="2" Margin="5">Login</Button>
+    </Grid>
+
+</Window>

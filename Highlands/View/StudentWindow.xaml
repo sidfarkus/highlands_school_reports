@@ -1,0 +1,113 @@
+﻿<Window x:Class="Highlands.StudentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Student Details" Height="427" Width="830" Icon="/Highlands;component/Images/main.ico">
+    <StackPanel>
+ 
+        <TabControl>
+            <TabItem Header="Grades">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                        <RadioButton Click="radThisQuarter_Click" VerticalAlignment="Center">This Quarter</RadioButton>
+                        <RadioButton Click="radThisYear_Click" VerticalAlignment="Center">This Year</RadioButton>
+                        <RadioButton Click="radAll_Click" IsChecked="True" VerticalAlignment="Center">All</RadioButton>
+                        <CheckBox Name="chkMyClasses" Margin="5" Click="chkMyClasses_Click" IsChecked="True" VerticalAlignment="Center">My Classes Only</CheckBox>
+                    </StackPanel>
+                    <DataGrid AutoGenerateColumns="True" Name="dgvGrades" MaxHeight="500" Grid.Row="1">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Click="btnEditGrade_Click">Edit</Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Name="btnApprove" Click="btnApprove_Click">Approve</Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Self-Development">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <RadioButton Click="radThisQuarter_Click"  VerticalAlignment="Center">This Quarter</RadioButton>
+                        <RadioButton Click="radThisYear_Click" VerticalAlignment="Center">This Year</RadioButton>
+                        <RadioButton Click="radAll_Click" IsChecked="True" VerticalAlignment="Center">All</RadioButton>
+                    </StackPanel>
+                    <DataGrid AutoGenerateColumns="True" Name="dgvSelfDevelopment" MouseDoubleClick="dgvSelfDevelopment_MouseDoubleClick">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button>Edit</Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+                </StackPanel>
+
+            </TabItem>
+            <TabItem Header="Attendance">
+
+            </TabItem>
+            <TabItem Name="tabStudentInfo" Header="Student Info">
+                <Grid Name="gridStudentInfo">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="4*"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label  HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0">Name:</Label>
+                    <TextBox Name="entName" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
+                    <Label  HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0">DOB:</Label>
+                    <DatePicker Grid.Row="1" Grid.Column="1" Name="dtpDob" SelectedDateChanged="dptDob_Changed"/>
+                    <Label Grid.Row="1" Grid.Column="2" Name="staAge">x years old</Label>
+                    <Label HorizontalAlignment="Right"  Grid.Row="2" Grid.Column="0">Grade Level:</Label>
+                    <ComboBox Name="cmbGradeLevel"  Grid.Row="2" Grid.Column="1" />
+                    <Label HorizontalAlignment="Right"  Grid.Row="3" Grid.Column="0">Address:</Label>
+                    <TextBox Name="entAddress" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1" />
+                    <Label HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0">Enrolled Date:</Label>
+                    <DatePicker Name="dtpEnrolled" Grid.Row="4" Grid.Column="1" />
+                    <CheckBox Grid.Row="5" Grid.Column="0" Name="chkWithdrawn" VerticalAlignment="Center"  HorizontalAlignment="Right" Unchecked="CheckBox_Checked" Checked="CheckBox_Checked" >Withdrawn Date:</CheckBox>
+                    <DatePicker Name="dtpWithdrawn" IsEnabled="False" Grid.Row="5" Grid.Column="1" />
+                    <Button Name="btnSaveStudentInfo" Margin="5" Grid.Row="6" Grid.Column="2" >Save</Button>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Report Card">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.Row="0">
+                        <ComboBox Name="cmbMarkingPeriod"/>
+                        <Button Margin="5">Print</Button>
+                    </StackPanel>
+                    <Image Grid.Row="1" Source="/Highlands;component/Images/draft.jpg" Height="400" Stretch="Fill"/>
+                </Grid>
+            </TabItem>
+
+        </TabControl>
+    </StackPanel>
+</Window>
