@@ -64,5 +64,16 @@ namespace Highlands.ViewModel
         }
 
 
+
+        public IEnumerable<GradeViewModel> Grades
+        {
+            get
+            {
+                var rv = new List<GradeViewModel>();
+                var grades = CourseRow.GetGradeRows();
+                grades.ToList().ForEach(g => rv.Add(new GradeViewModel(g)));
+                return rv;
+            }
+        }
     }
 }

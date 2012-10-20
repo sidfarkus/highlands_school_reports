@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Highlands.ViewModel;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +26,101 @@ namespace Highlands
         public ClassesControl()
         {
             InitializeComponent();
+            LoadGradebook();
+        }
+
+        private void LoadGradebook()
+        {
+            _gradebook = GradebookViewModel.Load();
+        }
+
+        private void FillStudents()
+        {
+            var rv = new Grades();
+            var courses = _gradebook.Courses;
+            if (UserViewModel.CurrentUser != null)
+            {
+                courses = courses.Where(c => c.Teacher == UserViewModel.CurrentUser.Name);
+            }
+
+            foreach (var course in courses)
+            {
+                //grd.Items.Add(course);
+                foreach (var grade in course.Grades)
+                {
+                    rv.Add(new StudentByClass(grade));
+                    //rv.Add(new dv() { Grade = grade.LetterGrade, Name = grade.StudentName, Stage = grade.ApprovalStage.ToString() });
+                }
+            }
+
+            grd.ItemsSource = rv.ToList();
+            ICollectionView defaultView = CollectionViewSource.GetDefaultView(grd.ItemsSource);
+
+            if (defaultView != null && defaultView.CanGroup == true)
+            {
+                defaultView.GroupDescriptions.Clear();
+                defaultView.GroupDescriptions.Add(new PropertyGroupDescription("ClassName"));
+                //defaultView.GroupDescriptions.Add(new PropertyGroupDescription("Level"));
+                //cvTasks.GroupDescriptions.Add(new PropertyGroupDescription("Complete"));
+            }
+        }
+
+        // Requires using System.Collections.ObjectModel; 
+        public class Grades : ObservableCollection<StudentByClass>
+        {
+            // Creating the Tasks collection in this way enables data binding from XAML.
+        }
+        public class StudentByClass
+        {
+            private GradeViewModel _grade;
+
+            public StudentByClass(GradeViewModel grade)
+            {
+                 _grade = grade;
+            }
+
+            public string StudentName
+            {
+                get
+                {
+                    return _grade.StudentName;
+                }
+            }
+            public string ClassName
+            {
+                get
+                {
+                    return _grade.Subject + " " + _grade.Level + " " + _grade.Quarter + " " + _grade.Group;
+                }
+            }
+            public string LetterGrade
+            {
+                get
+                {
+                    return _grade.LetterGrade;
+                }
+            }
+            public string SpecialGrade
+            {
+                get
+                {
+                    return _grade.SpecialGrade;
+                }
+            }
+            public string Stage
+            {
+                get
+                {
+                    return _grade.ApprovalStage.ToString();
+                }
+            }
+
+        }
+        public GradebookViewModel _gradebook;
+
+        internal void Refresh()
+        {
+            FillStudents();
         }
     }
 }

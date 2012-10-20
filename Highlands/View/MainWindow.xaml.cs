@@ -32,7 +32,7 @@ namespace Highlands
         {
             Title = "Highlands School";
             loginOverlay.Visibility = System.Windows.Visibility.Hidden;
-
+            ctrlClasses.Refresh();
         }
     }
 }

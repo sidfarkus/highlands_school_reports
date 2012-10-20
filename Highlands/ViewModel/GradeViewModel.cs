@@ -189,5 +189,19 @@ namespace Highlands.ViewModel
                 return _gradeRow.StudentRow.Name;
             }
         }
+
+        public IEnumerable<string> ForGrid
+        {
+            get
+            {
+                var rv = new List<string>();
+                rv.Add(_gradeRow.StudentRow.Name);
+                rv.Add(_gradeRow.LetterGrade);
+                rv.Add(_gradeRow.SpecialGrade);
+                rv.Add(_gradeRow.Comment);
+                rv.Add(_gradeRow.ApprovalStage);
+                return rv;
+            }
+        }
     }
 }
