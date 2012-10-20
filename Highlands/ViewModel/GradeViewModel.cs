@@ -1,5 +1,6 @@
 ﻿using Highlands.Model;
 using Highlands.StaticModel;
+using System;
 using System.Collections.Generic;
 
 namespace Highlands.ViewModel
@@ -89,7 +90,9 @@ namespace Highlands.ViewModel
         {
             var change = new Change(this, "Approval", false.ToString(), true.ToString());
             ChangeLog.LogDiffs(new List<Change>() { change });
-            Approval = true;
+            ApprovalStage = (ApprovalStage) ((int)ApprovalStage + 1);
+            if (UserViewModel.CurrentUser.HasClassroomRights && ApprovalStage == Model.ApprovalStage.Instructor)
+                ApprovalStage = Model.ApprovalStage.Classroom;
         }
 
         public override string ToString()
@@ -97,15 +100,23 @@ namespace Highlands.ViewModel
             return new CourseViewModel(_gradeRow.CourseRow).ToString();
         }
 
-        public bool Approval
+        public ApprovalStage ApprovalStage
         {
             get
             {
-                return _gradeRow.Approval;
+                return (ApprovalStage) Enum.Parse(typeof(ApprovalStage), _gradeRow.ApprovalStage);
             }
             set
             {
-                _gradeRow.Approval = value;
+                _gradeRow.ApprovalStage = value.ToString();
+            }
+        }
+
+        public bool IsReadyToApprove
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(LetterGrade) || !string.IsNullOrWhiteSpace(Comment); 
             }
         }
     }

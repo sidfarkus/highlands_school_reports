@@ -165,9 +165,10 @@ namespace Highlands
         {
             var context = (sender as Button).DataContext;
             var grade = context as GradeViewModel;
-            if (!UserViewModel.CurrentUser.CanEdit(grade.Subject))
+            var rights = UserViewModel.CurrentUser.CanEdit(grade);
+            if (RightsEnum.Success != UserViewModel.CurrentUser.CanEdit(grade))
             {
-                MessageBox.Show("User can not edit this grade.");
+                MessageBox.Show("User can not edit this grade at this stage.");
                 return;
             }
             var window = new EditGrade(_student.Name, grade);
@@ -175,21 +176,23 @@ namespace Highlands
             RefreshMarks();
         }
 
-
         private void dptDob_Changed(object sender, SelectionChangedEventArgs e)
         {
             var dob = dtpDob.SelectedDate.Value;
             staAge.Content = StudentViewModel.GetAge(dob).ToString("0") + " years old";
-
         }
 
         private void btnApprove_Click(object sender, RoutedEventArgs e)
         {
             var context = (sender as Button).DataContext;
             var grade = context as GradeViewModel;
-            if (!UserViewModel.CurrentUser.CanApprove(grade.Subject))
+            var result = UserViewModel.CurrentUser.CanApprove(grade);
+            if (RightsEnum.Success != result)
             {
-                MessageBox.Show("User can not approve/lock this grade.");
+                if (RightsEnum.GradeError == result)
+                    MessageBox.Show("Grade is not ready to be approved/locked.");
+                else
+                    MessageBox.Show("User can not approve/lock this grade.");
                 return;
             }
             if (MessageBoxResult.Yes != MessageBox.Show("Are you sure you want to lock " + grade + "?", "Approval", MessageBoxButton.YesNo))

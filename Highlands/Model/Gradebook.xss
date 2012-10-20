@@ -7,7 +7,7 @@
 <DiagramLayout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ex:showrelationlabel="False" ViewPortX="0" ViewPortY="0" xmlns:ex="urn:schemas-microsoft-com:xml-msdatasource-layout-extended" xmlns="urn:schemas-microsoft-com:xml-msdatasource-layout">
   <Shapes>
     <Shape ID="DesignTable:Student" ZOrder="7" X="70" Y="70" Height="162" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="158" />
-    <Shape ID="DesignTable:Grade" ZOrder="6" X="290" Y="70" Height="124" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="120" />
+    <Shape ID="DesignTable:Grade" ZOrder="6" X="289" Y="67" Height="143" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="139" />
     <Shape ID="DesignTable:SelfDevelopment" ZOrder="5" X="290" Y="283" Height="124" Width="166" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="86" />
     <Shape ID="DesignTable:Course" ZOrder="2" X="569" Y="146" Height="143" Width="150" AdapterExpanded="true" DataTableExpanded="true" OldAdapterHeight="0" OldDataTableHeight="0" SplitterPosition="139" />
   </Shapes>
@@ -16,11 +16,11 @@
       <RoutePoints>
         <Point>
           <X>220</X>
-          <Y>141</Y>
+          <Y>138</Y>
         </Point>
         <Point>
-          <X>290</X>
-          <Y>141</Y>
+          <X>289</X>
+          <Y>138</Y>
         </Point>
       </RoutePoints>
     </Connector>
@@ -44,11 +44,11 @@
       <RoutePoints>
         <Point>
           <X>569</X>
-          <Y>160</Y>
+          <Y>157</Y>
         </Point>
         <Point>
-          <X>440</X>
-          <Y>160</Y>
+          <X>439</X>
+          <Y>157</Y>
         </Point>
       </RoutePoints>
     </Connector>
