@@ -17,6 +17,8 @@ namespace Highlands
     {
         StudentViewModel _student;
 
+        ShowRange _range = ShowRange.All;
+
         public StudentWindow()
         {
             InitializeComponent();
@@ -35,6 +37,7 @@ namespace Highlands
         public void LoadStudent(StudentViewModel student)
         {
             _student = student;
+            nameHeader.Text = student.Name;
             noStudentOverlay.Visibility = System.Windows.Visibility.Hidden;
             var currentUser = UserViewModel.CurrentUser;
 
@@ -57,10 +60,9 @@ namespace Highlands
             cmbGradeLevel.Text = _student.GradeLevel;
 
             dgvGrades.ItemsSource = Grades;
-
             dgvSelfDevelopment.ItemsSource = SDScores;
-
-            cmbMarkingPeriod.ItemsSource = student.Grades.Select(g => MarkingPeriod.Parse(g.Quarter))
+            
+            cmbMarkingPeriod.ItemsSource = student.Grades.Select(g => MarkingPeriodKey.Parse(g.Quarter))
                 .Distinct()
                 .OrderBy(period => period.ApproximateEndDate)
                 .ThenBy(period => period.Quarter);
@@ -152,7 +154,6 @@ namespace Highlands
             subsetSDScores.ToList().ForEach(s => _sdScores.Add(s));
         }
 
-        ShowRange _range = ShowRange.All;
         private void radThisQuarter_Click(object sender, RoutedEventArgs e)
         {
             _range = ShowRange.ThisQuarter;
@@ -231,7 +232,7 @@ namespace Highlands
             {
                 try
                 {
-                    _student.CreateReportCard(dialog.FileName, (MarkingPeriod) cmbMarkingPeriod.SelectedItem);
+                    _student.CreateReportCard(dialog.FileName, (MarkingPeriodKey) cmbMarkingPeriod.SelectedItem);
                 }
                 catch (System.IO.IOException)
                 {

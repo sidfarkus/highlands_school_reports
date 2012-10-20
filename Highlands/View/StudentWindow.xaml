@@ -2,7 +2,12 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid>
-        <TabControl>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="nameHeader"  FontSize="20" FontWeight="Bold" Margin="15,5,5,10"/>
+        <TabControl Grid.Row="1">
             <TabItem Header="Grades">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -10,7 +15,7 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0">
-                        <RadioButton Click="radThisQuarter_Click" VerticalAlignment="Center">This Quarter</RadioButton>
+                        <RadioButton Click="radThisQuarter_Click" VerticalAlignment="Center" IsChecked="True">This Quarter</RadioButton>
                         <RadioButton Click="radThisYear_Click" VerticalAlignment="Center">This Year</RadioButton>
                         <RadioButton Click="radAll_Click" IsChecked="True" VerticalAlignment="Center">All</RadioButton>
                         <CheckBox Name="chkMyClasses" Margin="5" Click="chkMyClasses_Click" IsChecked="True" VerticalAlignment="Center">My Classes Only</CheckBox>
@@ -39,7 +44,7 @@
                             </DataTemplate>
                         </DataGrid.RowDetailsTemplate>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Name" Binding="{Binding StudentName}" Width="2*"/>
+                            <DataGridTextColumn Header="Subject" Binding="{Binding Subject}" Width="2*"/>
                             <DataGridTextColumn Header="Grade" Binding="{Binding LetterGrade}"  Width="*"/>
                             <DataGridTextColumn Header="Special Grade" Binding="{Binding SpecialGrade}"  Width="*"/>
                             <DataGridTextColumn Header="Teacher" Binding="{Binding Teacher}"  Width="2*"/>
@@ -55,7 +60,7 @@
                     </Grid.RowDefinitions>
 
                     <StackPanel Orientation="Horizontal" Margin="4">
-                        <RadioButton Click="radThisQuarter_Click"  VerticalAlignment="Center" Margin="3">This Quarter</RadioButton>
+                        <RadioButton Click="radThisQuarter_Click"  VerticalAlignment="Center" Margin="3" IsChecked="True">This Quarter</RadioButton>
                         <RadioButton Click="radThisYear_Click" VerticalAlignment="Center" Margin="3">This Year</RadioButton>
                         <RadioButton Click="radAll_Click" IsChecked="True" VerticalAlignment="Center" Margin="3">All</RadioButton>
                     </StackPanel>
@@ -119,7 +124,7 @@
                 </Grid>
             </TabItem>
         </TabControl>
-        <Border x:Name="noStudentOverlay" Background="LightGreen">
+        <Border Grid.RowSpan="2" x:Name="noStudentOverlay" Background="LightGreen">
             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="16">
                 Select a student on the left to see their grades.
             </TextBlock>

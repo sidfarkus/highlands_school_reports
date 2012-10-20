@@ -83,15 +83,15 @@ namespace Highlands.ViewModel
             }
         }
 
-        public bool IsCurrentForPeriod(MarkingPeriod period)
+        public bool IsCurrentForPeriod(MarkingPeriodKey period)
         {
-            return MarkingPeriodKey.Parse(Quarter).Equals(period.Key);
+            return MarkingPeriodKey.Parse(Quarter).Equals(period);
         }
 
-        public bool ShouldShowOnReportCard(MarkingPeriod period)
+        public bool ShouldShowOnReportCard(MarkingPeriodKey period)
         {
             var thisPeriod = MarkingPeriodKey.Parse(Quarter);
-            return thisPeriod.EndingSchoolYear == period.Key.EndingSchoolYear;
+            return thisPeriod.EndingSchoolYear == period.EndingSchoolYear;
         }
 
         internal void Save(System.Collections.Generic.List<StaticModel.Change> diffs)
@@ -110,7 +110,7 @@ namespace Highlands.ViewModel
             ApprovalStage = newStage; 
         }
 
-        public IEnumerable<KeyValuePair<string, string>> GetGradeReportFields(MarkingPeriod period, int rowIndex)
+        public IEnumerable<KeyValuePair<string, string>> GetGradeReportFields(MarkingPeriodKey period, int rowIndex)
         {
             yield return new KeyValuePair<string, string>(
                  string.Format(MarkingPeriodKey.Parse(Quarter).Quarter + "Row{0}", rowIndex),

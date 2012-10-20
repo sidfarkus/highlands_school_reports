@@ -126,7 +126,7 @@ namespace Highlands.ViewModel
             return _studentRow.HasCourse(course.CourseRow, mp);
         }
 
-        public void CreateReportCard(string outFilename, MarkingPeriod period)
+        public void CreateReportCard(string outFilename, MarkingPeriodKey period)
         {
             var currentSubjects = Grades.GroupBy(g => g.Subject)
                 .Where(subject => subject.Any(subGrade => subGrade.IsCurrentForPeriod(period)))
@@ -143,7 +143,7 @@ namespace Highlands.ViewModel
             PDFWriter.WritePDF(outFilename, outputProperties.ToDictionary(p => p.Key, p => p.Value));
         }
 
-        private IEnumerable<KeyValuePair<string, string>> GetSelfDevFields(MarkingPeriod period)
+        private IEnumerable<KeyValuePair<string, string>> GetSelfDevFields(MarkingPeriodKey period)
         {
             return SelfDevelopmentScores.Where(score => MarkingPeriodKey.Parse(score.Quarter).Equals(period))
                 .Select((s, i) => new[] { 
@@ -152,11 +152,11 @@ namespace Highlands.ViewModel
                 }).SelectMany(x => x);
         }
 
-        private IEnumerable<KeyValuePair<string, string>> GetReportLevelFields(MarkingPeriod period)
+        private IEnumerable<KeyValuePair<string, string>> GetReportLevelFields(MarkingPeriodKey period)
         {
             yield return new KeyValuePair<string, string>(
                 "SchoolYear",
-                String.Format("Aug, {0} - May, {1}", period.SchoolYear.Item1, period.SchoolYear.Item2));
+                String.Format("{0} - {1}", period.ApproximateStartDate.ToString("MMM, yyyy"), period.ApproximateStartDate.ToString("MMM, yyyy")));
 
         }
 
