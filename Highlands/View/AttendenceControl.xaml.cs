@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Highlands.View
+namespace Highlands
 {
     /// <summary>
     /// Interaction logic for AttendeesControl.xaml

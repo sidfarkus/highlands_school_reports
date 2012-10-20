@@ -13,14 +13,17 @@
                 <Button Click="btnLogout_Click">Logout</Button>
             </ToolBar>
             <TabControl Grid.Row="1">
+                <TabItem Header="Home">
+                    <TextBlock>Home</TextBlock>
+                </TabItem>
                 <TabItem Header="Classes">
-                    
+                    <h:ClassesControl />
                 </TabItem>
                 <TabItem Header="Grades">
-
+                    
                 </TabItem>
                 <TabItem Header="Attendees">
-
+                    <h:AttendeesControl />
                 </TabItem>
                 <TabItem Header="Students">
                     <h:StudentsControl />

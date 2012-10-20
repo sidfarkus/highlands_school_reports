@@ -40,3 +40,7 @@ C:\projects\highlands\highlands_school_reports\Highlands\obj\Debug\GeneratedInte
 C:\projects\highlands\highlands_school_reports\Highlands\obj\Debug\Highlands_MarkupCompile.lref
 C:\projects\highlands\highlands_school_reports\Highlands\obj\Debug\View\StudentsControl.baml
 C:\projects\highlands\highlands_school_reports\Highlands\obj\Debug\View\StudentsControl.g.cs
+C:\projects\highlands\highlands_school_reports\Highlands\obj\Debug\View\AttendenceControl.baml
+C:\projects\highlands\highlands_school_reports\Highlands\obj\Debug\View\ClassesControl.baml
+C:\projects\highlands\highlands_school_reports\Highlands\obj\Debug\View\AttendenceControl.g.cs
+C:\projects\highlands\highlands_school_reports\Highlands\obj\Debug\View\ClassesControl.g.cs
