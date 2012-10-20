@@ -182,7 +182,7 @@ namespace Highlands.ViewModel
                 "Stage: " + ApprovalStage + Environment.NewLine;
         }
 
-        public string StudentName
+        internal string StudentName
         {
             get
             {

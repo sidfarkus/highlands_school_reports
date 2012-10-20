@@ -13,7 +13,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Image Margin="10" Source="/Highlands;component/Images/Highlands.PNG" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+        <Image Margin="10" Source="/Highlands;component/Images/Highlands_logo.jpg" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
             <Image.Effect>
                 <DropShadowEffect Opacity="0.6" BlurRadius="6" ShadowDepth="2"/>
             </Image.Effect>
