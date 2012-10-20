@@ -411,7 +411,9 @@ namespace Highlands.Model {
             
             private global::System.Data.DataColumn columnDOB;
             
-            private global::System.Data.DataColumn columnAddress;
+            private global::System.Data.DataColumn columnAddressLine1;
+            
+            private global::System.Data.DataColumn columnAddressLine2;
             
             private global::System.Data.DataColumn columnGradeLevel;
             
@@ -478,9 +480,17 @@ namespace Highlands.Model {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn AddressColumn {
+            public global::System.Data.DataColumn AddressLine1Column {
                 get {
-                    return this.columnAddress;
+                    return this.columnAddressLine1;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public global::System.Data.DataColumn AddressLine2Column {
+                get {
+                    return this.columnAddressLine2;
                 }
             }
             
@@ -545,13 +555,14 @@ namespace Highlands.Model {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public StudentRow AddStudentRow(string Key, string Name, System.DateTime DOB, string Address, string GradeLevel, System.DateTime DateEnrolled, System.DateTime DateWithdrawn) {
+            public StudentRow AddStudentRow(string Key, string Name, System.DateTime DOB, string AddressLine1, string AddressLine2, string GradeLevel, System.DateTime DateEnrolled, System.DateTime DateWithdrawn) {
                 StudentRow rowStudentRow = ((StudentRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         Key,
                         Name,
                         DOB,
-                        Address,
+                        AddressLine1,
+                        AddressLine2,
                         GradeLevel,
                         DateEnrolled,
                         DateWithdrawn};
@@ -587,7 +598,8 @@ namespace Highlands.Model {
                 this.columnKey = base.Columns["Key"];
                 this.columnName = base.Columns["Name"];
                 this.columnDOB = base.Columns["DOB"];
-                this.columnAddress = base.Columns["Address"];
+                this.columnAddressLine1 = base.Columns["AddressLine1"];
+                this.columnAddressLine2 = base.Columns["AddressLine2"];
                 this.columnGradeLevel = base.Columns["GradeLevel"];
                 this.columnDateEnrolled = base.Columns["DateEnrolled"];
                 this.columnDateWithdrawn = base.Columns["DateWithdrawn"];
@@ -602,8 +614,10 @@ namespace Highlands.Model {
                 base.Columns.Add(this.columnName);
                 this.columnDOB = new global::System.Data.DataColumn("DOB", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDOB);
-                this.columnAddress = new global::System.Data.DataColumn("Address", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnAddress);
+                this.columnAddressLine1 = new global::System.Data.DataColumn("AddressLine1", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnAddressLine1);
+                this.columnAddressLine2 = new global::System.Data.DataColumn("AddressLine2", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnAddressLine2);
                 this.columnGradeLevel = new global::System.Data.DataColumn("GradeLevel", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnGradeLevel);
                 this.columnDateEnrolled = new global::System.Data.DataColumn("DateEnrolled", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
@@ -1745,17 +1759,33 @@ namespace Highlands.Model {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string Address {
+            public string AddressLine1 {
                 get {
                     try {
-                        return ((string)(this[this.tableStudent.AddressColumn]));
+                        return ((string)(this[this.tableStudent.AddressLine1Column]));
                     }
                     catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'Address\' in table \'Student\' is DBNull.", e);
+                        throw new global::System.Data.StrongTypingException("The value for column \'AddressLine1\' in table \'Student\' is DBNull.", e);
                     }
                 }
                 set {
-                    this[this.tableStudent.AddressColumn] = value;
+                    this[this.tableStudent.AddressLine1Column] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public string AddressLine2 {
+                get {
+                    try {
+                        return ((string)(this[this.tableStudent.AddressLine2Column]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("The value for column \'AddressLine2\' in table \'Student\' is DBNull.", e);
+                    }
+                }
+                set {
+                    this[this.tableStudent.AddressLine2Column] = value;
                 }
             }
             
@@ -1833,14 +1863,26 @@ namespace Highlands.Model {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsAddressNull() {
-                return this.IsNull(this.tableStudent.AddressColumn);
+            public bool IsAddressLine1Null() {
+                return this.IsNull(this.tableStudent.AddressLine1Column);
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetAddressNull() {
-                this[this.tableStudent.AddressColumn] = global::System.Convert.DBNull;
+            public void SetAddressLine1Null() {
+                this[this.tableStudent.AddressLine1Column] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public bool IsAddressLine2Null() {
+                return this.IsNull(this.tableStudent.AddressLine2Column);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
+            public void SetAddressLine2Null() {
+                this[this.tableStudent.AddressLine2Column] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

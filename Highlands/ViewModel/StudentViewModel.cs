@@ -36,11 +36,19 @@ namespace Highlands.ViewModel
         }
 
         [PDFOutputField("StudentAddress")]
-        public string Address
+        public string AddressLine1
         {
             get
             {
-                return _studentRow.Address;
+                return _studentRow.AddressLine1;
+            }
+        }
+
+        public string AddressLine2
+        {
+            get
+            {
+                return _studentRow.AddressLine2;
             }
         }
 

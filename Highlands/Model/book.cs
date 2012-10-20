@@ -1,109 +1,118 @@
-﻿using System;
+﻿using Highlands.StaticModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.IO;
+using System.Threading.Tasks;
 
 namespace Highlands.Model
 {
-    class book
+    public class Book
     {
-        List<student> students = new List<student>();//create student classs
-        List<grade> grades = new List<grade>();
-        List<course> courses = new List<course>();
-        List<selfdevscore> selfdevscores = new List<selfdevscore>();
-
-        public static book Read()
+        public static Book Read()
         {
-            var rv = new book();
-            try
-            {
-                rv.ReadStudents("students.csv");
-                rv.ReadGrades("grades.csv");
-                rv.ReadCourses("courses.csv");
-                rv.ReadSelfDevScores("selfdevscore.csv");
-            }
-            catch (System.Exception)
-            {
-                return null;
-            }
+            var rv = new Book();
+            rv.Students = Students.Read();
+            
             return rv;
         }
-
-        public void ReadStudents(string file)
-        {
-            //fill the lists
-            IEnumerable<string> lines = File.ReadLines(file);
-            char[] separator = new Char[] { ','};
-            foreach (string line in lines)
-            {
-                string[] fields = line.Split(separator);
-                student astudent = new student();
-                astudent.Name = fields[0];
-                astudent.GradeLevel = fields[1];
-              //  astudent.DOB = DateTime(fields[2]);
-                astudent.DateWithdrawn = fields[3];
-                astudent.DateEnrolled = fields[4];
-                astudent.Address = fields[5];
-            }
-
-        }
-
-        public void ReadGrades(string file)
-        {
-            //fill the lists
-            IEnumerable<string> lines = File.ReadLines(file);
-            char[] separator = new Char[] { ',' };
-            foreach (string line in lines)
-            {
-                string[] fields = line.Split(separator);
-                grade agrade = new grade();
-                agrade.Approval = fields[0];
-                agrade.Comment = fields[1];                
-                agrade.CourseKey = fields[2];
-                agrade.LetterGrade = fields[3];
-                agrade.SpecialGrade = fields[4];
-                agrade.StudentKey = fields[5];                
-            }
-
-        }
-
-        public void ReadCourses(string file)
-        {
-            //fill the lists
-            IEnumerable<string> lines = File.ReadLines(file);
-            char[] separator = new Char[] { ',' };
-            foreach (string line in lines)
-            {
-                string[] fields = line.Split(separator);
-                course acourse = new course();
-                acourse.CourseKey = fields[0];
-                acourse.Group = fields[1];                
-                acourse.Level = fields[2];
-                acourse.SubjectName = fields[3];
-                acourse.Teacher = fields[4];
-                acourse.Quarter = fields[5];
-            }
-
-        }
-
-        public void ReadSelfDevScores(string file)
-        {
-            //fill the lists
-            IEnumerable<string> lines = File.ReadLines(file);
-            char[] separator = new Char[] { ',' };
-            foreach (string line in lines)
-            {
-                string[] fields = line.Split(separator);
-                selfdevscore ascore = new selfdevscore();
-                ascore.Area = fields[0];
-                ascore.Quarter = fields[1];                
-                ascore.Score = fields[2];
-                ascore.StudentKey = fields[3];
-                ascore.Teacher = fields[4];
-            }
-
-        }
-        
+        public Students Students { get; private set; }
+        public List<Grade> Grades { get; private set; }
+        public SelfDevelopments SelfDevelopments { get; private set; }
+        public List<Course> Course { get; private set; }
     }
+
+    public class Students : List<Student>
+    {
+        internal static Students Read()
+        {
+            var lines = Maintenance.ReadArrayFromFile("studentTable");
+            if (lines == null)
+                return null;
+            var rv = new Students();
+            foreach (var line in lines)
+                rv.Add(Student.ReadLine(line));
+
+            return rv;
+        }
+    }
+
+    public class Student
+    {
+        public string Key 
+        {
+            get
+            {
+                return Name + DOB.ToString("yyyyMMddd");
+            }
+        }
+        public string Name { get; set; }
+        public DateTime DOB { get; set; }
+        public string AddressLine1 { get; set; }
+        public string AddressLine2 { get; set; }
+        public string GradeLevel { get; set; }
+        public DateTime DateEnrolled { get; set; }
+        public DateTime? DateWithdrawn { get; set; }
+        public List<Grade> Grades 
+        {
+            get
+            {
+                throw new Exception();
+            }
+        }
+
+        internal static Student ReadLine(string line)
+        {
+            var parts = line.Split(",".ToCharArray());
+            var rv = new Student();
+            rv.Name = parts[0];
+            rv.DOB = DateTime.Parse(parts[1]);
+            rv.AddressLine1 = parts[2];
+            rv.AddressLine2 = parts[3];
+            rv.GradeLevel = parts[4];
+            rv.DateEnrolled = DateTime.Parse(parts[5]);
+            rv.DateWithdrawn = DateTime.Parse(parts[6]);
+            return rv;
+         }
+    }
+
+    public class Grade
+    {
+        public string StudentKey { get; set; }
+        public string CourseKey { get; set; }
+        public string LetterGrade { get; set; }
+        public string SpecialGrade { get; set; }
+        public string Comment { get; set; }
+        public ApprovalStage Stage { get; set; }
+    }
+
+    public class SelfDevelopments : List<SelfDevelopment>
+    {
+    }
+
+    public class SelfDevelopment
+    {
+        public string StudentKey { get; set; }
+        public string Area { get; set; }
+        public MarkingPeriod Quarter { get; set; }
+        public string Score { get; set; }
+        public User Teacher { get; set; }
+    }
+
+    public class Course
+    {
+        public string Key
+        {
+            get
+            {
+                return Subject + Quarter.ToString() + Group + Level + Teacher;
+            }
+        }
+        public string Subject { get; set; }
+        public MarkingPeriod Quarter { get; set; }
+        public string Group { get; set; }
+        public string Teacher { get; set; }
+        public int Level { get; set; }
+    }
+
 }

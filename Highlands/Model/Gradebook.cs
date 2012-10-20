@@ -10,23 +10,95 @@ namespace Highlands.Model
     
     
     public partial class Gradebook {
+
+        public partial class StudentDataTable
+        {
+            public void ReadCsv()
+            {
+                var file = "studentTable.txt";
+                var lines = File.ReadLines(file);
+                var separator = ",".ToCharArray();
+                foreach (string line in lines)
+                {
+                    string[] fields = line.Split(separator);
+                    object[] values = new object[] { fields };
+                    Rows.Add(values);
+                }
+            }
+        }
+
         partial class GradeDataTable
         {
+            public void ReadCsv()
+            {
+                var file = "gradeTable.txt";
+                var lines = File.ReadLines(file);
+                var separator = ",".ToCharArray();
+                foreach (string line in lines)
+                {
+                    string[] fields = line.Split(separator);
+                    object[] values = new object[] { fields };
+                    Rows.Add(values);
+                }
+            }
         }
-        static public User CurrentUser { get; set; }
+
+        partial class CourseDataTable
+        {
+            public void ReadCsv()
+            {
+                var file = "courseTable.txt";
+                var lines = File.ReadLines(file);
+                var separator = ",".ToCharArray();
+                foreach (string line in lines)
+                {
+                    string[] fields = line.Split(separator);
+                    object[] values = new object[] { fields };
+                    Rows.Add(values);
+                }
+            }
+        }
+        static Gradebook _singleton;
         public static Gradebook Read()
         {
-            var rv = new Gradebook();
-            try
+            if (_singleton == null)
             {
-                rv.ReadXml("gradebook.xml");
+                var rv = new Gradebook();
+                //rv.ReadXml("Gradebook.xml");
+                try
+                {
+                    rv.ReadXml("gradebook.xml");
+                    /*var files = Directory.GetFiles(".", "grade*.xml");
+                    foreach (var file in files)
+                    {
+                        var gradeTable = new GradeDataTable();
+                        gradeTable.ReadXml(file);
+                        rv.Merge(gradeTable);
+                    }
+                    rv.Student.ReadXml("studentTable.xml");
+                    rv.Course.ReadXml("courseTable.xml");
+                    */
+                }
+                catch (System.Exception)
+                {
+                    return null;
+                }
+                _singleton = rv;
             }
-            catch (System.Exception)
-            {
-                return null;
-            }
-            return rv;
+            return _singleton;
         }
+
+        public void Save()
+        {
+            _singleton = this;
+            this.WriteXml("gradebook.xml");
+            /*Student.WriteXml("studentTable.xml");
+            Grade.WriteXml("gradeTable.xml");
+            Course.WriteXml("courseTable.xml");
+            */
+        }
+
+        static public User CurrentUser { get; set; }
 
         partial class StudentRow
         {
