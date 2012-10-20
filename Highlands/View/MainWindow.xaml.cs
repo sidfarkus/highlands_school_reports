@@ -60,21 +60,11 @@ namespace Highlands
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Load();
+            
         }
 
         private void Load()
         {
-            while (!UserViewModel.CurrentUser.IsValid)
-            {
-                var result = (new LoginWindow()).ShowDialog();
-                if (result == false)
-                {
-                    Close();
-                    return;
-                }
-            }
-
             Title = "Welcome, " + UserViewModel.CurrentUser;
             _gradebook = GradebookViewModel.Load();
 
@@ -138,8 +128,12 @@ namespace Highlands
         {
             // clear gradebook
             _gradebook.Reset();
+            logoutOverlay.Reset();
+        }
+
+        private void OnLogin(object sender, System.EventArgs e)
+        {
             Load();
-            
         }
     }
 }

@@ -1,7 +1,6 @@
-﻿<Window x:Class="Highlands.LoginWindow"
+﻿<UserControl x:Class="Highlands.LoginWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Gradebook.Login" Height="335" Width="391" Icon="/Highlands;component/Images/main.ico">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Background="White">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -20,5 +19,4 @@
         <PasswordBox x:Name="entPassword" Grid.Row="2" Grid.Column="1" />
        <Button Click="btnLogin_Click" Grid.Row="3" Grid.ColumnSpan="2" Margin="5">Login</Button>
     </Grid>
-
-</Window>
+</UserControl>

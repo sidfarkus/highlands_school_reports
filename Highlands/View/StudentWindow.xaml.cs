@@ -36,14 +36,13 @@ namespace Highlands
             dtpDob.SelectedDate = _student.DOB;
             entAddress.Text = _student.Address;
             dtpEnrolled.SelectedDate = _student.DateEnrolled;
-            if (_student.DateWithdrawn.HasValue)
+           if (_student.DateWithdrawn.HasValue)
                 dtpWithdrawn.SelectedDate = _student.DateWithdrawn.Value;
             chkWithdrawn.IsChecked = _student.DateWithdrawn.HasValue;
             Maintenance.GradeLevelShorts.ForEach(o => cmbGradeLevel.Items.Add(o));
             cmbGradeLevel.Text = _student.GradeLevel;
-            
-            dgvGrades.ItemsSource = Grades;
 
+            dgvGrades.ItemsSource = Grades;
 
             dgvSelfDevelopment.ItemsSource = SDScores;
 

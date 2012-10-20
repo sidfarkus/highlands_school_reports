@@ -4,15 +4,15 @@
 winexe
 C#
 .cs
-F:\code\Highlands\Highlands\obj\Debug\
+C:\projects\highlands\highlands_school_reports\Highlands\obj\Debug\
 Highlands
 none
 false
 DEBUG;TRACE
-F:\code\Highlands\Highlands\App.xaml
+C:\projects\highlands\highlands_school_reports\Highlands\App.xaml
 4-1062256774
 
-281703913381
+28-997219539
 12-1401562060
 View\EditGrade.xaml;View\LoginWindow.xaml;View\MainWindow.xaml;View\StudentWindow.xaml;
 

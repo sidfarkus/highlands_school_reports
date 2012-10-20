@@ -1,16 +1,26 @@
 ﻿using Highlands.ViewModel;
+using System;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace Highlands
 {
     /// <summary>
     /// Interaction logic for LoginWindow.xaml
     /// </summary>
-    public partial class LoginWindow : Window
+    public partial class LoginWindow : UserControl
     {
+        public event EventHandler LoggedIn = (o, s) => { };
+
         public LoginWindow()
         {
             InitializeComponent();
+            Reset();
+        }
+
+        public void Reset()
+        {
+            this.Visibility = System.Windows.Visibility.Visible;
             ViewUtils.ReadFromConfig(cmbUserName);
         }
 
@@ -24,9 +34,9 @@ namespace Highlands
             }
 
             ViewUtils.WriteToConfig(cmbUserName);
-            
-            DialogResult = true;
-            Close();
+
+            this.Visibility = System.Windows.Visibility.Hidden;
+            LoggedIn(this, new EventArgs());
         }
     }
 }
