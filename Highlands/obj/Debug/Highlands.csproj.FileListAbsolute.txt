@@ -38,3 +38,5 @@ C:\projects\highlands\highlands_school_reports\Highlands\obj\Debug\Highlands.Pro
 C:\projects\highlands\highlands_school_reports\Highlands\obj\Debug\Highlands.csproj.GenerateResource.Cache
 C:\projects\highlands\highlands_school_reports\Highlands\obj\Debug\GeneratedInternalTypeHelper.g.cs
 C:\projects\highlands\highlands_school_reports\Highlands\obj\Debug\Highlands_MarkupCompile.lref
+C:\projects\highlands\highlands_school_reports\Highlands\obj\Debug\View\StudentsControl.baml
+C:\projects\highlands\highlands_school_reports\Highlands\obj\Debug\View\StudentsControl.g.cs

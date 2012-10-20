@@ -87,6 +87,9 @@
     <Compile Include="ViewModel\SDScoreViewModel.cs" />
     <Compile Include="ViewModel\StudentViewModel.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
+    <Compile Include="View\StudentsControl.xaml.cs">
+      <DependentUpon>StudentsControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ViewUtils.cs" />
     <Compile Include="View\EditGrade.xaml.cs">
       <DependentUpon>EditGrade.xaml</DependentUpon>
@@ -126,6 +129,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\StudentsControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\StudentWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

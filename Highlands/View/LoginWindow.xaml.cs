@@ -20,7 +20,6 @@ namespace Highlands
 
         public void Reset()
         {
-            this.Visibility = System.Windows.Visibility.Visible;
             ViewUtils.ReadFromConfig(cmbUserName);
         }
 
@@ -34,8 +33,6 @@ namespace Highlands
             }
 
             ViewUtils.WriteToConfig(cmbUserName);
-
-            this.Visibility = System.Windows.Visibility.Hidden;
             LoggedIn(this, new EventArgs());
         }
     }
