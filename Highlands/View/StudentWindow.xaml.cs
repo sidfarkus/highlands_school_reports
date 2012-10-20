@@ -60,7 +60,7 @@ namespace Highlands
 
             dgvSelfDevelopment.ItemsSource = SDScores;
 
-            cmbMarkingPeriod.ItemsSource = student.Grades.Select(g => MarkingPeriod.Parse(g.Quarter))
+            cmbMarkingPeriod.ItemsSource = student.Grades.Select(g => MarkingPeriodKey.Parse(g.Quarter))
                 .Distinct()
                 .OrderBy(period => period.ApproximateEndDate)
                 .ThenBy(period => period.Quarter);
