@@ -85,13 +85,13 @@ namespace Highlands.ViewModel
 
         public bool IsCurrentForPeriod(MarkingPeriod period)
         {
-            return MarkingPeriod.Parse(Quarter).Equals(period);
+            return MarkingPeriodKey.Parse(Quarter).Equals(period.Key);
         }
 
         public bool ShouldShowOnReportCard(MarkingPeriod period)
         {
-            var thisPeriod = MarkingPeriod.Parse(Quarter);
-            return thisPeriod.SchoolYear.Item1 == period.SchoolYear.Item1;
+            var thisPeriod = MarkingPeriodKey.Parse(Quarter);
+            return thisPeriod.EndingSchoolYear == period.Key.EndingSchoolYear;
         }
 
         internal void Save(System.Collections.Generic.List<StaticModel.Change> diffs)
@@ -113,7 +113,7 @@ namespace Highlands.ViewModel
         public IEnumerable<KeyValuePair<string, string>> GetGradeReportFields(MarkingPeriod period, int rowIndex)
         {
             yield return new KeyValuePair<string, string>(
-                 string.Format(MarkingPeriod.Parse(Quarter).Quarter + "Row{0}", rowIndex),
+                 string.Format(MarkingPeriodKey.Parse(Quarter).Quarter + "Row{0}", rowIndex),
                  LetterGrade + (!string.IsNullOrEmpty(SpecialGrade) ? "\n" + SpecialGrade : ""));
 
             if (IsCurrentForPeriod(period))
@@ -182,11 +182,25 @@ namespace Highlands.ViewModel
                 "Stage: " + ApprovalStage + Environment.NewLine;
         }
 
-        public string StudentName
+        internal string StudentName
         {
             get
             {
                 return _gradeRow.StudentRow.Name;
+            }
+        }
+
+        public IEnumerable<string> ForGrid
+        {
+            get
+            {
+                var rv = new List<string>();
+                rv.Add(_gradeRow.StudentRow.Name);
+                rv.Add(_gradeRow.LetterGrade);
+                rv.Add(_gradeRow.SpecialGrade);
+                rv.Add(_gradeRow.Comment);
+                rv.Add(_gradeRow.ApprovalStage);
+                return rv;
             }
         }
     }

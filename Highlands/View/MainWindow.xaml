@@ -13,6 +13,15 @@
                 <Button Click="btnLogout_Click" Width="80" HorizontalAlignment="Right" Margin="3">Logout</Button>
             </Border>
             <TabControl Grid.Row="1">
+                <TabItem Header="Home">
+                    <TextBlock>Home</TextBlock>
+                </TabItem>
+                <TabItem Header="Classes">
+                    <h:ClassesControl x:Name="ctrlClasses"/>
+                </TabItem>
+                <TabItem Header="Grades">
+                    <h:GradesControl />
+                </TabItem>
                 <TabItem Header="Attendence">
                     <h:AttendeesControl />
                 </TabItem>

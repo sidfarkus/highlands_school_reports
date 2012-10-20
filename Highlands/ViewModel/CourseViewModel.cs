@@ -54,7 +54,7 @@ namespace Highlands.ViewModel
         {
             return (subject == "Art" || subject == "Music" || subject == "Health and Fitness");
         }
-        internal static bool NonSpecialCourse(string subject)
+        internal static bool SmallGroupCourse(string subject)
         {
             return (subject == "Reading" || subject == "Phonics/Spelling" || subject == "Written Expression" || subject == "Math");
         }
@@ -64,5 +64,16 @@ namespace Highlands.ViewModel
         }
 
 
+
+        public IEnumerable<GradeViewModel> Grades
+        {
+            get
+            {
+                var rv = new List<GradeViewModel>();
+                var grades = CourseRow.GetGradeRows();
+                grades.ToList().ForEach(g => rv.Add(new GradeViewModel(g)));
+                return rv;
+            }
+        }
     }
 }

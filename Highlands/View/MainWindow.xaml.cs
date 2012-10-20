@@ -33,6 +33,7 @@ namespace Highlands
             Title = "Highlands School";
             loginOverlay.Visibility = System.Windows.Visibility.Hidden;
             studentsControl.LoadGradebook();
+            ctrlClasses.Refresh();
         }
     }
 }

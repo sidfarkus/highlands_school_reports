@@ -145,7 +145,7 @@ namespace Highlands.ViewModel
 
         private IEnumerable<KeyValuePair<string, string>> GetSelfDevFields(MarkingPeriod period)
         {
-            return SelfDevelopmentScores.Where(score => MarkingPeriod.Parse(score.Quarter).Equals(period))
+            return SelfDevelopmentScores.Where(score => MarkingPeriodKey.Parse(score.Quarter).Equals(period))
                 .Select((s, i) => new[] { 
                     new KeyValuePair<string, string>("SD" + i, "Some SD Text!"),
                     new KeyValuePair<string, string>("SDValue" + i, s.Score.ToString())

@@ -27,8 +27,8 @@ namespace Highlands.ViewModel
                         var teacher = string.Empty;
                         if (CourseViewModel.ClassroomCourse(subject))
                             teacher = RandString(Maintenance.Users.Where(u => u.Role == RoleEnum.ClassroomInstructor).Select(t => t.Name).ToList());
-                        else if (CourseViewModel.NonSpecialCourse(subject))
-                            teacher = RandString(Maintenance.Users.Where(u => u.Role == RoleEnum.NonSpecialInstructor).Select(t => t.Name).ToList());
+                        else if (CourseViewModel.SmallGroupCourse(subject))
+                            teacher = RandString(Maintenance.Users.Where(u => u.Role == RoleEnum.SmallGroupInstructor).Select(t => t.Name).ToList());
                         else if (CourseViewModel.SpecialCourse(subject))
                             teacher = RandString(Maintenance.Users.Where(u => u.Role == RoleEnum.SpecialInstructor).Select(t => t.Name).ToList());
                         else
@@ -54,20 +54,20 @@ namespace Highlands.ViewModel
 
                 foreach (var course in rv.Course.OrderByDescending(c => c.Quarter))
                 {
-                    var mp = MarkingPeriod.Parse(course.Quarter);
-                    var diffYears = MarkingPeriod.Current.EndingSchoolYear - mp.EndingSchoolYear;
+                    var mp = MarkingPeriodKey.Parse(course.Quarter);
+                    var diffYears = MarkingPeriodKey.Current.EndingSchoolYear - mp.EndingSchoolYear;
 
                     if (course.Level == Maintenance.GradeLevelNumber(AddGradeLevel(student.GradeLevel, 0 - diffYears)))
                     {
 
-                        if (mp.Equals(MarkingPeriod.Current) && _rnd.Next(0, 2) == 0)
+                        if (mp.Equals(MarkingPeriodKey.Current) && _rnd.Next(0, 2) == 0)
                         {
                             rv.Grade.AddGradeRow(student, course, string.Empty, string.Empty, string.Empty, ApprovalStage.Open.ToString());
                         }
                         else
                         {
                             var stage = ApprovalStage.Office;
-                            if (mp.Equals(MarkingPeriod.Current))
+                            if (mp.Equals(MarkingPeriodKey.Current))
                             {
                                 if (_rnd.Next(0, 2) == 0)
                                     stage = ApprovalStage.Instructor;
@@ -99,7 +99,7 @@ namespace Highlands.ViewModel
 
                 foreach (var quarter in quarters)
                 {
-                    if (enrolled > quarter.ApproximateEndDate)
+                    if (enrolled > quarter.EndDate)
                         continue;
                     foreach (var area in Maintenance.SelfDevelopmentAreas)
                         rv.SelfDevelopment.AddSelfDevelopmentRow(student, area, quarter.ToString(), _rnd.Next(3, 5), "Jekyll");
@@ -107,9 +107,9 @@ namespace Highlands.ViewModel
                     if (_rnd.NextDouble() > .9)
                     {
                         if (withdraw)
-                            student.DateWithdrawn = quarter.ApproximateEndDate.AddMonths(-1);
+                            student.DateWithdrawn = quarter.EndDate.AddMonths(-1);
                         else
-                            student.DateEnrolled = quarter.ApproximateEndDate.AddMonths(-2);
+                            student.DateEnrolled = quarter.EndDate.AddMonths(-2);
                         //if (student.DateEnrolled > DateTime.Today)
                         //    student.DateEnrolled = DateTime.Today.AddDays(-1);
                         break;

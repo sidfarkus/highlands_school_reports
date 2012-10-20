@@ -14,7 +14,7 @@ namespace Highlands.StaticModel
         Admin,
         Nurse,
         ClassroomInstructor,
-        NonSpecialInstructor,
+        SmallGroupInstructor,
         SpecialInstructor
     }
 
@@ -95,7 +95,7 @@ namespace Highlands.StaticModel
         {
             get
             {
-                return (Role == RoleEnum.ClassroomInstructor || Role == RoleEnum.NonSpecialInstructor || Role == RoleEnum.SpecialInstructor);
+                return (Role == RoleEnum.ClassroomInstructor || Role == RoleEnum.SmallGroupInstructor || Role == RoleEnum.SpecialInstructor);
             }
         }
         public override string ToString()
