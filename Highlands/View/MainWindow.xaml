@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:h="clr-namespace:Highlands"
         Title="Highlands School" Icon="/Highlands;component/Images/main.ico" WindowState="Maximized">
+    
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
@@ -13,13 +14,9 @@
                 <Button Click="btnLogout_Click" Width="80" HorizontalAlignment="Right" Margin="3">Logout</Button>
             </Border>
             <TabControl Grid.Row="1">
-                <TabItem Header="Home">
-                    <TextBlock>Home</TextBlock>
-                </TabItem>
                 <TabItem Header="Classes">
                     <h:ClassesControl x:Name="ctrlClasses"/>
                 </TabItem>
-  
                 <TabItem Header="Attendence">
                     <h:AttendeesControl />
                 </TabItem>

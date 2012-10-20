@@ -64,7 +64,6 @@ namespace Highlands.ViewModel
         }
 
 
-
         public IEnumerable<GradeViewModel> Grades
         {
             get

@@ -133,7 +133,7 @@ namespace Highlands.ViewModel
                 .OrderBy(subject => subject.Key);
             var gradeReportFields = currentSubjects.Select((subject, i) => {
                 var thisYearsGrades = subject.Where(subGrade => subGrade.ShouldShowOnReportCard(period))
-                    .Select(subGrade => subGrade.GetGradeReportFields(period, i));
+                    .Select(subGrade => subGrade.GetGradeReportFields(period, i + 1));
                 return thisYearsGrades.SelectMany(x => x);
             }).SelectMany(x => x);
             var outputProperties = gradeReportFields.Concat(GetPDFFields(this))
@@ -145,10 +145,11 @@ namespace Highlands.ViewModel
 
         private IEnumerable<KeyValuePair<string, string>> GetSelfDevFields(MarkingPeriodKey period)
         {
+            var sdAreas = Maintenance.SelfDevelopmentAreas;
             return SelfDevelopmentScores.Where(score => MarkingPeriodKey.Parse(score.Quarter).Equals(period))
                 .Select((s, i) => new[] { 
-                    new KeyValuePair<string, string>("SD" + i, "Some SD Text!"),
-                    new KeyValuePair<string, string>("SDValue" + i, s.Score.ToString())
+                    new KeyValuePair<string, string>("SD" + i + 1, sdAreas[i]),
+                    new KeyValuePair<string, string>("SDValue" + i + 1, s.Score.ToString())
                 }).SelectMany(x => x);
         }
 

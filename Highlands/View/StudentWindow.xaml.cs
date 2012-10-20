@@ -62,9 +62,14 @@ namespace Highlands
             dgvGrades.ItemsSource = Grades;
             dgvSelfDevelopment.ItemsSource = SDScores;
             
+            var periods = new HashSet<string>();
             cmbMarkingPeriod.ItemsSource = student.Grades.Select(g => MarkingPeriodKey.Parse(g.Quarter))
-
-                .OrderBy(period => period.ApproximateEndDate)
+                .Where(period => { 
+                    var hadItem = periods.Contains(period.ToString());
+                    if (!hadItem) periods.Add(period.ToString());
+                    return !hadItem;
+                })
+                .OrderByDescending(period => period.ApproximateEndDate)
                 .ThenBy(period => period.Quarter);
             if (cmbMarkingPeriod.Items.Count > 0)
             {
@@ -222,17 +227,19 @@ namespace Highlands
 
         private void OnGenerateReportCard(object sender, RoutedEventArgs e)
         {
+            var period = (MarkingPeriodKey) cmbMarkingPeriod.SelectedItem;
             var dialog = new Microsoft.Win32.SaveFileDialog()
             {
                 AddExtension = true,
-                Filter = "PDF Files (*.pdf)|*.pdf"
+                Filter = "PDF Files (*.pdf)|*.pdf",
+                FileName = String.Format("{0}_Q{1}_{2}_Report_Card.pdf", _student.Name, period.Quarter, period.EndingSchoolYear)
             };
             var result = dialog.ShowDialog();
             if (result.HasValue && result.Value)
             {
                 try
                 {
-                    _student.CreateReportCard(dialog.FileName, (MarkingPeriodKey) cmbMarkingPeriod.SelectedItem);
+                    _student.CreateReportCard(dialog.FileName, period);
                 }
                 catch (System.IO.IOException)
                 {

@@ -56,6 +56,4 @@ C:\projects\highlands\Highlands\obj\Debug\Highlands.Properties.Resources.resourc
 C:\projects\highlands\Highlands\obj\Debug\Highlands.csproj.GenerateResource.Cache
 C:\projects\highlands\Highlands\bin\Debug\Report Card Template.pdf
 C:\projects\highlands\Highlands\obj\Debug\View\ClassesControl.baml
-C:\projects\highlands\Highlands\obj\Debug\View\GradesControl.baml
 C:\projects\highlands\Highlands\obj\Debug\View\ClassesControl.g.cs
-C:\projects\highlands\Highlands\obj\Debug\View\GradesControl.g.cs
