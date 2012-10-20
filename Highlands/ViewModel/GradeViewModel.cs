@@ -113,7 +113,7 @@ namespace Highlands.ViewModel
         public IEnumerable<KeyValuePair<string, string>> GetGradeReportFields(MarkingPeriod period, int rowIndex)
         {
             yield return new KeyValuePair<string, string>(
-                 string.Format("Mkg" + MarkingPeriod.Parse(Quarter).Quarter + "-Row{0}", rowIndex),
+                 string.Format(MarkingPeriod.Parse(Quarter).Quarter + "Row{0}", rowIndex),
                  LetterGrade + (!string.IsNullOrEmpty(SpecialGrade) ? "\n" + SpecialGrade : ""));
 
             if (IsCurrentForPeriod(period))

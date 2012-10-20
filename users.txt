@@ -1,46 +1,47 @@
-I. Jones,ClassroomInstructor
-R. Jacobi,ClassroomInstructor
-I. Jasper,ClassroomInstructor
-S. Jackson,ClassroomInstructor
-M. Jeffers,ClassroomInstructor
-R. Jewell,ClassroomInstructor
-S. Jordan,ClassroomInstructor
-M. Judd,ClassroomInstructor
-R. Juliet,ClassroomInstructor
-S. Jakes,ClassroomInstructor
-I.  Kaiser,None
-R. Kaufman,NonSpecialInstructor
-I. Kavanaugh,NonSpecialInstructor
-S. Kaynard,NonSpecialInstructor
-M. Keach,NonSpecialInstructor
-R. Kellog,NonSpecialInstructor
-S. Kelsey,NonSpecialInstructor
-M. Kelso,NonSpecialInstructor
-R. Kendall,NonSpecialInstructor
-S. Kimble,NonSpecialInstructor
-S. Lackey,SpecialInstructor
-S. Lacy,SpecialInstructor
-S. Ladd,SpecialInstructor
-S. Lahey,SpecialInstructor
-S. Laing,SpecialInstructor
-S. Laird,SpecialInstructor
-S. Lake,SpecialInstructor
-S. Lalor,SpecialInstructor
-S. Lam,SpecialInstructor
-S. Lamb,SpecialInstructor
-S. Lambert,SpecialInstructor
-S. Lambourne,SpecialInstructor
-S. Lamma,SpecialInstructor
-S. Lamport,SpecialInstructor
-S. Lancaster,SpecialInstructor
-S. Meese,Admin
-S. Mouse,Admin
-S. Nightingale,Nurse
-T.  O'Rourke,None
-None,None
-SuperUser,SuperUser
-Admin,Admin
-Nurse,Nurse
-ClassroomInstructor,ClassroomInstructor
-NonSpecialInstructor,NonSpecialInstructor
-SpecialInstructor,SpecialInstructor
+I. Jones,ClassroomInstructor,Jones@highlands.com,
+R. Jacobi,ClassroomInstructor,Jacobi@highlands.com,
+I. Jasper,ClassroomInstructor,Jasper@highlands.com,
+S. Jackson,ClassroomInstructor,Jackson@highlands.com,
+M. Jeffers,ClassroomInstructor,Jeffers@highlands.com,
+R. Jewell,ClassroomInstructor,Jewell@highlands.com,
+S. Jordan,ClassroomInstructor,Jordan@highlands.com,
+M. Judd,ClassroomInstructor,Judd@highlands.com,
+R. Juliet,ClassroomInstructor,Juliet@highlands.com,
+S. Jakes,ClassroomInstructor,Jakes@highlands.com,
+I.  Kaiser,None,@highlands.com,
+R. Kaufman,NonSpecialInstructor,Kaufman@highlands.com,
+I. Kavanaugh,NonSpecialInstructor,Kavanaugh@highlands.com,
+S. Kaynard,NonSpecialInstructor,Kaynard@highlands.com,
+M. Keach,NonSpecialInstructor,Keach@highlands.com,
+R. Kellog,NonSpecialInstructor,Kellog@highlands.com,
+S. Kelsey,NonSpecialInstructor,Kelsey@highlands.com,
+M. Kelso,NonSpecialInstructor,Kelso@highlands.com,
+R. Kendall,NonSpecialInstructor,Kendall@highlands.com,
+S. Kimble,NonSpecialInstructor,Kimble@highlands.com,
+S. Lackey,SpecialInstructor,Lackey@highlands.com,
+S. Lacy,SpecialInstructor,Lacy@highlands.com,
+S. Ladd,SpecialInstructor,Ladd@highlands.com,
+S. Lahey,SpecialInstructor,Lahey@highlands.com,
+S. Laing,SpecialInstructor,Laing@highlands.com,
+S. Laird,SpecialInstructor,Laird@highlands.com,
+S. Lake,SpecialInstructor,Lake@highlands.com,
+S. Lalor,SpecialInstructor,Lalor@highlands.com,
+S. Lam,SpecialInstructor,Lam@highlands.com,
+S. Lamb,SpecialInstructor,Lamb@highlands.com,
+S. Lambert,SpecialInstructor,Lambert@highlands.com,
+S. Lambourne,SpecialInstructor,Lambourne@highlands.com,
+S. Lamma,SpecialInstructor,Lamma@highlands.com,
+S. Lamport,SpecialInstructor,Lamport@highlands.com,
+S. Lancaster,SpecialInstructor,Lancaster@highlands.com,
+S. Meese,Admin,Meese@highlands.com,
+S. Mouse,Admin,Mouse@highlands.com,
+S. Nightingale,Nurse,Nightingale@highlands.com,
+T.  O'Rourke,None,@highlands.com,
+None,None,None@highlands.com,
+SuperUser,SuperUser,SuperUser@highlands.com,
+Admin,Admin,Admin@highlands.com,
+Nurse,Nurse,Nurse@highlands.com,
+ClassroomInstructor,ClassroomInstructor,ClassroomInstructor@highlands.com,
+NonSpecialInstructor,NonSpecialInstructor,NonSpecialInstructor@highlands.com,
+SpecialInstructor,SpecialInstructor,SpecialInstructor@highlands.com,
+password,SuperUser,password@highlands.com,9708D7770346C3A316B1759704D59F6305DAE4C8

@@ -34,7 +34,7 @@ namespace Highlands.Utils
                 {
                     var form = stamper.AcroFields;
                     var fieldKeys = form.Fields.Keys;
-                    //File.WriteAllLines(@"c:\users\rwarholic\fields.txt", fieldKeys.OfType<string>().ToArray());
+                    File.WriteAllLines(@"c:\users\rwarholic\fields.txt", fieldKeys.OfType<string>().ToArray());
                     foreach (string fieldKey in fieldKeys)
                     {
                         if (keys.ContainsKey(fieldKey))

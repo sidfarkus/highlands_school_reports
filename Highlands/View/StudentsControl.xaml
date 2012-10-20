@@ -2,33 +2,92 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" Loaded="Window_Loaded"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:h="clr-namespace:Highlands"
+             mc:Ignorable="d" Loaded="Window_Loaded" Background="White"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Style  TargetType="{x:Type ListBoxItem}">
+            <Style.Triggers>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                    <Setter Property="Background" Value="#19f39611"></Setter>
+                </Trigger>
+                <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                    <Setter Property="Background" Value="#19000000"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition  Height="Auto"/>
             <RowDefinition />
             <RowDefinition  Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <Label>Student:</Label>
-            <TextBox Name="entStudent" VerticalAlignment="Center" MinWidth="100" TextChanged="TextBox_TextChanged"/>
-            <CheckBox Name="chkMyStudents" IsChecked="True" VerticalAlignment="Center" Margin="5" Click="chkMyStudents_Click">My Students/Courses Only</CheckBox>
-        </StackPanel>
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Label>Grade Level:</Label>
+        <StackPanel Orientation="Horizontal">
+            <Label VerticalAlignment="Center">Grade Level:</Label>
             <ComboBox Name="cmbGradeLevel" MinWidth="50"  Margin="5" SelectionChanged="cmbGradeLevel_SelectionChanged">All</ComboBox>
-            <Label>Quarter:</Label>
+            <Label VerticalAlignment="Center">Quarter:</Label>
             <ComboBox Name="cmbQuarter" MinWidth="75" Margin="5" SelectionChanged="cmbQuarter_SelectionChanged">All</ComboBox>
-            <Label>Course:</Label>
+            <Label VerticalAlignment="Center">Course:</Label>
             <ComboBox Name="cmbCourse" MinWidth="75"  Margin="5" SelectionChanged="cmbCourse_SelectionChanged">All</ComboBox>
-            <Button Padding="5" Name="btnGradeAll">Grade All</Button>
+            <CheckBox Name="chkMyStudents" IsChecked="True" VerticalAlignment="Center" Margin="5" Click="chkMyStudents_Click">My Students Only</CheckBox>
         </StackPanel>
-        <ListBox Name="lst" Grid.Row="2" MouseDoubleClick="lst_MouseDoubleClick" />
-        <StatusBar Grid.Row="3">
-            <StatusBarItem Name="staCount">Count</StatusBarItem>
+        <Grid HorizontalAlignment="Right" Margin="0,0,5,0">
+            <Label VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,190,0">Find Student Name:</Label>
+            <TextBox Name="entStudent" VerticalAlignment="Center" HorizontalAlignment="Right" Width="180" TextChanged="TextBox_TextChanged"/>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" MinWidth="300"/>
+                <ColumnDefinition Width="3*" MinWidth="200"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            
+            <Grid Margin="8,0,16,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Name" FontWeight="Bold" FontSize="14"/>
+                <TextBlock Text="Age" Grid.Column="1" FontWeight="Bold" FontSize="14"/>
+                <TextBlock Text="Grade Level" FontWeight="Bold" Grid.Column="2" FontSize="14"/>
+                <TextBlock Text="Date Enrolled" FontWeight="Bold" Grid.Column="3" FontSize="14"/>
+            </Grid>
+            <ListBox Name="lst" MouseUp="ListMouseUp" VerticalAlignment="Stretch" 
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                        ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Row="1">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Black" BorderThickness="1" Padding="4" Margin="2">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Name}" FontWeight="Bold" />
+                                <TextBlock Text="{Binding Age}" Grid.Column="1"/>
+                                <TextBlock Text="{Binding GradeLevel}"  Grid.Column="2"/>
+                                <TextBlock Text="{Binding DateEnrolled}"  Grid.Column="3"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <h:StudentWindow x:Name="studentEditor" Grid.Column="1" Grid.RowSpan="2"/>
+            <GridSplitter Grid.Column="1" Grid.RowSpan="2" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeDirection="Columns" Width="4"/>
+        </Grid>
+        <StatusBar Grid.Row="2">
+            <StatusBarItem Name="staCount">Students</StatusBarItem>
         </StatusBar>
     </Grid>
 </UserControl>

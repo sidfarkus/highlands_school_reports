@@ -27,7 +27,6 @@ namespace Highlands
         public StudentsControl()
         {
             InitializeComponent();
-            LoadGradebook();
         }
 
         private void FillCourses(MarkingPeriod mp, string gradeLevel)
@@ -50,7 +49,6 @@ namespace Highlands
 
         private void FillStudents(string target, MarkingPeriod mp, string gradeLevel, CourseViewModel course)
         {
-            lst.Items.Clear();
             var students = Gradebook.Students;
             if (chkMyStudents.IsChecked == true)
                 students = students.Where(s => s.HasTeacher(UserViewModel.CurrentUser));
@@ -68,19 +66,17 @@ namespace Highlands
                 target = target.ToUpper();
                 students = students.Where(s => s.Name.ToUpper().Contains(target) || s.GradeLevel.ToUpper().Contains(target));
             }
-            foreach (var student in students)
-                lst.Items.Add(student);
 
+            lst.ItemsSource = students;
             staCount.Content = "Students: " + students.Count();
         }
 
-        private void LoadGradebook()
+        public void LoadGradebook()
         {
             Gradebook = GradebookViewModel.Load();
 
             chkMyStudents.IsChecked = UserViewModel.CurrentUser.HasStudents;
             chkMyStudents.IsEnabled = UserViewModel.CurrentUser.HasStudents;
-            btnGradeAll.IsEnabled = UserViewModel.CurrentUser.HasStudents;
 
             MarkingPeriod.MarkingPeriods.OrderByDescending(q => q.ApproximateEndDate).ToList().ForEach(q => cmbQuarter.Items.Add(q));
             cmbQuarter.Text = cmbQuarter.Items[1].ToString();
@@ -96,15 +92,6 @@ namespace Highlands
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             FillStudents(entStudent.Text, cmbQuarter.SelectedItem as MarkingPeriod, cmbGradeLevel.Text, cmbCourse.SelectedItem as CourseViewModel);
-        }
-
-        private void lst_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            var student = lst.SelectedItem as StudentViewModel;
-            if (student == null)
-                return;
-            var studentWindow = new StudentWindow(student);
-            studentWindow.ShowDialog();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -133,7 +120,15 @@ namespace Highlands
             var gradeLevel = e.AddedItems[0] as string;
             FillCourses(cmbQuarter.SelectedItem as MarkingPeriod, gradeLevel);
             FillStudents(entStudent.Text, cmbQuarter.SelectedItem as MarkingPeriod, gradeLevel, cmbCourse.SelectedItem as CourseViewModel);
+        }
 
+        private void ListMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            var student = lst.SelectedItem as StudentViewModel;
+            studentEditor.ClearStudent();
+            if (student == null)
+                return;
+            studentEditor.LoadStudent(student);
         }
     }
 }

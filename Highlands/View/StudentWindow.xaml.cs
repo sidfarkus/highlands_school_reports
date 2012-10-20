@@ -13,18 +13,31 @@ namespace Highlands
     /// <summary>
     /// Interaction logic for StudentWindow.xaml
     /// </summary>
-    public partial class StudentWindow : Window
+    public partial class StudentWindow : UserControl
     {
         StudentViewModel _student;
-        public StudentWindow(StudentViewModel student)
+
+        public StudentWindow()
         {
             InitializeComponent();
-           
-            _student = student;
+        }
+        
+        public StudentWindow(StudentViewModel student) : this()
+        {
+            LoadStudent(student);
+        }
 
-            Title = _student.Name;
+        public void ClearStudent()
+        {
+            noStudentOverlay.Visibility = System.Windows.Visibility.Visible;
+        }
+
+        public void LoadStudent(StudentViewModel student)
+        {
+            _student = student;
+            noStudentOverlay.Visibility = System.Windows.Visibility.Hidden;
             var currentUser = UserViewModel.CurrentUser;
-            
+
             chkMyClasses.IsChecked = currentUser.HasStudents;
             chkMyClasses.IsEnabled = currentUser.HasStudents;
             gridStudentInfo.IsEnabled = currentUser.CanEditStudentInfo;
@@ -37,7 +50,7 @@ namespace Highlands
             dtpDob.SelectedDate = _student.DOB;
             entAddress.Text = _student.Address;
             dtpEnrolled.SelectedDate = _student.DateEnrolled;
-           if (_student.DateWithdrawn.HasValue)
+            if (_student.DateWithdrawn.HasValue)
                 dtpWithdrawn.SelectedDate = _student.DateWithdrawn.Value;
             chkWithdrawn.IsChecked = _student.DateWithdrawn.HasValue;
             Maintenance.GradeLevelShorts.ForEach(o => cmbGradeLevel.Items.Add(o));
@@ -47,10 +60,19 @@ namespace Highlands
 
             dgvSelfDevelopment.ItemsSource = SDScores;
 
-            MarkingPeriod.MarkingPeriods.ForEach(o => cmbMarkingPeriod.Items.Add(o));
-            cmbMarkingPeriod.Text = MarkingPeriod.Current.ToString();
-            
-            //dgv.Items.Add(new List<string>() { "A", "B", "c" });
+            cmbMarkingPeriod.ItemsSource = student.Grades.Select(g => MarkingPeriod.Parse(g.Quarter))
+                .Distinct()
+                .OrderBy(period => period.ApproximateEndDate)
+                .ThenBy(period => period.Quarter);
+            if (cmbMarkingPeriod.Items.Count > 0)
+            {
+                cmbMarkingPeriod.SelectedIndex = 0;
+                genReport.IsEnabled = true;
+            }
+            else
+            {
+                genReport.IsEnabled = false;
+            }
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -60,10 +82,6 @@ namespace Highlands
                 dtpWithdrawn.SelectedDate = DateTime.Today;
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-
-        }
         ObservableCollection<GradeViewModel> _grades;
         public ObservableCollection<GradeViewModel> Grades
         {
@@ -164,8 +182,7 @@ namespace Highlands
 
         private void btnEditGrade_Click(object sender, RoutedEventArgs e)
         {
-            var context = (sender as Button).DataContext;
-            var grade = context as GradeViewModel;
+            var grade = dgvGrades.SelectedValue as GradeViewModel;
             var rights = UserViewModel.CurrentUser.CanEdit(grade);
             if (RightsEnum.Success != UserViewModel.CurrentUser.CanEdit(grade))
             {
@@ -185,8 +202,7 @@ namespace Highlands
 
         private void btnApprove_Click(object sender, RoutedEventArgs e)
         {
-            var context = (sender as Button).DataContext;
-            var grade = context as GradeViewModel;
+            var grade = dgvGrades.SelectedValue as GradeViewModel;
             var result = UserViewModel.CurrentUser.CanApprove(grade);
             if (RightsEnum.Success != result)
             {
@@ -215,7 +231,7 @@ namespace Highlands
             {
                 try
                 {
-                    _student.CreateReportCard(dialog.FileName, MarkingPeriod.Current);
+                    _student.CreateReportCard(dialog.FileName, (MarkingPeriod) cmbMarkingPeriod.SelectedItem);
                 }
                 catch (System.IO.IOException)
                 {
@@ -226,8 +242,7 @@ namespace Highlands
 
         private void btnUnApprove_Click(object sender, RoutedEventArgs e)
         {
-            var context = (sender as Button).DataContext;
-            var grade = context as GradeViewModel;
+            var grade = dgvGrades.SelectedValue as GradeViewModel;
             var result = UserViewModel.CurrentUser.CanUnApprove(grade);
             if (RightsEnum.Success != result)
             {

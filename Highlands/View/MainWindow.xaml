@@ -9,24 +9,15 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <ToolBar Grid.Row="0">
-                <Button Click="btnLogout_Click">Logout</Button>
-            </ToolBar>
+            <Border Grid.Row="0" Background="LightGray">
+                <Button Click="btnLogout_Click" Width="80" HorizontalAlignment="Right" Margin="3">Logout</Button>
+            </Border>
             <TabControl Grid.Row="1">
-                <TabItem Header="Home">
-                    <TextBlock>Home</TextBlock>
-                </TabItem>
-                <TabItem Header="Classes">
-                    <h:ClassesControl />
-                </TabItem>
-                <TabItem Header="Grades">
-                    <h:GradesControl />
-                </TabItem>
                 <TabItem Header="Attendence">
                     <h:AttendeesControl />
                 </TabItem>
                 <TabItem Header="Students">
-                    <h:StudentsControl/>
+                    <h:StudentsControl x:Name="studentsControl"/>
                 </TabItem>
             </TabControl>
         </Grid>

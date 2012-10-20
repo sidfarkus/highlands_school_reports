@@ -22,6 +22,8 @@ namespace Highlands
         {
             ViewUtils.ReadFromConfig(cmbUserName);
             entPassword.Password = "";
+            entConfirmPassword.Password = "";
+            UserViewModel.Reset();
         }
 
         private void btnLogin_Click(object sender, RoutedEventArgs e)

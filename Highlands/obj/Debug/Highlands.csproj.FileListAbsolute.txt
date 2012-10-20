@@ -32,17 +32,13 @@ C:\projects\highlands\Highlands\obj\Debug\Highlands.exe
 C:\projects\highlands\Highlands\obj\Debug\Highlands.pdb
 C:\projects\highlands\Highlands\obj\Debug\Highlands.csprojResolveAssemblyReference.cache
 C:\projects\highlands\Highlands\obj\Debug\View\AttendenceControl.baml
-C:\projects\highlands\Highlands\obj\Debug\View\ClassesControl.baml
 C:\projects\highlands\Highlands\obj\Debug\View\EditGrade.baml
-C:\projects\highlands\Highlands\obj\Debug\View\GradesControl.baml
 C:\projects\highlands\Highlands\obj\Debug\View\LoginWindow.baml
 C:\projects\highlands\Highlands\obj\Debug\View\StudentsControl.baml
 C:\projects\highlands\Highlands\obj\Debug\View\StudentWindow.baml
 C:\projects\highlands\Highlands\obj\Debug\App.baml
 C:\projects\highlands\Highlands\obj\Debug\View\AttendenceControl.g.cs
-C:\projects\highlands\Highlands\obj\Debug\View\ClassesControl.g.cs
 C:\projects\highlands\Highlands\obj\Debug\View\EditGrade.g.cs
-C:\projects\highlands\Highlands\obj\Debug\View\GradesControl.g.cs
 C:\projects\highlands\Highlands\obj\Debug\View\LoginWindow.g.cs
 C:\projects\highlands\Highlands\obj\Debug\View\MainWindow.g.cs
 C:\projects\highlands\Highlands\obj\Debug\View\StudentsControl.g.cs

@@ -17,7 +17,7 @@ namespace Highlands.ViewModel
             _studentRow = studentRow;
         }
 
-        [PDFOutputField("CommentRow1")]
+        [PDFOutputField("StudentName")]
         public string Name
         {
             get
@@ -26,7 +26,7 @@ namespace Highlands.ViewModel
             }
         }
 
-
+        [PDFOutputField("DOB")]
         public DateTime DOB
         {
             get
@@ -35,6 +35,7 @@ namespace Highlands.ViewModel
             }
         }
 
+        [PDFOutputField("StudentAddress")]
         public string Address
         {
             get
@@ -43,6 +44,7 @@ namespace Highlands.ViewModel
             }
         }
 
+        [PDFOutputField("DateEnrolled")]
         public DateTime DateEnrolled
         {
             get
@@ -51,6 +53,7 @@ namespace Highlands.ViewModel
             }
         }
 
+        [PDFOutputField("Grade")]
         public string GradeLevel
         {
             get
@@ -67,6 +70,7 @@ namespace Highlands.ViewModel
             }
         }
 
+        [PDFOutputField("DateWithdrawn")]
         public DateTime? DateWithdrawn
         {
             get
@@ -132,9 +136,28 @@ namespace Highlands.ViewModel
                     .Select(subGrade => subGrade.GetGradeReportFields(period, i));
                 return thisYearsGrades.SelectMany(x => x);
             }).SelectMany(x => x);
-            var outputProperties = gradeReportFields;
+            var outputProperties = gradeReportFields.Concat(GetPDFFields(this))
+                .Concat(GetReportLevelFields(period))
+                .Concat(GetSelfDevFields(period));
 
             PDFWriter.WritePDF(outFilename, outputProperties.ToDictionary(p => p.Key, p => p.Value));
+        }
+
+        private IEnumerable<KeyValuePair<string, string>> GetSelfDevFields(MarkingPeriod period)
+        {
+            return SelfDevelopmentScores.Where(score => MarkingPeriod.Parse(score.Quarter).Equals(period))
+                .Select((s, i) => new[] { 
+                    new KeyValuePair<string, string>("SD" + i, "Some SD Text!"),
+                    new KeyValuePair<string, string>("SDValue" + i, s.Score.ToString())
+                }).SelectMany(x => x);
+        }
+
+        private IEnumerable<KeyValuePair<string, string>> GetReportLevelFields(MarkingPeriod period)
+        {
+            yield return new KeyValuePair<string, string>(
+                "SchoolYear",
+                String.Format("Aug, {0} - May, {1}", period.SchoolYear.Item1, period.SchoolYear.Item2));
+
         }
 
         private IEnumerable<KeyValuePair<string, string>> GetPDFFields<T>(T obj)
@@ -144,9 +167,12 @@ namespace Highlands.ViewModel
 
             foreach (var prop in outputProperties)
             {
+                var val = prop.GetValue(obj) ?? "";
+                if (val is DateTime)
+                    val = ((DateTime) val).ToShortDateString();
                 yield return new KeyValuePair<string, string>(
                     prop.GetCustomAttributes(typeof(PDFOutputFieldAttribute), false).Cast<PDFOutputFieldAttribute>().First().FieldName,
-                    prop.GetValue(obj).ToString());
+                    val.ToString());
             }
         }
 
