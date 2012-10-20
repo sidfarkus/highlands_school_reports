@@ -111,22 +111,29 @@ namespace Highlands.StaticModel
             {
                 if (_markingPeriods == null)
                 {
+                    bool loaded = false;
                     var lines = Maintenance.ReadArrayFromFile("MarkingPeriods");
                     var rv = new List<MarkingPeriod>();
                     if (lines != null)
                     {
-                        foreach (var line in lines)
-                            rv.Add(MarkingPeriod.FromCsv(line));
-
+                        try
+                        {
+                            foreach (var line in lines)
+                                rv.Add(MarkingPeriod.FromCsv(line));
+                            loaded = true;
+                        }
+                        catch (Exception exc)
+                        {
+                        }
                     }
-                    else
+                    if (!loaded)
                     {
                         for (int year = 2011; year <= 2013; year++)
                         {
                             for (int quarter = 1; quarter <= 4; quarter++)
                             {
                                 var key = new MarkingPeriodKey(quarter, year);
-                                var mp = new MarkingPeriod(key, key.ApproximateStartDate, key.ApproximateEndDate);
+                                var mp = new MarkingPeriod(key, key.ApproximateStartDate, key.ApproximateEndDate, 90);
                                 if (mp.EndDate > MarkingPeriodKey.Current.ApproximateEndDate)
                                     break;
                                 rv.Add(mp);
@@ -142,7 +149,7 @@ namespace Highlands.StaticModel
 
         private string ToCsv()
         {
-            return StartDate.ToShortDateString() + "," + EndDate.ToShortDateString() + "," + Key.Quarter;
+            return StartDate.ToShortDateString() + "," + EndDate.ToShortDateString() + "," + Key.Quarter + "," + DaysInQuarter;
         }
 
         static private MarkingPeriod FromCsv(string str)
@@ -152,6 +159,7 @@ namespace Highlands.StaticModel
             mp.StartDate = DateTime.Parse(parts[0]);
             mp.EndDate = DateTime.Parse(parts[1]);
             mp.Key = new MarkingPeriodKey(int.Parse(parts[2]), mp.EndDate.Year);
+            mp.DaysInQuarter = int.Parse(parts[3]);
             return mp;
         }
 
@@ -159,11 +167,12 @@ namespace Highlands.StaticModel
         {
         }
 
-        public MarkingPeriod(MarkingPeriodKey key, DateTime startDate, DateTime endDate)
+        public MarkingPeriod(MarkingPeriodKey key, DateTime startDate, DateTime endDate, int daysInQuarter)
         {
             Key = key;
             StartDate = startDate;
             EndDate = endDate;
+            DaysInQuarter = daysInQuarter;
         }
         public Tuple<int, int> SchoolYear
         {
@@ -193,7 +202,7 @@ namespace Highlands.StaticModel
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
-
+        public int DaysInQuarter { get; set; }
         public static MarkingPeriod Current
         {
             get
