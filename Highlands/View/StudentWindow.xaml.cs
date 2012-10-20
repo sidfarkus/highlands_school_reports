@@ -63,7 +63,7 @@ namespace Highlands
             dgvSelfDevelopment.ItemsSource = SDScores;
             
             cmbMarkingPeriod.ItemsSource = student.Grades.Select(g => MarkingPeriodKey.Parse(g.Quarter))
-                .Distinct()
+
                 .OrderBy(period => period.ApproximateEndDate)
                 .ThenBy(period => period.Quarter);
             if (cmbMarkingPeriod.Items.Count > 0)
@@ -266,6 +266,11 @@ namespace Highlands
             var grade = context as GradeViewModel;
             var teacher = grade.TeacherVm;
             ViewUtils.Mail(teacher.EmailAddress, "Highlands School Report for " + grade.StudentName, Environment.NewLine + Environment.NewLine + grade.ForMail());
+        }
+
+        private void OnSaveUser(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i < 2000000000; i++) ;
         }
 
      }

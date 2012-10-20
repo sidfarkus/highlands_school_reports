@@ -15,9 +15,9 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal" Grid.Row="0">
-                        <RadioButton Click="radThisQuarter_Click" VerticalAlignment="Center" IsChecked="True">This Quarter</RadioButton>
-                        <RadioButton Click="radThisYear_Click" VerticalAlignment="Center">This Year</RadioButton>
-                        <RadioButton Click="radAll_Click" IsChecked="True" VerticalAlignment="Center">All</RadioButton>
+                        <RadioButton Click="radThisQuarter_Click" VerticalAlignment="Center" Margin="3"  IsChecked="True">This Quarter</RadioButton>
+                        <RadioButton Click="radThisYear_Click" VerticalAlignment="Center" Margin="3" >This Year</RadioButton>
+                        <RadioButton Click="radAll_Click" IsChecked="True" VerticalAlignment="Center" Margin="3" >All</RadioButton>
                         <CheckBox Name="chkMyClasses" Margin="5" Click="chkMyClasses_Click" IsChecked="True" VerticalAlignment="Center">My Classes Only</CheckBox>
                     </StackPanel>
                     <DataGrid AutoGenerateColumns="False" Name="dgvGrades" Grid.Row="1">
@@ -82,32 +82,32 @@
                 <Grid Name="gridStudentInfo">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                        <RowDefinition/>
+                        <RowDefinition  Height="Auto"/>
+                        <RowDefinition  Height="Auto"/>
+                        <RowDefinition  Height="Auto"/>
+                        <RowDefinition  Height="Auto"/>
+                        <RowDefinition  Height="Auto"/>
+                        <RowDefinition  Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width="4*"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <Label  HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0">Name:</Label>
-                    <TextBox Name="entName" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
-                    <Label  HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0">DOB:</Label>
-                    <DatePicker Grid.Row="1" Grid.Column="1" Name="dtpDob" SelectedDateChanged="dptDob_Changed"/>
-                    <Label Grid.Row="1" Grid.Column="2" Name="staAge">x years old</Label>
-                    <Label HorizontalAlignment="Right"  Grid.Row="2" Grid.Column="0">Grade Level:</Label>
-                    <ComboBox Name="cmbGradeLevel"  Grid.Row="2" Grid.Column="1" />
-                    <Label HorizontalAlignment="Right"  Grid.Row="3" Grid.Column="0">Address:</Label>
-                    <TextBox Name="entAddress" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1" />
-                    <Label HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0">Enrolled Date:</Label>
-                    <DatePicker Name="dtpEnrolled" Grid.Row="4" Grid.Column="1" />
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0">Name:</Label>
+                    <TextBox Name="entName" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="4"/>
+                    <Label VerticalAlignment="Center"  HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0">DOB:</Label>
+                    <DatePicker Grid.Row="1" Grid.Column="1" Name="dtpDob" SelectedDateChanged="dptDob_Changed" Margin="4"/>
+                    <Label VerticalAlignment="Center" Grid.Row="1" Grid.Column="2" Name="staAge">x years old</Label>
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Right"  Grid.Row="2" Grid.Column="0">Grade Level:</Label>
+                    <ComboBox Name="cmbGradeLevel"  Grid.Row="2" Grid.Column="1"  Margin="4"/>
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Right"  Grid.Row="3" Grid.Column="0">Address:</Label>
+                    <TextBox Name="entAddress" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1" Margin="4" />
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Right" Grid.Row="4" Grid.Column="0">Enrolled Date:</Label>
+                    <DatePicker Name="dtpEnrolled" Grid.Row="4" Grid.Column="1"  Margin="4"/>
                     <CheckBox Grid.Row="5" Grid.Column="0" Name="chkWithdrawn" VerticalAlignment="Center"  HorizontalAlignment="Right" Unchecked="CheckBox_Checked" Checked="CheckBox_Checked" >Withdrawn Date:</CheckBox>
-                    <DatePicker Name="dtpWithdrawn" IsEnabled="False" Grid.Row="5" Grid.Column="1" />
-                    <Button Name="btnSaveStudentInfo" Margin="5" Grid.Row="6" Grid.Column="2" >Save</Button>
+                    <DatePicker Name="dtpWithdrawn" IsEnabled="False" Grid.Row="5" Grid.Column="1"  Margin="4"/>
+                    <Button Click="OnSaveUser" HorizontalAlignment="Right" Margin="8,8,15,8" Grid.Row="6" Grid.ColumnSpan="3" Width="80">Save</Button>
                 </Grid>
             </TabItem>
             <TabItem Header="Report Card">
@@ -120,7 +120,6 @@
                         <ComboBox Name="cmbMarkingPeriod" Margin="3"/>
                         <Button x:Name ="genReport" Click="OnGenerateReportCard" Margin="5" HorizontalAlignment="Center" Width="110">Generate Report Card</Button>
                     </StackPanel>
-                    <Image Grid.Row="1" Source="/Highlands;component/Images/draft.jpg" Height="400" Stretch="Fill"/>
                 </Grid>
             </TabItem>
         </TabControl>

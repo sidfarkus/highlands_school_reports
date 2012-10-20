@@ -1,7 +1,7 @@
 ﻿<UserControl x:Class="Highlands.LoginWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Grid>
+    <Grid KeyUp="OnLoginKeyUp">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="Auto"/>
@@ -19,7 +19,7 @@
         <ComboBox Name="cmbUserName" Grid.Row="1" Grid.Column="1" IsEditable="True" Margin="3" />
         <Label VerticalAlignment="Center" Content="Password:" Grid.Row="2"/>
         <PasswordBox x:Name="entPassword" Grid.Row="2" Grid.Column="1" Margin="3" />
-        <Label  x:Name="staConfirmPassword" VerticalAlignment="Center" Content="Confirm Password:" Grid.Row="3"  Visibility="Collapsed"/>
+        <Label x:Name="staConfirmPassword" VerticalAlignment="Center" Content="Confirm Password:" Grid.Row="3"  Visibility="Collapsed"/>
         <PasswordBox x:Name="entConfirmPassword" Grid.Row="3" Grid.Column="1" Margin="3" Visibility="Collapsed" />
         <Button Click="btnLogin_Click" Grid.Row="4" Grid.ColumnSpan="2" Margin="5" Width="80" HorizontalAlignment="Right">Login</Button>
     </Grid>
