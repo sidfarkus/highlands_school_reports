@@ -78,6 +78,14 @@ namespace Highlands
                  _grade = grade;
             }
 
+            public GradeViewModel Grade
+            {
+                get
+                {
+                    return _grade;
+                }
+            }
+
             public string StudentName
             {
                 get
@@ -97,7 +105,7 @@ namespace Highlands
                 get
                 {
                     return _grade.LetterGrade;
-                }
+                    }
             }
             public string SpecialGrade
             {
@@ -120,6 +128,39 @@ namespace Highlands
         internal void Refresh()
         {
             FillStudents();
+        }
+
+        private void OnGradeSaved(object sender, EventArgs e)
+        {
+            FillStudents();
+        }
+
+        private void OnSaveCanceled(object sender, EventArgs e)
+        {
+            grd.SelectedItem = null;
+            hideEditOverlay.Visibility = System.Windows.Visibility.Visible;
+        }
+
+        private void SelectionChanged(object sender, SelectedCellsChangedEventArgs e)
+        {
+            if (grd.SelectedItem == null)
+                return;
+
+            var student = (StudentByClass)grd.SelectedItem;
+            gradeEditor.LoadGrade(student.StudentName, student.Grade);
+            hideEditOverlay.Visibility = System.Windows.Visibility.Hidden;
+            gradeEditor.ShowBackwards = grd.SelectedIndex > 0;
+            gradeEditor.ShowForwards = grd.SelectedIndex < grd.Items.Count - 1;
+        }
+
+        private void OnNextStudent(object sender, EventArgs e)
+        {
+            grd.SelectedIndex += 1;
+        }
+
+        private void OnPrevStudent(object sender, EventArgs e)
+        {
+            grd.SelectedIndex -= 1;
         }
     }
 }

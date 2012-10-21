@@ -11,17 +11,53 @@ namespace Highlands
     /// <summary>
     /// Interaction logic for EditGrade.xaml
     /// </summary>
-    public partial class EditGrade : Window
+    public partial class EditGrade : UserControl
     {
+        public event EventHandler Saved = (o, s) => { };
+        public event EventHandler Canceled = (o, s) => { };
+        public event EventHandler Forwards = (o, s) => { };
+        public event EventHandler Backwards = (o, s) => { };
+
+        public bool ShowForwards
+        {
+            get
+            {
+                return forwardButton.Visibility == System.Windows.Visibility.Visible;
+            }
+            set
+            {
+                forwardButton.Visibility = value ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden;
+            }
+        }
+
+        public bool ShowBackwards
+        {
+            get
+            {
+                return backwardButton.Visibility == System.Windows.Visibility.Visible;
+            }
+            set
+            {
+                backwardButton.Visibility = value ? System.Windows.Visibility.Visible : System.Windows.Visibility.Hidden;
+            }
+        }
         private string _studentName;
         private GradeViewModel _grade;
 
-        public EditGrade(string studentName, GradeViewModel grade)
+        public EditGrade()
+        {
+            InitializeComponent();
+        }
+
+        public EditGrade(string studentName, GradeViewModel grade) : this()
+        {
+            LoadGrade(studentName, grade);
+        }
+
+        public void LoadGrade(string studentName, GradeViewModel grade)
         {
             _studentName = studentName;
             _grade = grade;
-            
-            InitializeComponent();
 
             if (CourseViewModel.HasSpecialGrade(grade.Subject))
             {
@@ -33,11 +69,11 @@ namespace Highlands
             Maintenance.Comments.ToList().ForEach(g => cmbComment.Items.Add(g));
             cmbComment.SelectedIndex = 0;
 
-            Title = _studentName;
+            staStudent.Content = studentName;
             staCourse.Content = _grade.Subject + " for " + _grade.Quarter + " " + _grade.Group + " with " + _grade.Teacher;
             cmbLetterGrade.Text = _grade.LetterGrade;
             entSpecialGrade.Text = _grade.SpecialGrade;
-            
+
             var comment = _grade.Comment;
             foreach (var c in Maintenance.Comments)
             {
@@ -75,10 +111,6 @@ namespace Highlands
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             var diffs = new List<Change>();
-
-            // TODO persist "other" grade
-            // TODO persist semester flag if present
-
             if (_grade.Comment != staComment.Text)
                 diffs.Add(new Change(_grade, "Comment", _grade.Comment, staComment.Text));
             if (_grade.LetterGrade != cmbLetterGrade.Text)
@@ -86,24 +118,21 @@ namespace Highlands
             
             if (diffs.Count() == 0)
             {
-                Close();
+                Canceled(this, null);
                 return;
             }
  
             var result = MessageBox.Show(diffs.Count().ToString() + " changes!\n" + Change.FormatDiffs(diffs) + Environment.NewLine + "Save?", "Confirm Save", MessageBoxButton.YesNoCancel);
-            if (result == MessageBoxResult.Cancel)
+            if (result == MessageBoxResult.Cancel || result == MessageBoxResult.No)
             {
+                Canceled(this, null);
                 return;
             }
-            else if (result == MessageBoxResult.No)
-            {
-                Close();
-                return;
-            }
+
             _grade.Comment = staComment.Text;
             _grade.LetterGrade = cmbLetterGrade.Text;
             _grade.Save(diffs);
-            Close();
+            Saved(this, null);
         }
 
         private void btnFreeForm_Click(object sender, RoutedEventArgs e)
@@ -115,13 +144,23 @@ namespace Highlands
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            Close();
+            Canceled(this, null);
             return;
         }
 
         private void radSemester_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void OnForward(object sender, RoutedEventArgs e)
+        {
+            Forwards(this, null);
+        }
+
+        private void OnBackwards(object sender, RoutedEventArgs e)
+        {
+            Backwards(this, null);
         }
     }
 }

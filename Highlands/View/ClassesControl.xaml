@@ -3,10 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:h="clr-namespace:Highlands"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <DataGrid Name="grd" SelectionMode="Single">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        
+        <DataGrid Name="grd" AutoGenerateColumns="False" SelectionMode="Single" SelectedCellsChanged="SelectionChanged">
             <DataGrid.GroupStyle>
                 <!-- Style for groups at top level. -->
                 <GroupStyle>
@@ -16,7 +22,7 @@
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="{x:Type GroupItem}">
-                                        <Expander IsExpanded="True"  BorderThickness="1,1,1,5">
+                                        <Expander IsExpanded="True"  BorderThickness="1,1,1,2">
                                             <Expander.Header>
                                                 <DockPanel>
                                                     <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5"/>
@@ -35,6 +41,17 @@
                     </GroupStyle.ContainerStyle>
                 </GroupStyle>
             </DataGrid.GroupStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding StudentName}" Width="3*" />
+                <DataGridTextColumn IsReadOnly="True" Header="Grade" Binding="{Binding LetterGrade}" Width="*" />
+                <DataGridTextColumn IsReadOnly="True" Header="Special Grade" Binding="{Binding SpecialGrade}" Width="*" />
+                <DataGridTextColumn IsReadOnly="True" Header="Approval Status" Binding="{Binding Stage}" Width="2*"/>
+            </DataGrid.Columns>
         </DataGrid>
+        <Grid Grid.Column="1">
+            <h:EditGrade x:Name="gradeEditor" Saved="OnGradeSaved" Canceled="OnSaveCanceled" Forwards="OnNextStudent" Backwards="OnPrevStudent" Margin="10"/>
+            <Border x:Name="hideEditOverlay" Background="White" />
+        </Grid>
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeDirection="Columns" Width="4"/>
     </Grid>
 </UserControl>

@@ -191,7 +191,7 @@ namespace Highlands
                 MessageBox.Show("User can not edit this grade at this stage.");
                 return;
             }
-            var window = new EditGrade(_student.Name, grade);
+            var window = new EditGradeWindow(_student.Name, grade);
             window.ShowDialog();
             RefreshMarks();
         }

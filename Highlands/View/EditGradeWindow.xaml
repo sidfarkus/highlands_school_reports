@@ -1,0 +1,10 @@
+﻿<Window x:Class="Highlands.EditGradeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:h="clr-namespace:Highlands"
+        ShowInTaskbar="False" WindowStyle="ToolWindow"
+        Title="Edit Grade" Height="300" Width="300" Icon="/Highlands;component/Images/main.ico">
+    <Grid>
+        <h:EditGrade x:Name="gradeEditor" Saved="GradeSaved" Canceled="EditCanceled" />
+    </Grid>
+</Window>

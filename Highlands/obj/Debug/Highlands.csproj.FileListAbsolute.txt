@@ -57,3 +57,5 @@ C:\projects\highlands\Highlands\obj\Debug\Highlands.csproj.GenerateResource.Cach
 C:\projects\highlands\Highlands\bin\Debug\Report Card Template.pdf
 C:\projects\highlands\Highlands\obj\Debug\View\ClassesControl.baml
 C:\projects\highlands\Highlands\obj\Debug\View\ClassesControl.g.cs
+C:\projects\highlands\Highlands\obj\Debug\View\EditGradeWindow.g.cs
+C:\projects\highlands\Highlands\obj\Debug\View\EditGradeWindow.baml

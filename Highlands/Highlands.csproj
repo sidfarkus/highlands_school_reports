@@ -98,6 +98,9 @@
     <Compile Include="View\ClassesControl.xaml.cs">
       <DependentUpon>ClassesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\EditGradeWindow.xaml.cs">
+      <DependentUpon>EditGradeWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\StudentsControl.xaml.cs">
       <DependentUpon>StudentsControl.xaml</DependentUpon>
     </Compile>
@@ -124,6 +127,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\EditGrade.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\EditGradeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

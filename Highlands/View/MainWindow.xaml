@@ -14,14 +14,23 @@
                 <Button Click="btnLogout_Click" Width="80" HorizontalAlignment="Right" Margin="3">Logout</Button>
             </Border>
             <TabControl Grid.Row="1">
-                <TabItem Header="Classes">
+                <TabItem>
+                    <TabItem.Header>
+                        <TextBlock FontSize="16" FontWeight="Bold">Current Classes</TextBlock>
+                    </TabItem.Header>
                     <h:ClassesControl x:Name="ctrlClasses"/>
                 </TabItem>
-                <TabItem Header="Attendence">
-                    <h:AttendeesControl />
-                </TabItem>
-                <TabItem Header="Students">
+                <TabItem>
+                    <TabItem.Header>
+                        <TextBlock FontSize="16" FontWeight="Bold">Students</TextBlock>
+                    </TabItem.Header>
                     <h:StudentsControl x:Name="studentsControl"/>
+                </TabItem>
+                <TabItem >
+                    <TabItem.Header>
+                        <TextBlock FontSize="16" FontWeight="Bold">Attendance</TextBlock>
+                    </TabItem.Header>
+                    <h:AttendeesControl />
                 </TabItem>
             </TabControl>
         </Grid>
