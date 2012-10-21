@@ -19,7 +19,8 @@
                 <DataGridTextColumn Header="Name" IsReadOnly="True" Binding="{Binding Name}" Width="3*"/>
                 <DataGridTextColumn Header="Age" IsReadOnly="True" Binding="{Binding Age}" Width="*"/>
                 <DataGridTextColumn Header="Grade" IsReadOnly="True" Binding="{Binding GradeLevel}" Width="*"/>
-                <DataGridComboBoxColumn Header="Attendence Status" ItemsSource="{x:Static h:UserViewModel.AttendanceStatuses}" Width="2*" />
+                <DataGridComboBoxColumn Header="Attendence Status" ItemsSource="{x:Static h:UserViewModel.AttendanceStatuses}" 
+                                        Width="2*" SelectedItemBinding="{Binding AttendenceForDay}"/>
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>

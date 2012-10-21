@@ -137,6 +137,12 @@ namespace Highlands.ViewModel
             }
         }
 
+        public AttendanceStatus AttendenceForDay
+        {
+            get;
+            set;
+        }
+
         public bool IsValid
         {
             get
