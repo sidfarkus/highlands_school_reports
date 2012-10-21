@@ -195,10 +195,7 @@ namespace Highlands.StaticModel
         {
             get
             {
-                if (Key.Quarter == 1 || Key.Quarter == 2)
-                    return new Tuple<int, int>(Key.EndingSchoolYear, Key.EndingSchoolYear + 1);
-                else
-                    return new Tuple<int, int>(Key.EndingSchoolYear - 1, Key.EndingSchoolYear);
+                return new Tuple<int, int>(Key.EndingSchoolYear - 1, Key.EndingSchoolYear);
             }
         }
         public override string ToString()

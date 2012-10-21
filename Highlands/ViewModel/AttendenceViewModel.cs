@@ -23,7 +23,7 @@ namespace Highlands.ViewModel
             }
             if (!students.Any())
             {
-                students = GradebookViewModel.Load().Students.ToArray();
+                Students = GradebookViewModel.Load().Students.ToArray();
                 allStudents = students;
             }
         }
@@ -125,6 +125,11 @@ namespace Highlands.ViewModel
             set
             {
                 students = value;
+                foreach (var student in students)
+                {
+                    // fix to use day
+                    student.AttendenceForDay = AttendanceStatus.OnTime;
+                }
                 Changed("Students");
             }
         }

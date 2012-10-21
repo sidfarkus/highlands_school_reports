@@ -208,12 +208,19 @@ namespace Highlands.ViewModel
                 return p.Key.EndingSchoolYear == period.EndingSchoolYear &&
                        p.Key.Quarter <= period.Quarter;
             }).Select(p => p.DaysInQuarter).Sum();
+            var yearStart = MarkingPeriods.Singleton.Where(p => p.Key.EndingSchoolYear == period.EndingSchoolYear && p.Key.Quarter == 1)
+                .Select(x => x.StartDate)
+                .FirstOrDefault();
+
             return new[] { 
                 new KeyValuePair<string, string>(
                     "StudentAddress",
                     AddressLine1 + "\n" + AddressLine2),
                 new KeyValuePair<string, string>(
                     "SchoolYear",
+                    String.Format("{0:MMM dd, yyyy} - {1:MMM dd, yyyy}", yearStart, thisQuarter.EndDate)),
+                new KeyValuePair<string, string>(
+                    "SchoolYearAttendance",
                     String.Format("{0} - {1}", thisQuarter.SchoolYear.Item1, thisQuarter.SchoolYear.Item2)),
                 new KeyValuePair<string, string>(
                     "QTR1",
