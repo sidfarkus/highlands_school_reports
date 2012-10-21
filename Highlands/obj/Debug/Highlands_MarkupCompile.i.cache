@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\projects\highlands\Highlands\obj\Debug\
+C:\Users\PriyaShiyam\Documents\GitHub\highlands_school_reports\Highlands\obj\Debug\
 Highlands
 none
 false
 DEBUG;TRACE
-C:\projects\highlands\Highlands\App.xaml
-8371835309
+C:\Users\PriyaShiyam\Documents\GitHub\highlands_school_reports\Highlands\App.xaml
+9-1348968661
 
-36-763578535
-14870001981
-View\AttendenceControl.xaml;View\ClassesControl.xaml;View\EditGrade.xaml;View\EditGradeWindow.xaml;View\LoginWindow.xaml;View\MainWindow.xaml;View\StudentsControl.xaml;View\StudentWindow.xaml;
+39-598739666
+14255514929
+View\AttendenceControl.xaml;View\ClassesControl.xaml;View\EditGrade.xaml;View\EditGradeWindow.xaml;View\HonorRollsControl.xaml;View\LoginWindow.xaml;View\MainWindow.xaml;View\StudentsControl.xaml;View\StudentWindow.xaml;
 
 True
 

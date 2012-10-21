@@ -82,6 +82,7 @@
     </ApplicationDefinition>
     <Compile Include="Model\book.cs" />
     <Compile Include="Model\ChangeLog.cs" />
+    <Compile Include="StaticModel\OverallGPA.cs" />
     <Compile Include="StaticModel\User.cs" />
     <Compile Include="StaticModel\Maintenance.cs" />
     <Compile Include="StaticModel\MarkingPeriod.cs" />
@@ -94,6 +95,7 @@
     <Compile Include="ViewModel\DemoFactory.cs" />
     <Compile Include="ViewModel\GradebookViewModel.cs" />
     <Compile Include="ViewModel\GradeViewModel.cs" />
+    <Compile Include="ViewModel\HonorRollsViewModel.cs" />
     <Compile Include="ViewModel\SDScoreViewModel.cs" />
     <Compile Include="ViewModel\StudentViewModel.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />
@@ -105,6 +107,9 @@
     </Compile>
     <Compile Include="View\EditGradeWindow.xaml.cs">
       <DependentUpon>EditGradeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\HonorRollsControl.xaml.cs">
+      <DependentUpon>HonorRollsControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\StudentsControl.xaml.cs">
       <DependentUpon>StudentsControl.xaml</DependentUpon>
@@ -138,6 +143,10 @@
     <Page Include="View\EditGradeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\HonorRollsControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\LoginWindow.xaml">
       <SubType>Designer</SubType>
