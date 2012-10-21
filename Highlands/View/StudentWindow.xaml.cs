@@ -231,23 +231,13 @@ namespace Highlands
                 return;
             }
             var period = (MarkingPeriodKey)cmbMarkingPeriod.SelectedItem;
-            var dialog = new Microsoft.Win32.SaveFileDialog()
+            try
             {
-                AddExtension = true,
-                Filter = "PDF Files (*.pdf)|*.pdf",
-                FileName = _student.GetDefaultReportCardFilename(period)
-            };
-            var result = dialog.ShowDialog();
-            if (result.HasValue && result.Value)
+                _student.CreateReportCard(null, period);
+            }
+            catch (System.IO.IOException)
             {
-                try
-                {
-                    _student.CreateReportCard(dialog.FileName, period);
-                }
-                catch (System.IO.IOException)
-                {
-                    MessageBox.Show("Error writing the report card! Check to ensure you have permission to write to this folder and that the file is not currently in use.");
-                }
+                MessageBox.Show("Error writing the report card! Check to ensure you have permission to write to this folder and that the file is not currently in use.");
             }
         }
 
@@ -258,9 +248,9 @@ namespace Highlands
             if (RightsEnum.Success != result)
             {
                 if (RightsEnum.GradeError == result)
-                    MessageBox.Show("Grade is not ready to be approved/locked.");
+                    MessageBox.Show("Grade is not ready to be unapproved/unlocked.");
                 else
-                    MessageBox.Show("User can not approve/lock this grade.");
+                    MessageBox.Show("User can not unapprove/unlock this grade.");
                 return;
             }
             if (MessageBoxResult.Yes != MessageBox.Show("Are you sure you want to lock " + grade + "?", "Approval", MessageBoxButton.YesNo))

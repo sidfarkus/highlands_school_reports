@@ -23,7 +23,7 @@
                 <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
                     <Label VerticalAlignment="Center" Margin="3,3,6,3">Primary Grade:</Label>
                     <ComboBox Name="cmbLetterGrade" HorizontalAlignment="Center" IsEditable="True" Margin="3,0,3,0"/>
-                    <Label VerticalAlignment="Center" Visibility="Collapsed" Margin="6,3,6,3">Special Grade:</Label>
+                    <Label Name="staSpecialGrade"  VerticalAlignment="Center" Visibility="Collapsed" Margin="6,3,6,3">Secondary Grade:</Label>
                     <TextBox Name="entSpecialGrade" Visibility="Collapsed" VerticalAlignment="Center" MinWidth="40" Margin="3"/>
                 </StackPanel>
             </GroupBox>

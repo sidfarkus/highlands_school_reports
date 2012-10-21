@@ -12,7 +12,7 @@ namespace Highlands.ViewModel
 {
     public enum AttendanceStatus
     {
-        NotEntered,
+        None,
         Absent,
         Tardy,
         OnTime
@@ -192,7 +192,6 @@ namespace Highlands.ViewModel
         {
             get
             {
-                yield return AttendanceStatus.NotEntered;
                 yield return AttendanceStatus.Absent;
                 yield return AttendanceStatus.Tardy;
                 yield return AttendanceStatus.OnTime;

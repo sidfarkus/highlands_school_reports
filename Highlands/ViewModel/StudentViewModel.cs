@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Highlands.Utils;
+using System.Diagnostics;
 
 namespace Highlands.ViewModel
 {
@@ -80,6 +81,15 @@ namespace Highlands.ViewModel
             }
         }
 
+        [PDFOutputField("AbsentQ")]
+        public int DaysAbsentThisQuarter
+        {
+            get
+            {
+                return 0;
+            }
+        }
+
         [PDFOutputField("Grade")]
         public string GradeLevel
         {
@@ -101,22 +111,28 @@ namespace Highlands.ViewModel
             }
         }
 
-        public AttendanceStatus GetAttendanceForDay(DateTime date)
+        public AttendanceMiniVm GetAttendanceForDay(DateTime date)
         {
-            var rv = AttendanceStatus.NotEntered;
+
+            var rv = new AttendanceMiniVm();
+            rv.Date = date;
+            rv.Status = AttendanceStatus.OnTime;
             var attendanceRow = _studentRow.GetAttendanceRows().SingleOrDefault(a => a.StudentKey == _studentRow.Key && a.Date == date);
             if (attendanceRow != null)
-                rv = (AttendanceStatus) Enum.Parse(typeof(AttendanceStatus), attendanceRow.State);
+                rv.Status = (AttendanceStatus) Enum.Parse(typeof(AttendanceStatus), attendanceRow.State);
             return rv;
         }
 
-        public void SetAttendanceForDay(DateTime date, string quarter, AttendanceStatus status)
+        public void SetAttendanceForDay(DateTime date, AttendanceStatus status)
         {
             var attendanceRow = _studentRow.GetAttendanceRows().SingleOrDefault(a => a.StudentKey == _studentRow.Key && a.Date == date);
             var ds = (_studentRow.Table.DataSet as Gradebook);
             var attendanceTable = ds.Attendance;
-            if (attendanceRow != null)
-                attendanceTable.AddAttendanceRow(_studentRow, quarter, date, status.ToString());
+            if (attendanceRow == null)
+            {
+                if (status != AttendanceStatus.OnTime)  // don't bother saving it there are on time
+                    attendanceTable.AddAttendanceRow(_studentRow, date, status.ToString());
+            }
             else
                 attendanceRow.State = status.ToString();
             return;
@@ -157,13 +173,17 @@ namespace Highlands.ViewModel
                 return rv;
             }
         }
-
-        public AttendanceStatus AttendenceForDay
+        public class AttendanceMiniVm
         {
-            get;
-            set;
+            public AttendanceStatus Status { get; set; }
+            public DateTime Date { get; set; }
+            public override string ToString()
+            {
+                return Status.ToString();
+            }
         }
-
+        public AttendanceStatus AttendenceForDay { get; set; }
+  
         public bool IsValid
         {
             get
@@ -208,7 +228,14 @@ namespace Highlands.ViewModel
                 .Concat(GetReportLevelFields(period))
                 .Concat(GetSelfDevFields(period));
 
-            PDFWriter.WritePDF(outFilename, outputProperties.ToDictionary(p => p.Key, p => p.Value));
+            if (outFilename == null)
+            {
+                string tempFileName = "temp" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pdf";
+                PDFWriter.WritePDF(tempFileName, outputProperties.ToDictionary(p => p.Key, p => p.Value));
+                Process.Start(tempFileName);
+            }
+            else
+                PDFWriter.WritePDF(outFilename, outputProperties.ToDictionary(p => p.Key, p => p.Value));
         }
 
         private IEnumerable<KeyValuePair<string, string>> GetSelfDevFields(MarkingPeriodKey period)
@@ -251,16 +278,16 @@ namespace Highlands.ViewModel
                     thisYear.ToString()),
                 new KeyValuePair<string, string>(
                     "QTR2",
-                    "AbsentQ"),
+                    "0"),
                 new KeyValuePair<string, string>(
                     "YR2",
-                    "AbsentY"),
+                    "0"),
                 new KeyValuePair<string, string>(
                     "QTR3",
-                    "TardyQ"),
+                    "0"),
                 new KeyValuePair<string, string>(
                     "YR3",
-                    "TardyY"),
+                    "0"),
                 new KeyValuePair<string, string>(
                     "MarkingPeriod",
                     period.QuarterString),

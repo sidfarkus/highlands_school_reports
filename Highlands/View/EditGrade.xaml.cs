@@ -62,6 +62,7 @@ namespace Highlands
             if (CourseViewModel.HasSpecialGrade(grade.Subject))
             {
                 entSpecialGrade.Visibility = System.Windows.Visibility.Visible;
+                staSpecialGrade.Visibility = System.Windows.Visibility.Visible;
             }
 
             Maintenance.LetterGrades.ToList().ForEach(g => cmbLetterGrade.Items.Add(g));

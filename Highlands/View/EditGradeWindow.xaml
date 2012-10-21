@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:h="clr-namespace:Highlands"
         ShowInTaskbar="False" WindowStyle="ToolWindow"
-        Title="Edit Grade" Height="400" Width="400" Icon="/Highlands;component/Images/main.ico" Padding="3">
+        Title="Edit Grade" Height="467.945" Width="467.945" Icon="/Highlands;component/Images/main.ico" Padding="3">
     <Grid>
         <h:EditGrade x:Name="gradeEditor" Saved="GradeSaved" Canceled="EditCanceled" />
     </Grid>

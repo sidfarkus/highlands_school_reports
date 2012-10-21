@@ -13,11 +13,12 @@
             <DatePicker Name="datePicker" DisplayDate="{Binding CurrentDay,Mode=TwoWay}" Margin="10,5,5,5" 
                         DisplayDateEnd="{Binding QuarterEnd}" DisplayDateStart="{Binding QuarterStart}"
                         SelectedDate="{Binding CurrentDay,Mode=TwoWay}"/>
+            <Button Name="btnSave" Margin="5">Save</Button>
         </StackPanel>
-        <DataGrid ItemsSource="{Binding Students}"  AutoGenerateColumns="False">
+        <DataGrid ItemsSource="{Binding Students}"  AutoGenerateColumns="False" >
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" IsReadOnly="True" Binding="{Binding Name}" Width="3*"/>
-                <DataGridTextColumn Header="Age" IsReadOnly="True" Binding="{Binding Age}" Width="*"/>
+                <DataGridTextColumn Header="Age" IsReadOnly="True" Binding="{Binding Age}" Width="*" />
                 <DataGridTextColumn Header="Grade" IsReadOnly="True" Binding="{Binding GradeLevel}" Width="*"/>
                 <DataGridComboBoxColumn Header="Attendence Status" ItemsSource="{x:Static h:UserViewModel.AttendanceStatuses}" 
                                         Width="2*" SelectedItemBinding="{Binding AttendenceForDay}"/>

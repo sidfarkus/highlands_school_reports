@@ -2061,8 +2061,6 @@ namespace Highlands.Model {
             
             private global::System.Data.DataColumn columnStudentKey;
             
-            private global::System.Data.DataColumn columnQuarter;
-            
             private global::System.Data.DataColumn columnDate;
             
             private global::System.Data.DataColumn columnState;
@@ -2105,14 +2103,6 @@ namespace Highlands.Model {
             public global::System.Data.DataColumn StudentKeyColumn {
                 get {
                     return this.columnStudentKey;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public global::System.Data.DataColumn QuarterColumn {
-                get {
-                    return this.columnQuarter;
                 }
             }
             
@@ -2169,11 +2159,10 @@ namespace Highlands.Model {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public AttendanceRow AddAttendanceRow(StudentRow parentStudentRowByStudent_Attendance, string Quarter, System.DateTime Date, string State) {
+            public AttendanceRow AddAttendanceRow(StudentRow parentStudentRowByStudent_Attendance, System.DateTime Date, string State) {
                 AttendanceRow rowAttendanceRow = ((AttendanceRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
-                        Quarter,
                         Date,
                         State};
                 if ((parentStudentRowByStudent_Attendance != null)) {
@@ -2202,7 +2191,6 @@ namespace Highlands.Model {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             internal void InitVars() {
                 this.columnStudentKey = base.Columns["StudentKey"];
-                this.columnQuarter = base.Columns["Quarter"];
                 this.columnDate = base.Columns["Date"];
                 this.columnState = base.Columns["State"];
             }
@@ -2212,8 +2200,6 @@ namespace Highlands.Model {
             private void InitClass() {
                 this.columnStudentKey = new global::System.Data.DataColumn("StudentKey", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnStudentKey);
-                this.columnQuarter = new global::System.Data.DataColumn("Quarter", typeof(string), null, global::System.Data.MappingType.Element);
-                base.Columns.Add(this.columnQuarter);
                 this.columnDate = new global::System.Data.DataColumn("Date", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnDate);
                 this.columnState = new global::System.Data.DataColumn("State", typeof(string), null, global::System.Data.MappingType.Element);
@@ -3295,22 +3281,6 @@ namespace Highlands.Model {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public string Quarter {
-                get {
-                    try {
-                        return ((string)(this[this.tableAttendance.QuarterColumn]));
-                    }
-                    catch (global::System.InvalidCastException e) {
-                        throw new global::System.Data.StrongTypingException("The value for column \'Quarter\' in table \'Attendance\' is DBNull.", e);
-                    }
-                }
-                set {
-                    this[this.tableAttendance.QuarterColumn] = value;
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public System.DateTime Date {
                 get {
                     try {
@@ -3362,18 +3332,6 @@ namespace Highlands.Model {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
             public void SetStudentKeyNull() {
                 this[this.tableAttendance.StudentKeyColumn] = global::System.Convert.DBNull;
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public bool IsQuarterNull() {
-                return this.IsNull(this.tableAttendance.QuarterColumn);
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "4.0.0.0")]
-            public void SetQuarterNull() {
-                this[this.tableAttendance.QuarterColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]

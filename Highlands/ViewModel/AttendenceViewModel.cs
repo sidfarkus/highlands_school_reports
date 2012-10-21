@@ -126,10 +126,8 @@ namespace Highlands.ViewModel
             {
                 students = value;
                 foreach (var student in students)
-                {
-                    // fix to use day
-                    student.AttendenceForDay = AttendanceStatus.OnTime;
-                }
+                    student.AttendenceForDay = student.GetAttendanceForDay(CurrentDay).Status;
+                
                 Changed("Students");
             }
         }
