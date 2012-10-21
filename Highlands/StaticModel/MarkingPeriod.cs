@@ -12,6 +12,13 @@ namespace Highlands.StaticModel
         public int EndingSchoolYear { get; set; }
         static MarkingPeriodKey _current;
 
+        public string QuarterString
+        {
+            get
+            {
+                return new[] { "First", "Second", "Third", "Fourth" }[Quarter - 1];
+            }
+        }
 
         public MarkingPeriodKey(int quarter, int year)
         {

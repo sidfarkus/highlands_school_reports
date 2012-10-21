@@ -21,7 +21,7 @@
                         <RadioButton Click="radAll_Click" IsChecked="True" VerticalAlignment="Center" Margin="3" >All</RadioButton>
                         <CheckBox Name="chkMyClasses" Margin="5" Click="chkMyClasses_Click" IsChecked="True" VerticalAlignment="Center">My Classes Only</CheckBox>
                     </StackPanel>
-                    <DataGrid AutoGenerateColumns="False" Name="dgvGrades" Grid.Row="1">
+                    <DataGrid AutoGenerateColumns="False" Name="dgvGrades" Grid.Row="1"  SelectionMode="Single">
                         <DataGrid.RowDetailsTemplate>
                             <DataTemplate>
                                 <Grid Background="LightGray">
@@ -45,11 +45,11 @@
                             </DataTemplate>
                         </DataGrid.RowDetailsTemplate>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Subject" Binding="{Binding Subject}" Width="2*"/>
-                            <DataGridTextColumn Header="Grade" Binding="{Binding LetterGrade}"  Width="*"/>
-                            <DataGridTextColumn Header="Special Grade" Binding="{Binding SpecialGrade}"  Width="*"/>
-                            <DataGridTextColumn Header="Marking Period" Binding="{Binding Quarter}"  Width="*"/>
-                            <DataGridTextColumn Header="Teacher" Binding="{Binding Teacher}"  Width="2*"/>
+                            <DataGridTextColumn Header="Subject" Binding="{Binding Subject}" Width="2*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Grade" Binding="{Binding LetterGrade}"  Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Special Grade" Binding="{Binding SpecialGrade}"  Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Marking Period" Binding="{Binding Quarter}"  Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Teacher" Binding="{Binding Teacher}"  Width="2*" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
@@ -66,25 +66,25 @@
                         <RadioButton Click="radThisYear_Click" VerticalAlignment="Center" Margin="3">This Year</RadioButton>
                         <RadioButton Click="radAll_Click" IsChecked="True" VerticalAlignment="Center" Margin="3">All</RadioButton>
                     </StackPanel>
-                    <DataGrid Grid.Row="1" AutoGenerateColumns="False" Name="dgvSelfDevelopment" >
+                    <DataGrid Grid.Row="1" AutoGenerateColumns="False" Name="dgvSelfDevelopment" SelectionMode="Single" >
                         <DataGrid.RowDetailsTemplate>
                             <DataTemplate>
                                 <Grid Background="LightGray">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Margin="5">Enter the student's score: </TextBlock>
-                                    <TextBox Grid.Column="1" Margin="5" Text="{Binding Score}"/>
-                                    <Button Margin="5,5,15,5" Grid.Column="2">Save Changes</Button>
+                                    <TextBox Grid.Column="1" x:Name="scoreBox" Margin="5" Width="130" Text="{Binding Score}"/>
+                                    <Button Margin="5,5,15,5" Grid.Column="2" Click="SaveSDScore">Save Changes</Button>
                                 </Grid>
                             </DataTemplate>
                         </DataGrid.RowDetailsTemplate>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Area" Binding="{Binding Area}" Width="Auto"/>
-                            <DataGridTextColumn Header="Score" Binding="{Binding Score}" Width="*"/>
-                            <DataGridTextColumn Header="Marking Period" Binding="{Binding Quarter}" Width="2*"/>
+                            <DataGridTextColumn Header="Area" Binding="{Binding Area}" Width="Auto" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Score" Binding="{Binding Score}" Width="*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Marking Period" Binding="{Binding Quarter}" Width="2*" IsReadOnly="True"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

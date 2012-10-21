@@ -182,10 +182,6 @@ namespace Highlands
             RefreshMarks();
         }
 
-        private void dgvSelfDevelopment_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-        }
-
         private void btnEditGrade_Click(object sender, RoutedEventArgs e)
         {
             var grade = dgvGrades.SelectedValue as GradeViewModel;
@@ -277,7 +273,21 @@ namespace Highlands
 
         private void OnSaveUser(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < 2000000000; i++) ;
+            _student.Save();
+        }
+
+        private void SaveSDScore(object sender, RoutedEventArgs e)
+        {
+            var sd = (SDScoreViewModel) dgvSelfDevelopment.SelectedValue;
+            var scoreBox = (TextBox) LogicalTreeHelper.FindLogicalNode(((Button)sender).Parent, "scoreBox");
+            var score = 0;
+            if (Int32.TryParse(scoreBox.Text, out score))
+            {
+                sd.Score = score;
+                _student.Save();
+                RefreshMarks();
+            }
+            scoreBox.Text = "";
         }
 
      }

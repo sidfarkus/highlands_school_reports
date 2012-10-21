@@ -24,6 +24,10 @@ namespace Highlands.ViewModel
             {
                 return _studentRow.Name;
             }
+            set
+            {
+                _studentRow.Name = value;
+            }
         }
 
         [PDFOutputField("DOB")]
@@ -33,14 +37,21 @@ namespace Highlands.ViewModel
             {
                 return _studentRow.DOB;
             }
+            set
+            {
+                _studentRow.DOB = value;
+            }
         }
 
-        [PDFOutputField("StudentAddress")]
         public string AddressLine1
         {
             get
             {
                 return _studentRow.AddressLine1;
+            }
+            set
+            {
+                _studentRow.AddressLine1 = value;
             }
         }
 
@@ -49,6 +60,10 @@ namespace Highlands.ViewModel
             get
             {
                 return _studentRow.AddressLine2;
+            }
+            set
+            {
+                _studentRow.AddressLine2 = value;
             }
         }
 
@@ -59,6 +74,10 @@ namespace Highlands.ViewModel
             {
                 return _studentRow.DateEnrolled;
             }
+            set
+            {
+                _studentRow.DateEnrolled = value;
+            }
         }
 
         [PDFOutputField("Grade")]
@@ -67,6 +86,10 @@ namespace Highlands.ViewModel
             get
             {
                 return _studentRow.GradeLevel;
+            }
+            set
+            {
+                _studentRow.GradeLevel = value;
             }
         }
 
@@ -86,6 +109,10 @@ namespace Highlands.ViewModel
                 if (_studentRow.DateWithdrawn == DateTime.MaxValue)
                     return null;
                 return _studentRow.DateWithdrawn;
+            }
+            set
+            {
+                _studentRow.DateWithdrawn = value ?? DateTime.MaxValue;
             }
         }
 
@@ -124,6 +151,11 @@ namespace Highlands.ViewModel
             return gradeLevel + " grade";
         }
 
+        public void Save()
+        {
+            ((Gradebook)_studentRow.Table.DataSet).Save();
+        }
+
         internal bool HasTeacher(UserViewModel user)
         {
             return _studentRow.HasTeacher(user.Name);
@@ -138,7 +170,7 @@ namespace Highlands.ViewModel
         {
             var currentSubjects = Grades.GroupBy(g => g.Subject)
                 .Where(subject => subject.Any(subGrade => subGrade.IsCurrentForPeriod(period)))
-                .OrderBy(subject => subject.Key);
+                .OrderBy(subject => Maintenance.GetSubjectIndex(subject.Key));
             var gradeReportFields = currentSubjects.Select((subject, i) => {
                 var thisYearsGrades = subject.Where(subGrade => subGrade.ShouldShowOnReportCard(period))
                     .Select(subGrade => subGrade.GetGradeReportFields(period, i + 1));
@@ -154,19 +186,49 @@ namespace Highlands.ViewModel
         private IEnumerable<KeyValuePair<string, string>> GetSelfDevFields(MarkingPeriodKey period)
         {
             var sdAreas = Maintenance.SelfDevelopmentAreas;
-            return SelfDevelopmentScores.Where(score => MarkingPeriodKey.Parse(score.Quarter).Equals(period))
-                .Select((s, i) => new[] { 
-                    new KeyValuePair<string, string>("SD" + i + 1, sdAreas[i]),
-                    new KeyValuePair<string, string>("SDValue" + i + 1, s.Score.ToString())
+            var o = SelfDevelopmentScores.Where(score => MarkingPeriodKey.Parse(score.Quarter).Equals(period));
+            var p = o.Select((s, i) => new[] { 
+                    new KeyValuePair<string, string>("SD" + (i + 1), sdAreas[i]),
+                    new KeyValuePair<string, string>("SDValue" + (i == 10 ? 12 : i + 1), s.Score.ToString())
                 }).SelectMany(x => x);
+            return p;
         }
 
         private IEnumerable<KeyValuePair<string, string>> GetReportLevelFields(MarkingPeriodKey period)
         {
-            yield return new KeyValuePair<string, string>(
-                "SchoolYear",
-                String.Format("{0} - {1}", period.ApproximateStartDate.ToString("MMM, yyyy"), period.ApproximateStartDate.ToString("MMM, yyyy")));
-
+            var thisQuarter = MarkingPeriod.MarkingPeriods.Find(p => p.Key.Equals(period));
+            return new[] { 
+                new KeyValuePair<string, string>(
+                    "StudentAddress",
+                    AddressLine1 + "\n" + AddressLine2),
+                new KeyValuePair<string, string>(
+                    "SchoolYear",
+                    String.Format("{0} - {1}", thisQuarter.SchoolYear.Item1, thisQuarter.SchoolYear.Item2)),
+                new KeyValuePair<string, string>(
+                    "QTR1",
+                    "1"),
+                new KeyValuePair<string, string>(
+                    "YR1",
+                    "1"),
+                new KeyValuePair<string, string>(
+                    "QTR2",
+                    "2"),
+                new KeyValuePair<string, string>(
+                    "YR2",
+                    "2"),
+                new KeyValuePair<string, string>(
+                    "QTR3",
+                    "3"),
+                new KeyValuePair<string, string>(
+                    "YR3",
+                    "3"),
+                new KeyValuePair<string, string>(
+                    "MarkingPeriod",
+                    period.QuarterString),
+                new KeyValuePair<string, string>(
+                    "QtrEnding",
+                    thisQuarter != null ? thisQuarter.EndDate.ToShortDateString() : "N/A")
+            };
         }
 
         private IEnumerable<KeyValuePair<string, string>> GetPDFFields<T>(T obj)

@@ -20,12 +20,20 @@ namespace Highlands.ViewModel
             {
                 return _row.Area;
             }
+            set
+            {
+                _row.Area = value;
+            }
         }
         public string Quarter
         {
             get
             {
                 return _row.Quarter;
+            }
+            set
+            {
+                _row.Quarter = value;
             }
         }
         public int Score
@@ -34,12 +42,20 @@ namespace Highlands.ViewModel
             {
                 return _row.Score;
             }
+            set
+            {
+                _row.Score = value;
+            }
         }
         public string Teacher
         {
             get
             {
                 return _row.Teacher;
+            }
+            set
+            {
+                _row.Teacher = value;
             }
         }
     }

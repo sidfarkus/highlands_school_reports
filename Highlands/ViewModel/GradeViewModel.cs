@@ -91,12 +91,14 @@ namespace Highlands.ViewModel
         public bool ShouldShowOnReportCard(MarkingPeriodKey period)
         {
             var thisPeriod = MarkingPeriodKey.Parse(Quarter);
-            return thisPeriod.EndingSchoolYear == period.EndingSchoolYear;
+            return thisPeriod.EndingSchoolYear == period.EndingSchoolYear &&
+                thisPeriod.Quarter <= period.Quarter;
         }
 
         internal void Save(System.Collections.Generic.List<StaticModel.Change> diffs)
         {
             ChangeLog.LogDiffs(diffs);
+            ((Gradebook) _gradeRow.Table.DataSet).Save();
         }
 
         internal void Approve()
