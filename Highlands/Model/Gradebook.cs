@@ -21,7 +21,6 @@ namespace Highlands.Model
             Save();
         }
 
-        /*
         public void ImportClassLists(MarkingPeriodKey mpk, List<string> lines)
         {
             foreach (var line in lines)
@@ -41,8 +40,69 @@ namespace Highlands.Model
 
             Save();
         }
-        */
- 
+
+        public List<string> ImportStudents(List<string> lines)
+        {
+            var rv = new List<string>();
+            foreach (var line in lines)
+            {
+                try
+                {
+                    var parts = line.Split(",".ToCharArray());
+
+                    int i = 0;
+                    var name = parts[i++];
+                    if (name == "Name")
+                        continue;
+                    var dob = DateTime.Parse(parts[i++]);
+                    var address1 = parts[i++];
+                    var address2 = parts[i++];
+                    var gradeLevel = parts[i++];
+                    var enrolled = DateTime.Parse(parts[i++]);
+                    DateTime withdrawn = ParseNullableDateTime(parts[i++]);
+
+                    var student = Student.SingleOrDefault(s => s.Name == name && s.DOB == dob);
+                    if (student == null)
+                    {
+                        Student.AddStudentRow(name + dob.ToString(), name, dob, address1, address2, gradeLevel, enrolled, withdrawn);
+                        rv.Add("Added student " + name);
+                    }
+                    else
+                    {
+                        student.DOB = dob;
+                        student.AddressLine1 = address1;
+                        student.AddressLine2 = address2;
+                        student.GradeLevel = gradeLevel;
+                        student.DateEnrolled = enrolled;
+                        student.DateWithdrawn = withdrawn;
+                    }
+                }
+                catch (Exception)
+                {
+                    rv.Add("ERROR on student " + line);
+                }
+            }
+            return rv;
+        }
+
+        public List<string> ExportStudents()
+        {
+            var rv = new List<string>();
+            rv.Add("Name,DOB,AddressLine1,AddressLine2,Grade,DateEnrolled,DateWithdrawn");
+            foreach (Gradebook.StudentRow student in Student.Rows)
+            {
+                rv.Add(student.Name + "," + student.DOB + "," + student.AddressLine1 + "," + student.AddressLine2 + "," + student.GradeLevel + "," + student.DateEnrolled + "," + student.DateWithdrawn);
+            }
+            return rv;
+        }
+
+        DateTime ParseNullableDateTime(string str)
+        {
+            DateTime rv = DateTime.MaxValue;
+            if (!string.IsNullOrWhiteSpace(str))
+                rv = DateTime.Parse(str);
+            return rv;
+        }
         public static Gradebook Read()
         {
             var rv = new Gradebook();
