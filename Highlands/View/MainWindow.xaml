@@ -11,7 +11,9 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <ToolBar ToolBarTray.IsLocked="True">
-               <Button Click="btnLogout_Click" Width="80" Margin="3">Logout</Button>
+                <Button Click="btnImport_Click" Width="80" Margin="3">Import</Button>
+                <Button Click="btnExport_Click" Width="80" Margin="3">Export</Button>
+                <Button Click="btnLogout_Click" Width="80" Margin="3">Logout</Button>
             </ToolBar>
             <TabControl Grid.Row="1">
                 <TabItem >

@@ -41,19 +41,20 @@ namespace Highlands.Model
             Save();
         }
 
-        public List<string> ImportStudents(List<string> lines)
+        public IEnumerable<string> ImportStudents(IEnumerable<string> lines)
         {
             var rv = new List<string>();
             foreach (var line in lines)
             {
                 try
                 {
-                    var parts = line.Split(",".ToCharArray());
+                    if (line.StartsWith("Key"))
+                        continue;
+                    var parts = SplitCsv(line);
 
                     int i = 0;
+                    var key = parts[i++];
                     var name = parts[i++];
-                    if (name == "Name")
-                        continue;
                     var dob = DateTime.Parse(parts[i++]);
                     var address1 = parts[i++];
                     var address2 = parts[i++];
@@ -61,20 +62,30 @@ namespace Highlands.Model
                     var enrolled = DateTime.Parse(parts[i++]);
                     DateTime withdrawn = ParseNullableDateTime(parts[i++]);
 
-                    var student = Student.SingleOrDefault(s => s.Name == name && s.DOB == dob);
+                    var student = Student.FindByKey(key);
                     if (student == null)
                     {
-                        Student.AddStudentRow(name + dob.ToString(), name, dob, address1, address2, gradeLevel, enrolled, withdrawn);
+                        student = Student.SingleOrDefault(s => s.Name == name && s.DOB == dob);
+                    }
+                    if (student == null)
+                    {
+                        Student.AddStudentRow(MakeStudentKey(name, dob), name, dob, address1, address2, gradeLevel, enrolled, withdrawn);
                         rv.Add("Added student " + name);
                     }
                     else
                     {
-                        student.DOB = dob;
-                        student.AddressLine1 = address1;
-                        student.AddressLine2 = address2;
-                        student.GradeLevel = gradeLevel;
-                        student.DateEnrolled = enrolled;
-                        student.DateWithdrawn = withdrawn;
+                        if (!CompareDate(student.DOB, dob))
+                            student.DOB = dob;
+                        if (student.AddressLine1 != address1)
+                            student.AddressLine1 = address1;
+                        if (student.AddressLine2 != address2)
+                            student.AddressLine2 = address2;
+                        if (student.GradeLevel != gradeLevel)
+                            student.GradeLevel = gradeLevel;
+                        if (!CompareDate(student.DateEnrolled, enrolled))
+                            student.DateEnrolled = enrolled;
+                        if (!CompareDate(student.DateWithdrawn, withdrawn))
+                            student.DateWithdrawn = withdrawn;
                     }
                 }
                 catch (Exception)
@@ -84,14 +95,51 @@ namespace Highlands.Model
             }
             return rv;
         }
+        bool CompareDate(DateTime d1, DateTime d2)
+        {
+            return (d1.Year == d2.Year && d1.DayOfYear == d2.DayOfYear);
+        }
+
+        public static string MakeStudentKey(string name, DateTime dob)
+        {
+            return name.Replace(" ", "") +dob.ToString("yyyyMMdd");
+        }
+        private IList<string> SplitCsv(string line)
+        {
+            var parts = line.Split(",".ToCharArray());
+            var rv = new List<string>();
+            string superpart = null;
+            foreach (var part in parts)
+            {
+                if (part.StartsWith("\""))
+                {
+                    superpart = part.Trim("\"".ToCharArray());
+                }
+                else if (superpart != null)
+                {
+                    superpart += "," + part.Trim("\"".ToCharArray());
+                    if (part.EndsWith("\""))
+                    {
+                        rv.Add(superpart);
+                        superpart = null;
+                    }
+                }
+                else
+                    rv.Add(part);
+            }
+            return rv;
+        }
 
         public List<string> ExportStudents()
         {
             var rv = new List<string>();
-            rv.Add("Name,DOB,AddressLine1,AddressLine2,Grade,DateEnrolled,DateWithdrawn");
+            rv.Add("Key,Name,DOB,AddressLine1,AddressLine2,Grade,DateEnrolled,DateWithdrawn");
             foreach (Gradebook.StudentRow student in Student.Rows)
             {
-                rv.Add(student.Name + "," + student.DOB + "," + student.AddressLine1 + "," + student.AddressLine2 + "," + student.GradeLevel + "," + student.DateEnrolled + "," + student.DateWithdrawn);
+                var withdrawn = "";
+                if (student.DateWithdrawn != DateTime.MaxValue)
+                    withdrawn = student.DateWithdrawn.ToShortDateString();
+                rv.Add(student.Key + "," + student.Name + "," + student.DOB.ToShortDateString() + ",\"" + student.AddressLine1 + "\",\"" + student.AddressLine2 + "\"," + student.GradeLevel + "," + student.DateEnrolled.ToShortDateString() + "," + withdrawn);
             }
             return rv;
         }
