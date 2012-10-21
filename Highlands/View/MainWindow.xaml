@@ -10,10 +10,16 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Border Grid.Row="0" Background="LightGray">
-               <Button Click="btnLogout_Click" Width="80" HorizontalAlignment="Right" Margin="3">Logout</Button>
-            </Border>
+            <ToolBar ToolBarTray.IsLocked="True">
+               <Button Click="btnLogout_Click" Width="80" Margin="3">Logout</Button>
+            </ToolBar>
             <TabControl Grid.Row="1">
+                <TabItem >
+                    <TabItem.Header>
+                        <TextBlock FontSize="16" FontWeight="Bold">Attendance</TextBlock>
+                    </TabItem.Header>
+                    <h:AttendeesControl />
+                </TabItem>
                 <TabItem>
                     <TabItem.Header>
                         <TextBlock FontSize="16" FontWeight="Bold">Current Classes</TextBlock>
@@ -25,12 +31,6 @@
                         <TextBlock FontSize="16" FontWeight="Bold">Students</TextBlock>
                     </TabItem.Header>
                     <h:StudentsControl x:Name="studentsControl"/>
-                </TabItem>
-                <TabItem >
-                    <TabItem.Header>
-                        <TextBlock FontSize="16" FontWeight="Bold">Attendance</TextBlock>
-                    </TabItem.Header>
-                    <h:AttendeesControl />
                 </TabItem>
             </TabControl>
         </Grid>
