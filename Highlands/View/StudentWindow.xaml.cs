@@ -228,7 +228,7 @@ namespace Highlands
             {
                 AddExtension = true,
                 Filter = "PDF Files (*.pdf)|*.pdf",
-                FileName = String.Format("{0}_Q{1}_{2}_Report_Card.pdf", _student.Name, period.Quarter, period.EndingSchoolYear)
+                FileName = _student.GetDefaultReportCardFilename(period)
             };
             var result = dialog.ShowDialog();
             if (result.HasValue && result.Value)

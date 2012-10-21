@@ -71,6 +71,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPFFolderBrowser">
+      <HintPath>..\packages\FolderBrowser\WPFFolderBrowser.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -85,6 +88,7 @@
     <Compile Include="Utils\PDFWriter.cs" />
     <Compile Include="Utils\Utils.cs" />
     <Compile Include="StaticModel\Change.cs" />
+    <Compile Include="ViewModel\AttendenceViewModel.cs" />
     <Compile Include="ViewModel\CourseViewModel.cs" />
     <Compile Include="ViewModel\DemoFactory.cs" />
     <Compile Include="ViewModel\GradebookViewModel.cs" />

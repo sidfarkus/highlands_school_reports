@@ -58,7 +58,7 @@
                 <TextBlock Text="Name" FontWeight="Bold" FontSize="14"/>
                 <TextBlock Text="Age" Grid.Column="1" FontWeight="Bold" FontSize="14"/>
                 <TextBlock Text="Grade Level" FontWeight="Bold" Grid.Column="2" FontSize="14"/>
-                <TextBlock Text="Date Enrolled" FontWeight="Bold" Grid.Column="3" FontSize="14"/>
+                <TextBlock Text="Enrolled Since" FontWeight="Bold" Grid.Column="3" FontSize="14"/>
             </Grid>
             <ListBox Name="lst" MouseUp="ListMouseUp" VerticalAlignment="Stretch" 
                         ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
@@ -76,7 +76,7 @@
                                 <TextBlock Text="{Binding Name}" FontWeight="Bold" />
                                 <TextBlock Text="{Binding Age}" Grid.Column="1"/>
                                 <TextBlock Text="{Binding GradeLevel}"  Grid.Column="2"/>
-                                <TextBlock Text="{Binding DateEnrolled}"  Grid.Column="3"/>
+                                <TextBlock Text="{Binding DateEnrolled, StringFormat='\{0:MMM, yyyy\}'}"  Grid.Column="3"/>
                             </Grid>
                         </Border>
                     </DataTemplate>

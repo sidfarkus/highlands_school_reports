@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Highlands.ViewModel;
 
 namespace Highlands
 {
@@ -20,9 +21,13 @@ namespace Highlands
     /// </summary>
     public partial class AttendeesControl : UserControl
     {
+        private AttendenceViewModel model;
+
         public AttendeesControl()
         {
             InitializeComponent();
+            model = new AttendenceViewModel();
+            this.DataContext = model;
         }
     }
 }

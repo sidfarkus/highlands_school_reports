@@ -89,7 +89,6 @@ namespace Highlands
             return Gradebook;
         }
 
-
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             FillStudents(entStudent.Text, cmbQuarter.SelectedItem as MarkingPeriod, cmbGradeLevel.Text, cmbCourse.SelectedItem as CourseViewModel);

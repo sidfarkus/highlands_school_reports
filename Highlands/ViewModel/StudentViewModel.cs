@@ -171,7 +171,8 @@ namespace Highlands.ViewModel
             var currentSubjects = Grades.GroupBy(g => g.Subject)
                 .Where(subject => subject.Any(subGrade => subGrade.IsCurrentForPeriod(period)))
                 .OrderBy(subject => Maintenance.GetSubjectIndex(subject.Key));
-            var gradeReportFields = currentSubjects.Select((subject, i) => {
+            var gradeReportFields = currentSubjects.Select((subject, i) =>
+            {
                 var thisYearsGrades = subject.Where(subGrade => subGrade.ShouldShowOnReportCard(period))
                     .Select(subGrade => subGrade.GetGradeReportFields(period, i + 1));
                 return thisYearsGrades.SelectMany(x => x);
@@ -196,7 +197,7 @@ namespace Highlands.ViewModel
 
         private IEnumerable<KeyValuePair<string, string>> GetReportLevelFields(MarkingPeriodKey period)
         {
-            var thisQuarter = MarkingPeriod.MarkingPeriods.Find(p => p.Key.Equals(period));
+            var thisQuarter = MarkingPeriods.Singleton.Find(p => p.Key.Equals(period));
             return new[] { 
                 new KeyValuePair<string, string>(
                     "StudentAddress",
@@ -240,7 +241,7 @@ namespace Highlands.ViewModel
             {
                 var val = prop.GetValue(obj) ?? "";
                 if (val is DateTime)
-                    val = ((DateTime) val).ToShortDateString();
+                    val = ((DateTime)val).ToShortDateString();
                 yield return new KeyValuePair<string, string>(
                     prop.GetCustomAttributes(typeof(PDFOutputFieldAttribute), false).Cast<PDFOutputFieldAttribute>().First().FieldName,
                     val.ToString());
@@ -267,6 +268,11 @@ namespace Highlands.ViewModel
             if (today.DayOfYear < dob.DayOfYear)
                 years -= 1;
             return years;
+        }
+
+        public string GetDefaultReportCardFilename(MarkingPeriodKey period)
+        {
+            return String.Format("{0}_Q{1}_{2}_Report_Card.pdf", Name, period.Quarter, period.EndingSchoolYear);
         }
     }
 }

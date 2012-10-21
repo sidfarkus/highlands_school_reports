@@ -8,49 +8,58 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
-        
-        <DataGrid Name="grd" AutoGenerateColumns="False" SelectionMode="Single" SelectedCellsChanged="SelectionChanged">
-            <DataGrid.GroupStyle>
-                <!-- Style for groups at top level. -->
-                <GroupStyle>
-                    <GroupStyle.ContainerStyle>
-                        <Style TargetType="{x:Type GroupItem}">
-                            <Setter Property="Margin" Value="0,0,0,5"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type GroupItem}">
-                                        <Expander IsExpanded="True"  BorderThickness="1,1,1,2">
-                                            <Expander.Header>
-                                                <DockPanel>
-                                                    <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5"/>
-                                                    <TextBlock FontWeight="Bold" VerticalAlignment="Center">Count:</TextBlock>
-                                                    <TextBlock FontWeight="Bold" Text="{Binding Path=ItemCount}"  Margin="5"/>
-                                                </DockPanel>
-                                            </Expander.Header>
-                                            <Expander.Content>
-                                                <ItemsPresenter />
-                                            </Expander.Content>
-                                        </Expander>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </GroupStyle.ContainerStyle>
-                </GroupStyle>
-            </DataGrid.GroupStyle>
-            <DataGrid.Columns>
-                <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding StudentName}" Width="3*" />
-                <DataGridTextColumn IsReadOnly="True" Header="Grade" Binding="{Binding LetterGrade}" Width="*" />
-                <DataGridTextColumn IsReadOnly="True" Header="Special Grade" Binding="{Binding SpecialGrade}" Width="*" />
-                <DataGridTextColumn IsReadOnly="True" Header="Approval Status" Binding="{Binding Stage}" Width="2*"/>
-            </DataGrid.Columns>
-        </DataGrid>
+
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Top" Background="LightGray" Orientation="Horizontal">
+                <Button Width="120" Margin="5" Click="OnCreateAllReports">Save Report Cards</Button>
+            </StackPanel>
+            <DataGrid Name="grd" AutoGenerateColumns="False" SelectionMode="Single" SelectedCellsChanged="SelectionChanged">
+                <DataGrid.GroupStyle>
+                    <!-- Style for groups at top level. -->
+                    <GroupStyle>
+                        <GroupStyle.ContainerStyle>
+                            <Style TargetType="{x:Type GroupItem}">
+                                <Setter Property="Margin" Value="0,0,0,5"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type GroupItem}">
+                                            <Expander IsExpanded="True"  BorderThickness="1,1,1,2">
+                                                <Expander.Header>
+                                                    <DockPanel>
+                                                        <TextBlock FontWeight="Bold" Text="{Binding Path=Name}" Margin="5"/>
+                                                        <TextBlock FontWeight="Bold" VerticalAlignment="Center">Count:</TextBlock>
+                                                        <TextBlock FontWeight="Bold" Text="{Binding Path=ItemCount}"  Margin="5"/>
+                                                    </DockPanel>
+                                                </Expander.Header>
+                                                <Expander.Content>
+                                                    <ItemsPresenter />
+                                                </Expander.Content>
+                                            </Expander>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </GroupStyle.ContainerStyle>
+                    </GroupStyle>
+                </DataGrid.GroupStyle>
+                <DataGrid.Columns>
+                    <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding StudentName}" Width="3*" />
+                    <DataGridTextColumn IsReadOnly="True" Header="Grade" Binding="{Binding LetterGrade}" Width="*" />
+                    <DataGridTextColumn IsReadOnly="True" Header="Special Grade" Binding="{Binding SpecialGrade}" Width="*" />
+                    <DataGridTextColumn IsReadOnly="True" Header="Approval Status" Binding="{Binding Stage}" Width="2*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
         <Grid Grid.Column="1">
             <h:EditGrade x:Name="gradeEditor" Saved="OnGradeSaved" Canceled="OnSaveCanceled" Forwards="OnNextStudent" Backwards="OnPrevStudent" Margin="10"/>
-            <Border x:Name="hideEditOverlay" Background="White" />
+            <Border x:Name="hideEditOverlay" Background="LightGreen">
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="16">
+                    Select a student on the left to begin grading.
+                </TextBlock>
+            </Border>
         </Grid>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Stretch" ResizeDirection="Columns" Width="4"/>
     </Grid>

@@ -59,3 +59,4 @@ C:\projects\highlands\Highlands\obj\Debug\View\ClassesControl.baml
 C:\projects\highlands\Highlands\obj\Debug\View\ClassesControl.g.cs
 C:\projects\highlands\Highlands\obj\Debug\View\EditGradeWindow.g.cs
 C:\projects\highlands\Highlands\obj\Debug\View\EditGradeWindow.baml
+C:\projects\highlands\Highlands\bin\Debug\WPFFolderBrowser.dll

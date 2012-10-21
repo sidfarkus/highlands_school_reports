@@ -157,5 +157,41 @@ namespace Highlands
         {
             grd.SelectedIndex -= 1;
         }
+
+        private void OnCreateAllReports(object sender, RoutedEventArgs e)
+        {
+            var dialog = new WPFFolderBrowser.WPFFolderBrowserDialog("Pick a folder to save all the report cards");
+            var result = dialog.ShowDialog();
+            if (result.HasValue && result.Value)
+            {
+                var grades = (List<StudentByClass>)grd.ItemsSource;
+                var students = grades.Select(g => {
+                    var student = _gradebook.Students.FirstOrDefault(s => s.Name.Equals(g.StudentName, StringComparison.OrdinalIgnoreCase));
+                    if (!String.IsNullOrEmpty(g.LetterGrade))
+                        return student;
+                    return null;
+                });
+
+                int notExported = 0, exported = 0;
+                foreach (var student in students)
+                {
+                    if (student != null)
+                    {
+                        var filename = System.IO.Path.Combine(dialog.FileName, student.GetDefaultReportCardFilename(MarkingPeriod.Current.Key));
+                        student.CreateReportCard(filename, MarkingPeriod.Current.Key);
+                        exported++;
+                    }
+                    else
+                    {
+                        notExported++;
+                    }
+                }
+                if (notExported > 0)
+                {
+                    MessageBox.Show(notExported + " student(s) could not be exported because they had no grade set!\n\n" + exported + " student(s) were successfully written.");
+                }
+            }
+
+        }
     }
 }

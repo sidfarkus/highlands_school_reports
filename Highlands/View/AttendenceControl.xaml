@@ -5,7 +5,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        
-    </Grid>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <TextBlock VerticalAlignment="Center" Margin="5">Quarter: </TextBlock>
+            <ComboBox ItemsSource="{Binding Quarters}" Margin="5" SelectedItem="{Binding CurrentQuarter}"/>
+        </StackPanel>
+        <DataGrid ItemsSource="{Binding Students}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
 </UserControl>
