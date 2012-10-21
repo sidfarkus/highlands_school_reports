@@ -7,90 +7,79 @@ using System.Linq;
 
 namespace Highlands.Model
 {
-    
-    
-    public partial class Gradebook {
-
-        public partial class StudentDataTable
+    public partial class Gradebook 
+    {
+        public void CloneQuarter(MarkingPeriodKey last, MarkingPeriodKey next)
         {
-            public void ReadCsv()
-            {
-                var file = "studentTable.txt";
-                var lines = File.ReadLines(file);
-                var separator = ",".ToCharArray();
-                foreach (string line in lines)
-                {
-                    string[] fields = line.Split(separator);
-                    object[] values = new object[] { fields };
-                    Rows.Add(values);
-                }
-            }
+            if (false == MarkingPeriods.Singleton.Any(m => m.Key.Equals(next)))
+                MarkingPeriods.Singleton.AddMarkingPeriod(new MarkingPeriod(next, next.ApproximateStartDate, next.ApproximateEndDate, 45));
+
+            var courses = Course.Where(c => c.Quarter == last.ToString());
+            foreach (var course in courses)
+                Course.AddCourseRow(course.CourseKey + course.Quarter, course.SubjectName, course.Quarter, course.Group, course.Teacher, course.Level);
+            
+            Save();
         }
 
-        partial class GradeDataTable
+        /*
+        public void ImportClassLists(MarkingPeriodKey mpk, List<string> lines)
         {
-            public void ReadCsv()
+            foreach (var line in lines)
             {
-                var file = "gradeTable.txt";
-                var lines = File.ReadLines(file);
-                var separator = ",".ToCharArray();
-                foreach (string line in lines)
-                {
-                    string[] fields = line.Split(separator);
-                    object[] values = new object[] { fields };
-                    Rows.Add(values);
-                }
+                var parts = line.Split(",".ToCharArray());
+                var studentName = parts[0];
+                var student = Student.SingleOrDefault(s => s.Name == studentName);
+                if (student == null)
+                    continue;
+                var courseName = parts[1];
+                var quarter = parts[2];
+                var teacher = parts[3];
+                var group  = parts[4];
+                var level = parts[5];
+                
             }
-        }
 
-        partial class CourseDataTable
-        {
-            public void ReadCsv()
-            {
-                var file = "courseTable.txt";
-                var lines = File.ReadLines(file);
-                var separator = ",".ToCharArray();
-                foreach (string line in lines)
-                {
-                    string[] fields = line.Split(separator);
-                    object[] values = new object[] { fields };
-                    Rows.Add(values);
-                }
-            }
+            Save();
         }
-        static Gradebook _singleton;
+        */
+ 
         public static Gradebook Read()
         {
-            if (_singleton == null)
+            var rv = new Gradebook();
+            try
             {
-                var rv = new Gradebook();
-                //rv.ReadXml("Gradebook.xml");
-                try
-                {
-                    rv.ReadXml("gradebook.xml");
-                    /*var files = Directory.GetFiles(".", "grade*.xml");
-                    foreach (var file in files)
-                    {
-                        var gradeTable = new GradeDataTable();
-                        gradeTable.ReadXml(file);
-                        rv.Merge(gradeTable);
-                    }
-                    rv.Student.ReadXml("studentTable.xml");
-                    rv.Course.ReadXml("courseTable.xml");
-                    */
-                }
-                catch (System.Exception)
-                {
-                    return null;
-                }
-                _singleton = rv;
+                rv.ReadXml("gradebook.xml");
+                rv.AcceptChanges();
             }
-            return _singleton;
+            catch (System.Exception)
+            {
+                return null;
+            }
+            return rv;
         }
 
+        
+        
         public void Save()
         {
-            _singleton = this;
+             try
+            {
+                if (!HasChanges())
+                    return;
+                var other = new Gradebook();
+                other.ReadXml("gradebook.xml");
+                if (other.Config.Guid != Config.Guid)
+                {
+                    if (CheckMerge(other))
+                        return;
+                }
+           }
+            catch (Exception exc)
+            {
+                
+            }
+            var guid = Guid.NewGuid();
+            Config.Guid = guid.ToString();
             this.WriteXml("gradebook.xml");
             /*Student.WriteXml("studentTable.xml");
             Grade.WriteXml("gradeTable.xml");
@@ -98,8 +87,62 @@ namespace Highlands.Model
             */
         }
 
-        static public User CurrentUser { get; set; }
+        private bool CheckMerge(Gradebook other)
+        {
+            // handles may overwrite other changes on same lines
+            var changes = GetChanges();
+            other.Merge(changes, false);
+            other.Save();
+            Read();
+            
+            return true;
+        }
 
+        static public User CurrentUser { get; set; }
+        partial class ConfigDataTable
+        {
+            public string Guid
+            {
+                get
+                {
+                    if (this.Count() < 1)
+                        return null;
+                    return this[0].Guid;
+                }
+                set
+                {
+                    var name = "-";
+                    if (CurrentUser != null)
+                        name = CurrentUser.Name;
+                    if (this.Count() < 1)
+                        AddConfigRow(value, DateTime.Now.ToString(), name);
+                    else
+                    {
+                        this[0].Guid = value;
+                        this[0].LastModified = DateTime.Now.ToString();
+                        this[0].UserModified = CurrentUser.Name;
+                    }
+                }
+            }
+            public string LastModified
+            {
+                get
+                {
+                    if (this.Count() < 1)
+                        return null;
+                    return this[0].LastModified;
+                }
+            }
+            public string UserModified
+            {
+                get
+                {
+                    if (this.Count() < 1)
+                        return null;
+                    return this[0].UserModified;
+                }
+            }
+        }
         partial class StudentRow
         {
             internal bool HasTeacher(string teacher)

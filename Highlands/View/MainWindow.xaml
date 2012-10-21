@@ -11,7 +11,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Border Grid.Row="0" Background="LightGray">
-                <Button Click="btnLogout_Click" Width="80" HorizontalAlignment="Right" Margin="3">Logout</Button>
+               <Button Click="btnLogout_Click" Width="80" HorizontalAlignment="Right" Margin="3">Logout</Button>
             </Border>
             <TabControl Grid.Row="1">
                 <TabItem Header="Classes">

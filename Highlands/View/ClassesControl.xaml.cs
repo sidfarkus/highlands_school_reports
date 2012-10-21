@@ -27,12 +27,6 @@ namespace Highlands
         public ClassesControl()
         {
             InitializeComponent();
-            LoadGradebook();
-        }
-
-        private void LoadGradebook()
-        {
-            _gradebook = GradebookViewModel.Load();
         }
 
         private void FillStudents()
@@ -117,8 +111,9 @@ namespace Highlands
         }
         public GradebookViewModel _gradebook;
 
-        internal void Refresh()
+        internal void Refresh(GradebookViewModel gradebook)
         {
+            _gradebook = gradebook;
             FillStudents();
         }
     }
