@@ -30,6 +30,7 @@ namespace Highlands
             loginWindow.Reset();
             loginOverlay.Visibility = System.Windows.Visibility.Visible;
         }
+
         GradebookViewModel _gradebook;
         private void OnLogin(object sender, System.EventArgs e)
         {
@@ -37,6 +38,8 @@ namespace Highlands
             loginOverlay.Visibility = System.Windows.Visibility.Hidden;
             _gradebook = studentsControl.LoadGradebook();
             ctrlClasses.Refresh(_gradebook);
+            //ctrlClasses.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanEditAttendance);
+            //tabAttendance.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanEditAttendance);
             tabClasses.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanViewGrades);
             tabStudents.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanViewGrades);
             btnExport.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanImportExport);

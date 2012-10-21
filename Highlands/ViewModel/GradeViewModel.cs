@@ -108,8 +108,8 @@ namespace Highlands.ViewModel
             if (UserViewModel.CurrentUser.HasClassroomRights && newStage == ApprovalStage.Instructor)
                 newStage = ApprovalStage.Classroom;
             var change = new Change(this, "Approval", oldStage.ToString(), newStage.ToString());
-            ChangeLog.LogDiff(change);
-            ApprovalStage = newStage; 
+            ApprovalStage = newStage;
+            Save(new List<Change>() { change });
         }
 
         public IEnumerable<KeyValuePair<string, string>> GetGradeReportFields(MarkingPeriodKey period, int rowIndex)

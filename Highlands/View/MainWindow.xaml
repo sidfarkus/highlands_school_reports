@@ -13,7 +13,7 @@
             <ToolBar ToolBarTray.IsLocked="True">
                 <Button Name="btnImport" Click="btnImport_Click" Width="80" Margin="3">Import Students</Button>
                 <Button Name="btnExport" Click="btnExport_Click" Width="80" Margin="3">Export Students</Button>
-                <Button Click="btnLogout_Click" Width="80" Margin="3">Logout</Button>
+                <!--<Button Click="btnLogout_Click" Width="80" Margin="3">Logout</Button>-->
             </ToolBar>
             <TabControl Grid.Row="1">
                 <TabItem Name="tabAttendance">
