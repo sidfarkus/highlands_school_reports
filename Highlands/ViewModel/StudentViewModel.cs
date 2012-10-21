@@ -81,12 +81,19 @@ namespace Highlands.ViewModel
             }
         }
 
-        [PDFOutputField("AbsentQ")]
         public int DaysAbsentThisQuarter
         {
             get
             {
-                return 0;
+                return _studentRow.GetAttendanceRows().Count(a => a.Date >= MarkingPeriod.Current.StartDate && a.Date <= MarkingPeriod.Current.EndDate && a.State == AttendanceStatus.Absent.ToString());
+            }
+        }
+
+        public int DaysTardyThisQuarter
+        {
+            get
+            {
+                return _studentRow.GetAttendanceRows().Count(a => a.Date >= MarkingPeriod.Current.StartDate && a.Date <= MarkingPeriod.Current.EndDate && a.State == AttendanceStatus.Tardy.ToString());
             }
         }
 
@@ -327,7 +334,7 @@ namespace Highlands.ViewModel
 
             foreach (var prop in outputProperties)
             {
-                var val = prop.GetValue(obj) ?? "";
+                var val = prop.GetValue(obj, null) ?? "";
                 if (val is DateTime)
                     val = ((DateTime)val).ToShortDateString();
                 yield return new KeyValuePair<string, string>(

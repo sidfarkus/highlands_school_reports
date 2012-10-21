@@ -133,9 +133,13 @@ namespace Highlands.Model
             string superpart = null;
             foreach (var part in parts)
             {
+               
                 if (part.StartsWith("\""))
                 {
-                    superpart = part.Trim("\"".ToCharArray());
+                    if (part.EndsWith("\""))
+                        rv.Add(part.Trim("\"".ToCharArray()));
+                    else
+                        superpart = part.Trim("\"".ToCharArray());
                 }
                 else if (superpart != null)
                 {

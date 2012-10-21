@@ -1,6 +1,7 @@
 ﻿//using Highlands.Model;
 using Highlands.StaticModel;
 using Highlands.ViewModel;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,7 @@ namespace Highlands
             loginOverlay.Visibility = System.Windows.Visibility.Hidden;
             _gradebook = studentsControl.LoadGradebook();
             ctrlClasses.Refresh(_gradebook);
+            ctrlAttendees.Refresh();
             //ctrlClasses.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanEditAttendance);
             //tabAttendance.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanEditAttendance);
             tabClasses.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanViewGrades);
@@ -50,7 +52,13 @@ namespace Highlands
         {
             try
             {
-                var results = _gradebook.ImportStudents("importStudents.csv");
+                var ofd = new OpenFileDialog();
+                ofd.DefaultExt = ".csv";
+                ofd.Multiselect = false;
+                ofd.Filter = "CSV files|*.csv|All Files|*.*";
+                if (ofd.ShowDialog() != true)
+                    return;
+                var results = _gradebook.ImportStudents(ofd.FileName);
                 if (results.Count() == 0)
                 {
                     MessageBox.Show("No changes");
@@ -82,7 +90,13 @@ namespace Highlands
         {
             try
             {
-                _gradebook.ExportStudents("exportStudents.csv");
+                var sfd = new SaveFileDialog();
+                sfd.DefaultExt = ".csv";
+                sfd.Filter = "CSV files|*.csv|All Files|*.*";
+                if (sfd.ShowDialog() != true)
+                    return;
+                _gradebook.ExportStudents(sfd.FileName);
+            
             }
             catch (Exception exc)
             {

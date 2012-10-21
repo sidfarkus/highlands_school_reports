@@ -50,6 +50,7 @@ namespace Highlands
         private void FillStudents(string target, MarkingPeriod mp, string gradeLevel, CourseViewModel course)
         {
             var students = Gradebook.Students;
+            students = students.OrderBy(s => s.Name);
             if (chkMyStudents.IsChecked == true)
                 students = students.Where(s => s.HasTeacher(UserViewModel.CurrentUser));
             if (course != null)

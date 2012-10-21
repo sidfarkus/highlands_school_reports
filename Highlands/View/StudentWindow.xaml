@@ -119,6 +119,8 @@
                     <DatePicker Name="dtpEnrolled" Grid.Row="4" Grid.Column="1"  Margin="4"/>
                     <CheckBox Grid.Row="5" Grid.Column="0" Name="chkWithdrawn" VerticalAlignment="Center"  HorizontalAlignment="Right" Unchecked="CheckBox_Checked" Checked="CheckBox_Checked" >Withdrawn Date:</CheckBox>
                     <DatePicker Name="dtpWithdrawn" IsEnabled="False" Grid.Row="5" Grid.Column="1"  Margin="4"/>
+                    <Label VerticalAlignment="Center" HorizontalAlignment="Right"  Grid.Row="6" Grid.Column="0">Attendance:</Label>
+                    <Label Name="staAttendance" Grid.Row="6" Grid.Column="1"  Margin="4" VerticalAlignment="Center" >YTD: </Label>
                     <Button Click="OnSaveUser" HorizontalAlignment="Right" Margin="8,8,15,8" Grid.Row="6" Grid.ColumnSpan="3" Width="80">Save</Button>
                 </Grid>
             </TabItem>

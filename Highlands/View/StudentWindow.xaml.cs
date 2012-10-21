@@ -57,6 +57,7 @@ namespace Highlands
             if (_student.DateWithdrawn.HasValue)
                 dtpWithdrawn.SelectedDate = _student.DateWithdrawn.Value;
             chkWithdrawn.IsChecked = _student.DateWithdrawn.HasValue;
+            staAttendance.Content = "Absence Qtr: " + _student.DaysAbsentThisQuarter + " Tardy Qtr: " + _student.DaysTardyThisQuarter; 
             Maintenance.GradeLevelShorts.ForEach(o => cmbGradeLevel.Items.Add(o));
             cmbGradeLevel.Text = _student.GradeLevel;
 

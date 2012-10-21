@@ -20,7 +20,7 @@
                     <TabItem.Header>
                         <TextBlock FontSize="16" FontWeight="Bold">Attendance</TextBlock>
                     </TabItem.Header>
-                    <h:AttendeesControl />
+                    <h:AttendeesControl x:Name="ctrlAttendees" />
                 </TabItem>
                 <TabItem Name="tabClasses">
                     <TabItem.Header>

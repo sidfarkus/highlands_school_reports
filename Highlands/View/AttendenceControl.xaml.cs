@@ -28,8 +28,6 @@ namespace Highlands
             InitializeComponent();
             model = new AttendenceViewModel();
             this.DataContext = model;
-            colStatus.IsReadOnly = !UserViewModel.CurrentUser.CanEditAttendance;
-            btnSave.IsEnabled = UserViewModel.CurrentUser.CanEditAttendance;
         }
 
         private void OnLoad(object sender, RoutedEventArgs e)
@@ -40,6 +38,11 @@ namespace Highlands
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
             model.Save();
+        }
+        public void Refresh()
+        {
+            colStatus.IsReadOnly = !UserViewModel.CurrentUser.CanEditAttendance;
+            btnSave.IsEnabled = UserViewModel.CurrentUser.CanEditAttendance;
         }
     }
 }
