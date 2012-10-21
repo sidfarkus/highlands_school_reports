@@ -123,8 +123,9 @@ namespace Highlands.ViewModel
             return rv;
         }
 
-        public void SetAttendanceForDay(DateTime date, AttendanceStatus status)
+        public void SetAttendanceForDay(AttendanceStatus status)
         {
+            var date = CurrentDayForAttendance;
             var attendanceRow = _studentRow.GetAttendanceRows().SingleOrDefault(a => a.StudentKey == _studentRow.Key && a.Date == date);
             var ds = (_studentRow.Table.DataSet as Gradebook);
             var attendanceTable = ds.Attendance;
@@ -137,6 +138,7 @@ namespace Highlands.ViewModel
                 attendanceRow.State = status.ToString();
             return;
         }
+        public DateTime CurrentDayForAttendance { get; set; } 
 
         [PDFOutputField("DateWithdrawn")]
         public DateTime? DateWithdrawn
@@ -182,7 +184,21 @@ namespace Highlands.ViewModel
                 return Status.ToString();
             }
         }
-        public AttendanceStatus AttendenceForDay { get; set; }
+
+        AttendanceStatus _attendanceStatus;
+        public AttendanceStatus AttendenceForDay
+        {
+            get
+            {
+                return _attendanceStatus;
+            }
+            set
+            {
+                _attendanceStatus = value;
+                SetAttendanceForDay(_attendanceStatus);
+            }
+        }
+
   
         public bool IsValid
         {
@@ -260,6 +276,13 @@ namespace Highlands.ViewModel
                 .Select(x => x.StartDate)
                 .FirstOrDefault();
 
+            var quarterRows = _studentRow.GetAttendanceRows().Where(a => a.Date >= thisQuarter.StartDate || a.Date < thisQuarter.StartDate);
+            var yearRows = _studentRow.GetAttendanceRows().Where(a => a.Date >= yearStart);
+            int absentThisQtr = quarterRows.Count(a => a.State == AttendanceStatus.Absent.ToString());
+            int absentThisYear = yearRows.Count(a => a.State == AttendanceStatus.Absent.ToString());
+
+            int tardyThisQtr = quarterRows.Count(a => a.State == AttendanceStatus.Tardy.ToString());
+            int tardyThisYear = yearRows.Count(a => a.State == AttendanceStatus.Tardy.ToString());
             return new[] { 
                 new KeyValuePair<string, string>(
                     "StudentAddress",
@@ -278,16 +301,16 @@ namespace Highlands.ViewModel
                     thisYear.ToString()),
                 new KeyValuePair<string, string>(
                     "QTR2",
-                    "0"),
+                    absentThisQtr.ToString()),
                 new KeyValuePair<string, string>(
                     "YR2",
-                    "0"),
+                    absentThisYear.ToString()),
                 new KeyValuePair<string, string>(
                     "QTR3",
-                    "0"),
+                    tardyThisQtr.ToString()),
                 new KeyValuePair<string, string>(
                     "YR3",
-                    "0"),
+                    tardyThisYear.ToString()),
                 new KeyValuePair<string, string>(
                     "MarkingPeriod",
                     period.QuarterString),

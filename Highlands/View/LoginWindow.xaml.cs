@@ -70,11 +70,11 @@ namespace Highlands
             staConfirmPassword.Visibility = System.Windows.Visibility.Hidden;
             LoggedIn(this, new EventArgs());
         }
-
+        /*
         private void OnLoginKeyUp(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == System.Windows.Input.Key.Enter)
                 btnLogin_Click(this, null);
-        }
+        }*/
     }
 }

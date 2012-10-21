@@ -179,7 +179,7 @@ namespace Highlands.StaticModel
             int year = mp.EndDate.Year;
             if (quarter == 1)
                 year++;
-            mp.Key = new MarkingPeriodKey(int.Parse(parts[2]), mp.EndDate.Year);
+            mp.Key = new MarkingPeriodKey(quarter, year);
             mp.DaysInQuarter = int.Parse(parts[3]);
             return mp;
         }

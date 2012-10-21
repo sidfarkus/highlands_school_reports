@@ -126,8 +126,10 @@ namespace Highlands.ViewModel
             {
                 students = value;
                 foreach (var student in students)
+                {
                     student.AttendenceForDay = student.GetAttendanceForDay(CurrentDay).Status;
-                
+                    student.CurrentDayForAttendance = CurrentDay;
+                }
                 Changed("Students");
             }
         }
@@ -147,6 +149,14 @@ namespace Highlands.ViewModel
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
             }
+        }
+
+        internal void Save()
+        {
+            var student = students.FirstOrDefault();
+            if (student == null)
+                return;
+            student.Save();
         }
     }
 }

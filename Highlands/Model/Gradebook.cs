@@ -211,7 +211,7 @@ namespace Highlands.Model
             var guid = Guid.NewGuid();
             Config.Guid = guid.ToString();
             WriteXml("gradebook.xml");
-            WriteXml("gradebook-" + CurrentUserName + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xml");
+            Maintenance.BackupFile("gradebook.xml", CurrentUserName);
             /*Student.WriteXml("studentTable.xml");
             Grade.WriteXml("gradeTable.xml");
             Course.WriteXml("courseTable.xml");

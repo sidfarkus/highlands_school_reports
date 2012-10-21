@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -149,6 +150,7 @@ namespace Highlands.StaticModel
         internal static void WriteArrayToFile(string table, IList<string> array)
         {
             System.IO.File.WriteAllLines(table + ".txt", array);
+            BackupFile(table + ".txt", "-");
         }
 
         internal static IList<string> ReadArrayFromFile(string table)
@@ -170,6 +172,7 @@ namespace Highlands.StaticModel
         internal static void WriteToFile(string key, string value)
         {
             System.IO.File.WriteAllText(key + ".txt", value);
+            BackupFile(key + ".txt", "-");
         }
 
         internal static string ReadFromFile(string key)
@@ -269,6 +272,16 @@ namespace Highlands.StaticModel
                 return "0";
             return gradeLevel.Substring(0, 1);
         }
+
+        internal static void BackupFile(string filename, string username)
+        {
+            var justname = Path.GetFileNameWithoutExtension(filename);
+            var dir = Path.GetDirectoryName(filename);
+            var ext = Path.GetExtension(filename);
+            var newDir = Path.Combine(dir, "Archive");
+            Directory.CreateDirectory(newDir);
+            File.Copy(filename, Path.Combine(newDir, justname + "-" + username + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ext));
+         }
     }
 
     public enum ApprovalStage

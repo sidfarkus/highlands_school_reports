@@ -269,7 +269,7 @@ namespace Highlands.ViewModel
         {
             get
             {
-                return (_user.Role == RoleEnum.SuperUser && _user.Role == RoleEnum.Admin);
+                return (_user.Role == RoleEnum.SuperUser || _user.Role == RoleEnum.Admin);
             }
         }
 

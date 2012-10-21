@@ -253,7 +253,7 @@ namespace Highlands
                     MessageBox.Show("User can not unapprove/unlock this grade.");
                 return;
             }
-            if (MessageBoxResult.Yes != MessageBox.Show("Are you sure you want to lock " + grade + "?", "Approval", MessageBoxButton.YesNo))
+            if (MessageBoxResult.Yes != MessageBox.Show("Are you sure you want to unlock " + grade + "?", "Approval", MessageBoxButton.YesNo))
                 return;
 
             grade.UnApprove();
