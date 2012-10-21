@@ -37,6 +37,10 @@ namespace Highlands
             loginOverlay.Visibility = System.Windows.Visibility.Hidden;
             _gradebook = studentsControl.LoadGradebook();
             ctrlClasses.Refresh(_gradebook);
+            tabClasses.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanViewGrades);
+            tabStudents.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanViewGrades);
+            btnExport.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanImportExport);
+            btnImport.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanImportExport);
         }
 
         private void btnImport_Click(object sender, RoutedEventArgs e)

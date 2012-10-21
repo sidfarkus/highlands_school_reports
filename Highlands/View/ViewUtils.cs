@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Controls;
+using System.Windows;
 
 namespace Highlands
 {
@@ -12,6 +13,14 @@ namespace Highlands
             System.Diagnostics.Process.Start("mailto:" + address + "?subject=" + subject +"&body=" + EncodeForMail(body));
         }
         
+        public static Visibility IsVisible(bool visible)
+        {
+            if (visible)
+                return Visibility.Visible;
+            else
+                return Visibility.Collapsed;
+        }
+
         private static string EncodeForMail(string str)
         {
             str = str.Replace("%", "%25");

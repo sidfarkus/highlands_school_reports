@@ -33,18 +33,17 @@ namespace Highlands.ViewModel
         }
         internal static ValidationEnum ValidateUser(string userName, string unhashedPassword)
         {
-            var user = Maintenance.Users.SingleOrDefault(u => u.Name.ToUpper() == userName.ToUpper());           
+            var user = Maintenance.Users.SingleOrDefault(u => u.Name.ToUpper() == userName.ToUpper());
             if (user == null)
                 return ValidationEnum.FailedUserNotFound;
             if (string.IsNullOrWhiteSpace(user.HashedPassword))
                 return ValidationEnum.RequirePasswordReset;
-                var hashedPassword = User.Hash(user.Name, unhashedPassword);
+            var hashedPassword = User.Hash(user.Name, unhashedPassword);
             if (hashedPassword != user.HashedPassword)
                 return ValidationEnum.FailedPassword;
             Gradebook.CurrentUser = user;
             return ValidationEnum.Passed;
         }
-
 
         User _user;
         public UserViewModel(User user)
@@ -109,9 +108,9 @@ namespace Highlands.ViewModel
             {
                 if (_user == null)
                     return false;
-                return _user.Role == RoleEnum.SuperUser || 
+                return _user.Role == RoleEnum.SuperUser ||
                     _user.Role == RoleEnum.ClassroomInstructor ||
-                    _user.Role == RoleEnum.Nurse || 
+                    _user.Role == RoleEnum.Nurse ||
                     _user.Role == RoleEnum.Admin;
             }
         }
@@ -138,7 +137,7 @@ namespace Highlands.ViewModel
 
             if (grade.ApprovalStage == ApprovalStage.Classroom)
                 return RightsEnum.UserError;
-            
+
             if (HasClassroomRights)
                 return RightsEnum.Success;
             if (Name == grade.Teacher)
@@ -218,6 +217,7 @@ namespace Highlands.ViewModel
             var change = new Change(user, "password", "old", "new");
             ChangeLog.LogDiff(change);
             Maintenance.SaveUsers();
+            ValidateUser(userName, unhashedPassword1);
             return ValidationEnum.PasswordChanged;
         }
 
@@ -257,6 +257,23 @@ namespace Highlands.ViewModel
 
             return RightsEnum.UserError;
         }
+
+        public bool CanViewGrades
+        {
+            get
+            {
+                return (_user.Role != RoleEnum.Nurse);
+            }
+        }
+
+        public bool CanImportExport
+        {
+            get
+            {
+                return (_user.Role == RoleEnum.SuperUser && _user.Role == RoleEnum.Admin);
+            }
+        }
+
     }
     public enum RightsEnum
     {
@@ -267,3 +284,4 @@ namespace Highlands.ViewModel
         GradeError
     }
 }
+

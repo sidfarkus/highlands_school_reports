@@ -101,6 +101,27 @@ namespace Highlands.ViewModel
             }
         }
 
+        public AttendanceStatus GetAttendanceForDay(DateTime date)
+        {
+            var rv = AttendanceStatus.NotEntered;
+            var attendanceRow = _studentRow.GetAttendanceRows().SingleOrDefault(a => a.StudentKey == _studentRow.Key && a.Date == date);
+            if (attendanceRow != null)
+                rv = (AttendanceStatus) Enum.Parse(typeof(AttendanceStatus), attendanceRow.State);
+            return rv;
+        }
+
+        public void SetAttendanceForDay(DateTime date, string quarter, AttendanceStatus status)
+        {
+            var attendanceRow = _studentRow.GetAttendanceRows().SingleOrDefault(a => a.StudentKey == _studentRow.Key && a.Date == date);
+            var ds = (_studentRow.Table.DataSet as Gradebook);
+            var attendanceTable = ds.Attendance;
+            if (attendanceRow != null)
+                attendanceTable.AddAttendanceRow(_studentRow, quarter, date, status.ToString());
+            else
+                attendanceRow.State = status.ToString();
+            return;
+        }
+
         [PDFOutputField("DateWithdrawn")]
         public DateTime? DateWithdrawn
         {
