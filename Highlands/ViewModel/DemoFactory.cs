@@ -19,7 +19,7 @@ namespace Highlands.ViewModel
             var dobStart = DateTime.Now.AddYears(-14);
             var dobEnd = DateTime.Now.AddYears(-5);
             int iCourse = 1000; 
-            foreach (var quarter in MarkingPeriod.MarkingPeriods.OrderByDescending(q => q.ToString()))
+            foreach (var quarter in MarkingPeriods.Singleton.OrderByDescending(q => q.ToString()))
             {
                 foreach(var gradeLevel in Maintenance.GradeLevelShorts)
                     foreach (var subject in Maintenance.Subjects)
@@ -89,11 +89,11 @@ namespace Highlands.ViewModel
                         }
                     }
                 }
-                var quarters = MarkingPeriod.MarkingPeriods.OrderByDescending(q => q.ToString());
+                var quarters = MarkingPeriods.Singleton.OrderByDescending(q => q.ToString());
                 bool withdraw = false;
                 if (i % 33 == 0)
                 {
-                    quarters = MarkingPeriod.MarkingPeriods.OrderBy(q => q.ToString());
+                    quarters = MarkingPeriods.Singleton.OrderBy(q => q.ToString());
                     withdraw = true;
                 }
 

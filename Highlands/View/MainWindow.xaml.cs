@@ -22,6 +22,8 @@ namespace Highlands
 
         private void btnLogout_Click(object sender, RoutedEventArgs e)
         {
+            GradebookViewModel.Test();
+       
             // clear gradebook
             Title = "Welcome, " + UserViewModel.CurrentUser;
             loginWindow.Reset();
@@ -32,8 +34,8 @@ namespace Highlands
         {
             Title = "Highlands School";
             loginOverlay.Visibility = System.Windows.Visibility.Hidden;
-            studentsControl.LoadGradebook();
-            ctrlClasses.Refresh();
+            var gradebook = studentsControl.LoadGradebook();
+            ctrlClasses.Refresh(gradebook);
         }
     }
 }

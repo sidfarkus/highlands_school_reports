@@ -54,5 +54,15 @@ namespace Highlands.ViewModel
             _gradebook = null;
             UserViewModel.Reset();
         }
+
+        internal static void Test()
+        {
+            var gradebook1 = Gradebook.Read();
+            var gradebook2 = Gradebook.Read();
+            gradebook1.Student[0].AddressLine2 = "AddressLineX";
+            gradebook1.Save();
+            gradebook2.Student[0].AddressLine2 = "ChangedSecond";
+            gradebook2.Save();
+        }
     }
 }

@@ -71,14 +71,14 @@ namespace Highlands
             staCount.Content = "Students: " + students.Count();
         }
 
-        public void LoadGradebook()
+        public GradebookViewModel LoadGradebook()
         {
             Gradebook = GradebookViewModel.Load();
 
             chkMyStudents.IsChecked = UserViewModel.CurrentUser.HasStudents;
             chkMyStudents.IsEnabled = UserViewModel.CurrentUser.HasStudents;
 
-            MarkingPeriod.MarkingPeriods.OrderByDescending(q => q.EndDate).ToList().ForEach(q => cmbQuarter.Items.Add(q));
+            MarkingPeriods.Singleton.OrderByDescending(q => q.EndDate).ToList().ForEach(q => cmbQuarter.Items.Add(q));
             cmbQuarter.Text = cmbQuarter.Items[1].ToString();
 
             Maintenance.GradeLevelShorts.ToList().ForEach(g => cmbGradeLevel.Items.Add(g));
@@ -86,6 +86,7 @@ namespace Highlands
 
             FillCourses(MarkingPeriodKey.Current, cmbGradeLevel.Text);
             FillStudents(entStudent.Text, cmbQuarter.SelectedItem as MarkingPeriod, cmbGradeLevel.Text, cmbCourse.SelectedItem as CourseViewModel);
+            return Gradebook;
         }
 
 

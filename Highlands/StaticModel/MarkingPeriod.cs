@@ -107,20 +107,18 @@ namespace Highlands.StaticModel
 
         #endregion
     }
-    public class MarkingPeriod
+    public class MarkingPeriods : List<MarkingPeriod>
     {
-        static List<MarkingPeriod> _markingPeriods;
-        public MarkingPeriodKey Key { get; set; }
-        
-        static public List<MarkingPeriod> MarkingPeriods
+        static MarkingPeriods _singleton;
+        static public MarkingPeriods Singleton
         {
             get
             {
-                if (_markingPeriods == null)
+                if (_singleton == null)
                 {
                     bool loaded = false;
                     var lines = Maintenance.ReadArrayFromFile("MarkingPeriods");
-                    var rv = new List<MarkingPeriod>();
+                    var rv = new MarkingPeriods();
                     if (lines != null)
                     {
                         try
@@ -129,7 +127,7 @@ namespace Highlands.StaticModel
                                 rv.Add(MarkingPeriod.FromCsv(line));
                             loaded = true;
                         }
-                        catch (Exception exc)
+                        catch (Exception)
                         {
                         }
                     }
@@ -140,7 +138,7 @@ namespace Highlands.StaticModel
                             for (int quarter = 1; quarter <= 4; quarter++)
                             {
                                 var key = new MarkingPeriodKey(quarter, year);
-                                var mp = new MarkingPeriod(key, key.ApproximateStartDate, key.ApproximateEndDate, 90);
+                                var mp = new MarkingPeriod(key, key.ApproximateStartDate, key.ApproximateEndDate, 45);
                                 if (mp.EndDate > MarkingPeriodKey.Current.ApproximateEndDate)
                                     break;
                                 rv.Add(mp);
@@ -148,18 +146,30 @@ namespace Highlands.StaticModel
                         }
                         Maintenance.WriteArrayToFile("MarkingPeriods", rv.Select(m => m.ToCsv()).ToList());
                     }
-                    _markingPeriods = rv;
+                    _singleton = rv;
                 }
-                return _markingPeriods;
+                return _singleton;
             }
         }
 
-        private string ToCsv()
+        public void AddMarkingPeriod(MarkingPeriod mp)
+        {
+            MarkingPeriods.Singleton.Add(mp);
+            Maintenance.WriteArrayToFile("MarkingPeriods", this.Select(m => m.ToCsv()).ToList());
+        }
+    }
+
+    public class MarkingPeriod
+    {
+        public MarkingPeriodKey Key { get; set; }
+        
+ 
+        internal string ToCsv()
         {
             return StartDate.ToShortDateString() + "," + EndDate.ToShortDateString() + "," + Key.Quarter + "," + DaysInQuarter;
         }
 
-        static private MarkingPeriod FromCsv(string str)
+        static internal MarkingPeriod FromCsv(string str)
         {
             var mp = new MarkingPeriod();
             var parts = str.Split(",".ToCharArray());
@@ -215,7 +225,7 @@ namespace Highlands.StaticModel
             get
             {
                 var key = MarkingPeriodKey.Current;
-                return MarkingPeriods.SingleOrDefault(m => m.Key.ToString() == key.ToString());
+                return MarkingPeriods.Singleton.SingleOrDefault(m => m.Key.ToString() == key.ToString());
             }
         }
 
