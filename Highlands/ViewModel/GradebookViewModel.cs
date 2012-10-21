@@ -64,5 +64,19 @@ namespace Highlands.ViewModel
             gradebook2.Student[0].AddressLine2 = "ChangedSecond";
             gradebook2.Save();
         }
+
+        internal IEnumerable<string> ImportStudents(string filename)
+        {
+
+            var results = _gradebook.ImportStudents(System.IO.File.ReadAllLines(filename));
+            _gradebook.Save();
+            return results;
+        }
+
+        internal void ExportStudents(string filename)
+        {
+            var lines = _gradebook.ExportStudents();
+            System.IO.File.WriteAllLines(filename, lines);
+        }
     }
 }

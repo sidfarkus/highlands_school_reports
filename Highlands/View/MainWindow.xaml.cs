@@ -29,13 +29,24 @@ namespace Highlands
             loginWindow.Reset();
             loginOverlay.Visibility = System.Windows.Visibility.Visible;
         }
-
+        GradebookViewModel _gradebook;
         private void OnLogin(object sender, System.EventArgs e)
         {
             Title = "Highlands School";
             loginOverlay.Visibility = System.Windows.Visibility.Hidden;
-            var gradebook = studentsControl.LoadGradebook();
-            ctrlClasses.Refresh(gradebook);
+            _gradebook = studentsControl.LoadGradebook();
+            ctrlClasses.Refresh(_gradebook);
+        }
+
+        private void btnImport_Click(object sender, RoutedEventArgs e)
+        {
+            _gradebook.ImportStudents("importStudents.csv");
+            
+        }
+
+        private void btnExport_Click(object sender, RoutedEventArgs e)
+        {
+            _gradebook.ExportStudents("exportStudents.csv");
         }
     }
 }
