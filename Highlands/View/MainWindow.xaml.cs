@@ -1,6 +1,7 @@
 ﻿//using Highlands.Model;
 using Highlands.StaticModel;
 using Highlands.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -40,13 +41,46 @@ namespace Highlands
 
         private void btnImport_Click(object sender, RoutedEventArgs e)
         {
-            _gradebook.ImportStudents("importStudents.csv");
-            
+            try
+            {
+                var results = _gradebook.ImportStudents("importStudents.csv");
+                if (results.Count() == 0)
+                {
+                    MessageBox.Show("No changes");
+                    return;
+                }
+
+                string message;
+                if (results.Count() > 30)
+                    message = "More than " + results.Count() + " rows changed";
+                else
+                    message = string.Join(Environment.NewLine, results.ToArray());
+                
+                var result = MessageBox.Show(message + Environment.NewLine + "Save results and close?", "Import Complete", MessageBoxButton.YesNo);
+                if (result == MessageBoxResult.Yes)
+                {
+                    _gradebook.Save();
+                    Close();
+                }
+                else
+                    Close();
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
         }
 
         private void btnExport_Click(object sender, RoutedEventArgs e)
         {
-            _gradebook.ExportStudents("exportStudents.csv");
+            try
+            {
+                _gradebook.ExportStudents("exportStudents.csv");
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
         }
     }
 }

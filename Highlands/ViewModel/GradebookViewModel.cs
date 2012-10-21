@@ -67,9 +67,7 @@ namespace Highlands.ViewModel
 
         internal IEnumerable<string> ImportStudents(string filename)
         {
-
             var results = _gradebook.ImportStudents(System.IO.File.ReadAllLines(filename));
-            _gradebook.Save();
             return results;
         }
 
@@ -77,6 +75,11 @@ namespace Highlands.ViewModel
         {
             var lines = _gradebook.ExportStudents();
             System.IO.File.WriteAllLines(filename, lines);
+        }
+
+        internal void Save()
+        {
+            _gradebook.Save();
         }
     }
 }

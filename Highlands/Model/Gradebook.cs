@@ -70,29 +70,51 @@ namespace Highlands.Model
                     if (student == null)
                     {
                         Student.AddStudentRow(MakeStudentKey(name, dob), name, dob, address1, address2, gradeLevel, enrolled, withdrawn);
-                        rv.Add("Added student " + name);
+                        rv.Add("Added student: " + name);
                     }
                     else
                     {
+                        bool updated = false;
                         if (!CompareDate(student.DOB, dob))
+                        {
                             student.DOB = dob;
+                            updated = true;
+                        }
                         if (student.AddressLine1 != address1)
+                        {
                             student.AddressLine1 = address1;
+                            updated = true;
+                        }
                         if (student.AddressLine2 != address2)
+                        {
                             student.AddressLine2 = address2;
+                            updated = true;
+                        }
                         if (student.GradeLevel != gradeLevel)
+                        {
                             student.GradeLevel = gradeLevel;
+                            updated = true;
+                        }
                         if (!CompareDate(student.DateEnrolled, enrolled))
+                        {
                             student.DateEnrolled = enrolled;
+                            updated = true;
+                        }
                         if (!CompareDate(student.DateWithdrawn, withdrawn))
+                        {
                             student.DateWithdrawn = withdrawn;
+                            updated = true;
+                        }
+                        if (updated)
+                            rv.Add("Modified: " + name);
                     }
                 }
                 catch (Exception)
                 {
-                    rv.Add("ERROR on student " + line);
+                    rv.Add("ERROR on student: " + line);
                 }
             }
+
             return rv;
         }
         bool CompareDate(DateTime d1, DateTime d2)
@@ -188,7 +210,8 @@ namespace Highlands.Model
             }
             var guid = Guid.NewGuid();
             Config.Guid = guid.ToString();
-            this.WriteXml("gradebook.xml");
+            WriteXml("gradebook.xml");
+            WriteXml("gradebook-" + CurrentUserName + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xml");
             /*Student.WriteXml("studentTable.xml");
             Grade.WriteXml("gradeTable.xml");
             Course.WriteXml("courseTable.xml");
@@ -207,6 +230,16 @@ namespace Highlands.Model
         }
 
         static public User CurrentUser { get; set; }
+        static public string CurrentUserName
+        {
+            get
+            {
+                string rv = "-";
+                if (CurrentUser != null)
+                    rv = CurrentUser.Name;
+                return rv;
+            }
+        }
         partial class ConfigDataTable
         {
             public string Guid
@@ -219,16 +252,13 @@ namespace Highlands.Model
                 }
                 set
                 {
-                    var name = "-";
-                    if (CurrentUser != null)
-                        name = CurrentUser.Name;
-                    if (this.Count() < 1)
-                        AddConfigRow(value, DateTime.Now.ToString(), name);
+                   if (this.Count() < 1)
+                        AddConfigRow(value, DateTime.Now.ToString(), CurrentUserName);
                     else
                     {
                         this[0].Guid = value;
                         this[0].LastModified = DateTime.Now.ToString();
-                        this[0].UserModified = CurrentUser.Name;
+                        this[0].UserModified = CurrentUserName;
                     }
                 }
             }
