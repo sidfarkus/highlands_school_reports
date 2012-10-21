@@ -29,5 +29,10 @@ namespace Highlands
             model = new AttendenceViewModel();
             this.DataContext = model;
         }
+
+        private void OnLoad(object sender, RoutedEventArgs e)
+        {
+            
+        }
     }
 }

@@ -28,6 +28,56 @@ namespace Highlands.ViewModel
             }
         }
 
+        public bool CanEdit
+        {
+            get
+            {
+                return UserViewModel.CurrentUser.CanEditAttendance;
+            }
+        }
+
+        private DateTime currentDay = DateTime.Now;
+        public DateTime CurrentDay
+        {
+            get
+            {
+                return currentDay;
+            }
+            set
+            {
+                currentDay = value;
+                Changed("CurrentDay");
+            }
+        }
+
+        private DateTime quarterStart = DateTime.MinValue;
+        public DateTime QuarterStart
+        {
+            get
+            {
+                return quarterStart;
+            }
+            set
+            {
+                quarterStart = value;
+                Changed("QuarterStart");
+            }
+        }
+
+        private DateTime quarterEnd = DateTime.Now;
+        public DateTime QuarterEnd
+        {
+            get
+            {
+                return quarterEnd;
+            }
+            set
+            {
+                quarterEnd = value;
+                Changed("QuarterEnd");
+            }
+        }
+
         private IEnumerable<MarkingPeriodKey> quarters = Enumerable.Empty<MarkingPeriodKey>();
         public IEnumerable<MarkingPeriodKey> Quarters
         {
@@ -53,6 +103,13 @@ namespace Highlands.ViewModel
             {
                 currentQuarter = value;
                 Students = FilterStudents(currentQuarter);
+
+                var period = MarkingPeriods.Singleton.Find(p => p.Key.Equals(currentQuarter));
+                QuarterEnd = period.EndDate;
+                QuarterStart = period.StartDate;
+                if (CurrentDay > QuarterEnd || CurrentDay < QuarterStart)
+                    CurrentDay = QuarterEnd;
+
                 Changed("CurrentQuarter");
             }
         }
@@ -85,7 +142,6 @@ namespace Highlands.ViewModel
         {
             if (PropertyChanged != null)
             {
-
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
             }
         }

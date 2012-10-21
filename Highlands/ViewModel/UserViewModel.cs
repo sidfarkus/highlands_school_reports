@@ -10,6 +10,14 @@ using System.Threading.Tasks;
 
 namespace Highlands.ViewModel
 {
+    public enum AttendanceStatus
+    {
+        NotEntered,
+        Absent,
+        Tardy,
+        OnTime
+    }
+
     class UserViewModel
     {
         public enum ValidationEnum
@@ -101,7 +109,22 @@ namespace Highlands.ViewModel
             {
                 if (_user == null)
                     return false;
-                return _user.Role == RoleEnum.SuperUser || _user.Role == RoleEnum.ClassroomInstructor;
+                return _user.Role == RoleEnum.SuperUser || 
+                    _user.Role == RoleEnum.ClassroomInstructor ||
+                    _user.Role == RoleEnum.Nurse || 
+                    _user.Role == RoleEnum.Admin;
+            }
+        }
+
+        public bool CanExportReportCards
+        {
+            get
+            {
+                if (_user == null)
+                    return false;
+                return _user.Role == RoleEnum.Admin ||
+                    _user.Role == RoleEnum.SuperUser ||
+                    _user.Role == RoleEnum.ClassroomInstructor;
             }
         }
 
@@ -163,6 +186,17 @@ namespace Highlands.ViewModel
                     return false;
 
                 return _user.IsTeacher;
+            }
+        }
+
+        public static IEnumerable<AttendanceStatus> AttendanceStatuses
+        {
+            get
+            {
+                yield return AttendanceStatus.NotEntered;
+                yield return AttendanceStatus.Absent;
+                yield return AttendanceStatus.Tardy;
+                yield return AttendanceStatus.OnTime;
             }
         }
 

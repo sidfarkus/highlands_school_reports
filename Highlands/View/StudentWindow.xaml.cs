@@ -23,8 +23,9 @@ namespace Highlands
         {
             InitializeComponent();
         }
-        
-        public StudentWindow(StudentViewModel student) : this()
+
+        public StudentWindow(StudentViewModel student)
+            : this()
         {
             LoadStudent(student);
         }
@@ -61,10 +62,11 @@ namespace Highlands
 
             dgvGrades.ItemsSource = Grades;
             dgvSelfDevelopment.ItemsSource = SDScores;
-            
+
             var periods = new HashSet<string>();
             cmbMarkingPeriod.ItemsSource = student.Grades.Select(g => MarkingPeriodKey.Parse(g.Quarter))
-                .Where(period => { 
+                .Where(period =>
+                {
                     var hadItem = periods.Contains(period.ToString());
                     if (!hadItem) periods.Add(period.ToString());
                     return !hadItem;
@@ -113,8 +115,8 @@ namespace Highlands
                 return _sdScores;
             }
         }
-        
-        
+
+
         enum ShowRange
         {
             All,
@@ -223,7 +225,12 @@ namespace Highlands
 
         private void OnGenerateReportCard(object sender, RoutedEventArgs e)
         {
-            var period = (MarkingPeriodKey) cmbMarkingPeriod.SelectedItem;
+            if (!UserViewModel.CurrentUser.CanExportReportCards)
+            {
+                MessageBox.Show("You do not have permission to export a report card!");
+                return;
+            }
+            var period = (MarkingPeriodKey)cmbMarkingPeriod.SelectedItem;
             var dialog = new Microsoft.Win32.SaveFileDialog()
             {
                 AddExtension = true,
@@ -278,8 +285,8 @@ namespace Highlands
 
         private void SaveSDScore(object sender, RoutedEventArgs e)
         {
-            var sd = (SDScoreViewModel) dgvSelfDevelopment.SelectedValue;
-            var scoreBox = (TextBox) LogicalTreeHelper.FindLogicalNode(((Button)sender).Parent, "scoreBox");
+            var sd = (SDScoreViewModel)dgvSelfDevelopment.SelectedValue;
+            var scoreBox = (TextBox)LogicalTreeHelper.FindLogicalNode(((Button)sender).Parent, "scoreBox");
             var score = 0;
             if (Int32.TryParse(scoreBox.Text, out score))
             {
@@ -290,5 +297,5 @@ namespace Highlands
             scoreBox.Text = "";
         }
 
-     }
- }
+    }
+}

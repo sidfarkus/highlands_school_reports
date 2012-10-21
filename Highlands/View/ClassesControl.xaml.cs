@@ -160,6 +160,12 @@ namespace Highlands
 
         private void OnCreateAllReports(object sender, RoutedEventArgs e)
         {
+            if (!UserViewModel.CurrentUser.CanExportReportCards)
+            {
+                MessageBox.Show("You do not have permission to export report cards!");
+                return;
+            }
+
             var dialog = new WPFFolderBrowser.WPFFolderBrowserDialog("Pick a folder to save all the report cards");
             var result = dialog.ShowDialog();
             if (result.HasValue && result.Value)

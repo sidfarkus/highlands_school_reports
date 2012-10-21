@@ -30,10 +30,10 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <StackPanel Orientation="Horizontal">
-                                        <Button Name="btnApprove" Click="btnApprove_Click" Width="80" Margin="3,2,3,2">Approve</Button>
-                                        <Button Name="btnUnApprove" Click="btnUnApprove_Click" Width="80" Margin="3,2,3,2">UnApprove</Button>
-                                        <Button Click="btnEditGrade_Click" Width="80" Margin="3,2,3,2">Edit</Button>
-                                        <Button Name="btnEmail" Click="btnEmail_Click" Width="80" Margin="3,2,3,2">Email</Button>
+                                        <Button Click="btnApprove_Click" Width="90" Margin="3,2,3,2">Approve</Button>
+                                        <Button Click="btnUnApprove_Click" Width="90" Margin="3,2,3,2">UnApprove</Button>
+                                        <Button Click="btnEditGrade_Click" Width="90" Margin="3,2,3,2">Change Grade</Button>
+                                        <Button Click="btnEmail_Click" Width="90" Margin="3,2,3,2">Email</Button>
                                     </StackPanel>
                                     <StackPanel Orientation="Vertical" Grid.Row="1" Margin="2,2,2,10">
                                         <TextBlock Margin="3" FontWeight="Bold">Comments:</TextBlock>
@@ -76,8 +76,9 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Margin="5">Enter the student's score: </TextBlock>
-                                    <TextBox Grid.Column="1" x:Name="scoreBox" Margin="5" Width="130" Text="{Binding Score}"/>
-                                    <Button Margin="5,5,15,5" Grid.Column="2" Click="SaveSDScore">Save Changes</Button>
+                                    <TextBox Grid.Column="1" x:Name="scoreBox" Margin="5" Width="130" Text="{Binding Score}"
+                                             IsEnabled="{Binding CanEdit}"/>
+                                    <Button Margin="5,5,15,5" Grid.Column="2" Click="SaveSDScore" IsEnabled="{Binding CanEdit}">Save Changes</Button>
                                 </Grid>
                             </DataTemplate>
                         </DataGrid.RowDetailsTemplate>

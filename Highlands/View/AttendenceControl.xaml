@@ -3,16 +3,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" 
+             xmlns:h="clr-namespace:Highlands.ViewModel"
+             mc:Ignorable="d" Loaded="OnLoad"
              d:DesignHeight="300" d:DesignWidth="300">
     <DockPanel>
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
             <TextBlock VerticalAlignment="Center" Margin="5">Quarter: </TextBlock>
             <ComboBox ItemsSource="{Binding Quarters}" Margin="5" SelectedItem="{Binding CurrentQuarter}"/>
+            <DatePicker Name="datePicker" DisplayDate="{Binding CurrentDay,Mode=TwoWay}" Margin="10,5,5,5" 
+                        DisplayDateEnd="{Binding QuarterEnd}" DisplayDateStart="{Binding QuarterStart}"
+                        SelectedDate="{Binding CurrentDay,Mode=TwoWay}"/>
         </StackPanel>
-        <DataGrid ItemsSource="{Binding Students}">
+        <DataGrid ItemsSource="{Binding Students}"  AutoGenerateColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Name" IsReadOnly="True" Binding="{Binding Name}" Width="3*"/>
+                <DataGridTextColumn Header="Age" IsReadOnly="True" Binding="{Binding Age}" Width="*"/>
+                <DataGridTextColumn Header="Grade" IsReadOnly="True" Binding="{Binding GradeLevel}" Width="*"/>
+                <DataGridComboBoxColumn Header="Attendence Status" ItemsSource="{x:Static h:UserViewModel.AttendanceStatuses}" Width="2*" />
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>

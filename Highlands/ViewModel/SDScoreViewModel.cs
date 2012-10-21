@@ -14,6 +14,13 @@ namespace Highlands.ViewModel
         {
             _row = row;
         }
+        public bool CanEdit
+        {
+            get
+            {
+                return UserViewModel.CurrentUser.CanEditSelfDevelopmentScores;
+            }
+        }
         public string Area
         {
             get

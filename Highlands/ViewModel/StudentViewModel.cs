@@ -198,6 +198,10 @@ namespace Highlands.ViewModel
         private IEnumerable<KeyValuePair<string, string>> GetReportLevelFields(MarkingPeriodKey period)
         {
             var thisQuarter = MarkingPeriods.Singleton.Find(p => p.Key.Equals(period));
+            var thisYear = MarkingPeriods.Singleton.Where(p => {
+                return p.Key.EndingSchoolYear == period.EndingSchoolYear &&
+                       p.Key.Quarter <= period.Quarter;
+            }).Select(p => p.DaysInQuarter).Sum();
             return new[] { 
                 new KeyValuePair<string, string>(
                     "StudentAddress",
@@ -207,22 +211,22 @@ namespace Highlands.ViewModel
                     String.Format("{0} - {1}", thisQuarter.SchoolYear.Item1, thisQuarter.SchoolYear.Item2)),
                 new KeyValuePair<string, string>(
                     "QTR1",
-                    "1"),
+                    thisQuarter.DaysInQuarter.ToString()),
                 new KeyValuePair<string, string>(
                     "YR1",
-                    "1"),
+                    thisYear.ToString()),
                 new KeyValuePair<string, string>(
                     "QTR2",
-                    "2"),
+                    "AbsentQ"),
                 new KeyValuePair<string, string>(
                     "YR2",
-                    "2"),
+                    "AbsentY"),
                 new KeyValuePair<string, string>(
                     "QTR3",
-                    "3"),
+                    "TardyQ"),
                 new KeyValuePair<string, string>(
                     "YR3",
-                    "3"),
+                    "TardyY"),
                 new KeyValuePair<string, string>(
                     "MarkingPeriod",
                     period.QuarterString),
