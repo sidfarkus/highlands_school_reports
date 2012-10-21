@@ -116,6 +116,8 @@ namespace Highlands
                 diffs.Add(new Change(_grade, "Comment", _grade.Comment, staComment.Text));
             if (_grade.LetterGrade != cmbLetterGrade.Text)
                 diffs.Add(new Change(_grade, "Grade", _grade.LetterGrade, cmbLetterGrade.Text));
+            if (_grade.SpecialGrade != entSpecialGrade.Text)
+                diffs.Add(new Change(_grade, "Secondary Grade", _grade.SpecialGrade, entSpecialGrade.Text));
             
             if (diffs.Count() == 0)
             {
@@ -132,6 +134,7 @@ namespace Highlands
 
             _grade.Comment = staComment.Text;
             _grade.LetterGrade = cmbLetterGrade.Text;
+            _grade.SpecialGrade = entSpecialGrade.Text;
             _grade.Save(diffs);
             Saved(this, null);
         }
