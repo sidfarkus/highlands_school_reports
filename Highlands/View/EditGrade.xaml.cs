@@ -65,7 +65,7 @@ namespace Highlands
                 staSpecialGrade.Visibility = System.Windows.Visibility.Visible;
             }
 
-            Maintenance.LetterGrades.ToList().ForEach(g => cmbLetterGrade.Items.Add(g));
+            Maintenance.LetterGrades.Keys.ToList().ForEach(g => cmbLetterGrade.Items.Add(g));
 
             Maintenance.Comments.ToList().ForEach(g => cmbComment.Items.Add(g));
             cmbComment.SelectedIndex = 0;

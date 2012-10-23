@@ -11,6 +11,8 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <ToolBar ToolBarTray.IsLocked="True">
+                <Button Name="btnHonorRoll" Click="btnHonorRoll_Click" Width="80" Margin="3">Honor Roll</Button>
+                <Separator/>
                 <Button Name="btnImport" Click="btnImport_Click" Width="80" Margin="3">Import Students</Button>
                 <Button Name="btnExport" Click="btnExport_Click" Width="80" Margin="3">Export Students</Button>
                 <!--<Button Click="btnLogout_Click" Width="80" Margin="3">Logout</Button>-->

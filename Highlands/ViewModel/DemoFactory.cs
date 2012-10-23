@@ -84,7 +84,7 @@ namespace Highlands.ViewModel
                                 else if (course.SubjectName == "Written Expression")
                                     specialGrade = "Paragraph";
                             }
-                            rv.Grade.AddGradeRow(student, course, RandString(Maintenance.LetterGrades, 3), specialGrade, Maintenance.FormatCommentFromList(RandString(Maintenance.Comments)) + " " + (i + @"/100"), stage.ToString());
+                            rv.Grade.AddGradeRow(student, course, RandString(Maintenance.LetterGrades.Keys.ToList(), 3), specialGrade, Maintenance.FormatCommentFromList(RandString(Maintenance.Comments)) + " " + (i + @"/100"), stage.ToString());
                         }
                     }
                 }

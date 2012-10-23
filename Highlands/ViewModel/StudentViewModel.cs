@@ -369,5 +369,25 @@ namespace Highlands.ViewModel
         {
             return String.Format("{0}_Q{1}_{2}_Report_Card.pdf", Name, period.Quarter, period.EndingSchoolYear);
         }
+
+        internal double Gpa(MarkingPeriod mp)
+        {
+            var grades = _studentRow.GetGradeRows().Where(g => g.CourseRow.Quarter == mp.Key.ToString());
+            return grades.Average(g => Maintenance.GradePoint(g.LetterGrade));
+        }
+
+        internal bool HonorRoll(MarkingPeriod mp)
+        {
+            var grades = _studentRow.GetGradeRows().Where(g => g.CourseRow.Quarter == mp.Key.ToString());
+            if (grades.Any(g => Maintenance.GradePoint(g.LetterGrade) < 1.0))
+                return false;
+            if (grades.Count() == 0)
+                return false;
+            var avg = grades.Average(g => Maintenance.GradePoint(g.LetterGrade));
+            var lines = grades.Select(g => g.LetterGrade).ToList();
+            if (avg >= 2.999)
+                return true;
+            return false;
+        }
     }
 }

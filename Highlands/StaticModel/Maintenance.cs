@@ -11,25 +11,44 @@ namespace Highlands.StaticModel
     {
         #region Public Methods
 
-        static IList<string> _letterGrades;
-        static public IList<string> LetterGrades
+        static Dictionary<string, double> _letterGrades;
+        static public Dictionary<string, double> LetterGrades
         {
             get
             {
-
                 if (_letterGrades == null)
                 {
-                    _letterGrades = ReadArrayFromFile("letterGrades");
-                    if (_letterGrades == null)
+                    var lines = ReadArrayFromFile("letterGrades");
+                    if (lines == null)
                     {
-                        _letterGrades = new List<string>() { "A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D", "E", "-", "S", "N" };
-                        WriteArrayToFile("letterGrades", _letterGrades);
+                        lines = new List<string>() { "A+,4.3", "A,4.0", "A-,3.6", "B+,3.3", "B,3.0", "B-,2.6", "C+,2.3", "C,2.0", "C-,1.6", "D,0", "E,0", "-,0", "S,1", "N,0" };
+                        WriteArrayToFile("letterGrades", lines);
+                    }
+                    _letterGrades = new Dictionary<string, double>();
+                    foreach (var line in lines)
+                    {
+                        var parts = line.Split(",".ToCharArray());
+                        _letterGrades.Add(parts[0], double.Parse(parts[1]));
                     }
                 }
                 return _letterGrades;
             }
         }
 
+        public class LetterGrade
+        {
+            public string Letter { get; set; }
+            public double Points { get; set; }
+
+            internal static LetterGrade FromCsv(string line)
+            {
+                var parts = line.Split(",".ToCharArray());
+                var rv = new LetterGrade();
+                rv.Letter = parts[0];
+                rv.Points = double.Parse(parts[1]);
+                return rv;
+            }
+        }
 
         static public List<string> GradeOrdinalLongs
         {
@@ -282,6 +301,14 @@ namespace Highlands.StaticModel
             Directory.CreateDirectory(newDir);
             File.Copy(filename, Path.Combine(newDir, justname + "-" + username + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ext));
          }
+
+        internal static double GradePoint(string letterGrade)
+        {
+            if (!LetterGrades.ContainsKey(letterGrade))
+                return 0.0;
+            
+            return LetterGrades[letterGrade];
+        }
     }
 
     public enum ApprovalStage

@@ -31,7 +31,7 @@ namespace Highlands
             loginWindow.Reset();
             loginOverlay.Visibility = System.Windows.Visibility.Visible;
         }
-
+        public GradebookViewModel Gradebook { get; set; }
         GradebookViewModel _gradebook;
         private void OnLogin(object sender, System.EventArgs e)
         {
@@ -101,6 +101,16 @@ namespace Highlands
             catch (Exception exc)
             {
                 MessageBox.Show(exc.Message);
+            }
+        }
+
+        private void btnHonorRoll_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var mp in MarkingPeriods.Singleton)
+            {
+                var students = _gradebook.Students.Where(s => s.HonorRoll(mp)).OrderByDescending(s => s.Gpa(mp)).ToList();
+                var outs = string.Join(Environment.NewLine, students.Select(s => s.Name + " " + s.Gpa(mp).ToString("0.00")).ToList());
+                MessageBox.Show(outs, mp.ToString());
             }
         }
     }
