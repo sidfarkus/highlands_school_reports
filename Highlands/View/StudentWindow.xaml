@@ -128,12 +128,10 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <StackPanel Orientation="Vertical" Margin="1" Grid.Row="0">
-                        <ComboBox Name="cmbMarkingPeriod" Margin="3"/>
-                        <Button x:Name ="genReport" Click="OnGenerateReportCard" Margin="5" HorizontalAlignment="Center" Width="110">Create Report Card PDF</Button>
-                    </StackPanel>
+                    <Button  Grid.Row="0" x:Name ="genReport" Click="OnGenerateReportCard" Margin="5" HorizontalAlignment="Center" Width="110">Create Report Card PDF</Button>
+                    <DataGrid Name="grdStudentReport" IsReadOnly="True" Grid.Row="1"/>
                 </Grid>
             </TabItem>
         </TabControl>

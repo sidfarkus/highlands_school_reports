@@ -183,8 +183,9 @@ namespace Highlands
                 {
                     if (student != null)
                     {
-                        var filename = System.IO.Path.Combine(dialog.FileName, student.GetDefaultReportCardFilename(MarkingPeriod.Current.Key));
-                        student.CreateReportCard(filename, MarkingPeriod.Current.Key);
+                        var report = new ReportCard(student);
+                        var filename = System.IO.Path.Combine(dialog.FileName, report.GetDefaultReportCardFilename(MarkingPeriod.Current.Key) + ".pdf");
+                        report.CreateReportCard(filename, MarkingPeriod.Current.Key);
                         exported++;
                     }
                     else

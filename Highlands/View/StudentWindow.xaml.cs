@@ -57,12 +57,19 @@ namespace Highlands
             if (_student.DateWithdrawn.HasValue)
                 dtpWithdrawn.SelectedDate = _student.DateWithdrawn.Value;
             chkWithdrawn.IsChecked = _student.DateWithdrawn.HasValue;
-            staAttendance.Content = "Absence Qtr: " + _student.DaysAbsentThisQuarter + " Tardy Qtr: " + _student.DaysTardyThisQuarter; 
+            staAttendance.Content = 
+                "Absence Qtr: " + _student.DaysAttendance(MarkingPeriod.Current, AttendanceStatus.Absent) + 
+                " Tardy Qtr: " + _student.DaysAttendance(MarkingPeriod.Current, AttendanceStatus.Tardy); 
             Maintenance.GradeLevelShorts.ForEach(o => cmbGradeLevel.Items.Add(o));
             cmbGradeLevel.Text = _student.GradeLevel;
 
             dgvGrades.ItemsSource = Grades;
             dgvSelfDevelopment.ItemsSource = SDScores;
+
+             grdStudentReport.ItemsSource = _student.StudentReports();
+            /*
+           cmbMarkingPeriod.ItemsSource = 
+                MarkingPeriods.Singleton.OrderByDescending(q => q.EndDate).Where(q => student.AttendedDuring(q));
 
             var periods = new HashSet<string>();
             cmbMarkingPeriod.ItemsSource = student.Grades.Select(g => MarkingPeriodKey.Parse(g.Quarter))
@@ -72,17 +79,18 @@ namespace Highlands
                     if (!hadItem) periods.Add(period.ToString());
                     return !hadItem;
                 })
-                .OrderByDescending(period => period.ApproximateEndDate)
+                .OrderByDescending(period => period.ToString())
                 .ThenBy(period => period.Quarter);
             if (cmbMarkingPeriod.Items.Count > 0)
-            {
-                cmbMarkingPeriod.SelectedIndex = 0;
-                genReport.IsEnabled = true;
-            }
-            else
-            {
-                genReport.IsEnabled = false;
-            }
+           {
+               cmbMarkingPeriod.SelectedIndex = 0;
+               genReport.IsEnabled = true;
+           }
+           else
+           {
+               genReport.IsEnabled = false;
+           }
+            */
         }
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
@@ -231,10 +239,14 @@ namespace Highlands
                 MessageBox.Show("You do not have permission to export a report card!");
                 return;
             }
-            var period = (MarkingPeriodKey)cmbMarkingPeriod.SelectedItem;
+            var report = (StudentReport) grdStudentReport.SelectedItem;
+            MarkingPeriod mp = MarkingPeriod.Current;
+            if (report != null)
+                mp = report.Quarter;
             try
             {
-                _student.CreateReportCard(null, period);
+                var reportCard = new ReportCard(_student);
+                reportCard.CreateReportCard(null, mp.Key);
             }
             catch (System.IO.IOException)
             {

@@ -9,6 +9,7 @@ namespace Highlands.Model
 {
     public partial class Gradebook 
     {
+        /*
         public void CloneQuarter(MarkingPeriodKey last, MarkingPeriodKey next)
         {
             if (false == MarkingPeriods.Singleton.Any(m => m.Key.Equals(next)))
@@ -19,7 +20,7 @@ namespace Highlands.Model
                 Course.AddCourseRow(course.CourseKey + course.Quarter, course.SubjectName, course.Quarter, course.Group, course.Teacher, course.Level);
             
             Save();
-        }
+        }*/
 
         public void ImportClassLists(MarkingPeriodKey mpk, List<string> lines)
         {
@@ -311,6 +312,13 @@ namespace Highlands.Model
             }
         }
 
+        partial class AttendanceRow
+        {
+            public override string ToString()
+            {
+                return StudentRow.Name + " " + Date + " " + State;
+            }
+        }
     }
-        
+
 }

@@ -46,6 +46,7 @@ namespace Highlands
             tabStudents.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanViewGrades);
             btnExport.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanImportExport);
             btnImport.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanImportExport);
+            btnHonorRoll.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanViewHonorRoll);
         }
 
         private void btnImport_Click(object sender, RoutedEventArgs e)
@@ -106,11 +107,23 @@ namespace Highlands
 
         private void btnHonorRoll_Click(object sender, RoutedEventArgs e)
         {
-            foreach (var mp in MarkingPeriods.Singleton)
+            foreach (var mp in MarkingPeriods.Singleton.OrderByDescending(m => m.StartDate))
             {
-                var students = _gradebook.Students.Where(s => s.HonorRoll(mp)).OrderByDescending(s => s.Gpa(mp)).ToList();
-                var outs = string.Join(Environment.NewLine, students.Select(s => s.Name + " " + s.Gpa(mp).ToString("0.00")).ToList());
-                MessageBox.Show(outs, mp.ToString());
+                //var mp = MarkingPeriod.Current;
+                var students = _gradebook.Students.Where(s => s.HonorRoll(mp)).OrderByDescending(s => s.Gpa(mp)).GroupBy(s => s.GradeLevel);
+                var outs = new List<string>();
+                foreach (var kvp in students.OrderBy(s => Maintenance.GradeLevelNumber(s.Key)))
+                {
+                    outs.Add("-" + StudentViewModel.FormatGradeLevel(kvp.Key) + "-");
+                    foreach(var student in kvp)
+                        outs.Add(student.Name + " " + student.Gpa(mp).ToString("0.00"));
+                    outs.Add("");
+                }
+                if (outs.Count() == 0)
+                    continue;
+
+                ViewUtils.Mail("", "Honor Roll- " + mp + " " + DateTime.Now.ToString(), string.Join(Environment.NewLine, outs.ToArray()));
+                break;
             }
         }
     }

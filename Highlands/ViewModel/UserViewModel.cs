@@ -273,6 +273,14 @@ namespace Highlands.ViewModel
             }
         }
 
+
+        public bool CanViewHonorRoll
+        {
+            get
+            {
+                return (_user.Role != RoleEnum.Nurse);
+            }
+        }
     }
     public enum RightsEnum
     {

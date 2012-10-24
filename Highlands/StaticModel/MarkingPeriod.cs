@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Highlands.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -61,36 +62,6 @@ namespace Highlands.StaticModel
         }
 
 
-        public DateTime ApproximateStartDate
-        {
-            get
-            {
-                if (Quarter == 1)
-                    return new DateTime(EndingSchoolYear - 1, 9, 1);
-                else if (Quarter == 2)
-                    return new DateTime(EndingSchoolYear - 1, 11, 11);
-                else if (Quarter == 3)
-                    return new DateTime(EndingSchoolYear, 1, 21);
-                else //if (Quarter == 4)
-                    return new DateTime(EndingSchoolYear, 4, 2);
-            }
-        }
-
-        public DateTime ApproximateEndDate
-        {
-            get
-            {
-                if (Quarter == 1)
-                    return new DateTime(EndingSchoolYear - 1, 11, 10);
-                else if (Quarter == 2)
-                    return new DateTime(EndingSchoolYear, 1, 20);
-                else if (Quarter == 3)
-                    return new DateTime(EndingSchoolYear, 4, 1);
-                else //if (Quarter == 4)
-                    return new DateTime(EndingSchoolYear, 6, 12);
-             }
-        }
-
         public override string ToString()
         {
             return (EndingSchoolYear - 1) + @"/" + (EndingSchoolYear - 2000) + "-Q" + Quarter;
@@ -107,6 +78,7 @@ namespace Highlands.StaticModel
 
         #endregion
     }
+
     public class MarkingPeriods : List<MarkingPeriod>
     {
         static MarkingPeriods _singleton;
@@ -133,17 +105,7 @@ namespace Highlands.StaticModel
                     }
                     if (!loaded)
                     {
-                        for (int year = 2011; year <= 2013; year++)
-                        {
-                            for (int quarter = 1; quarter <= 4; quarter++)
-                            {
-                                var key = new MarkingPeriodKey(quarter, year);
-                                var mp = new MarkingPeriod(key, key.ApproximateStartDate, key.ApproximateEndDate, 45);
-                                if (mp.EndDate > MarkingPeriodKey.Current.ApproximateEndDate)
-                                    break;
-                                rv.Add(mp);
-                            }
-                        }
+                        rv = DemoFactory.DemoMarkingPeriod();
                         Maintenance.WriteArrayToFile("MarkingPeriods", rv.Select(m => m.ToCsv()).ToList());
                     }
                     _singleton = rv;
@@ -157,16 +119,46 @@ namespace Highlands.StaticModel
             MarkingPeriods.Singleton.Add(mp);
             Maintenance.WriteArrayToFile("MarkingPeriods", this.Select(m => m.ToCsv()).ToList());
         }
+
+        internal MarkingPeriod Find(MarkingPeriodKey mpk)
+        {
+            return this.First(q => mpk.ToString().Equals(q.Key.ToString()));
+        }
     }
 
-    public class MarkingPeriod
+    public class Period
+    {
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public int DaysIn { get; set; }
+    }
+
+    public class MarkingYear : Period
+    {
+        public MarkingYear(MarkingPeriod mp)
+        {
+            var mps = MarkingPeriods.Singleton.Where(q => q.Key.EndingSchoolYear == mp.Key.EndingSchoolYear && q.Key.Quarter <= mp.Key.Quarter).OrderBy(q => q.Key.Quarter);
+            DaysIn = mps.Sum(q => q.DaysIn);
+            StartDate = mps.First().StartDate;
+            EndDate = mps.Last().EndDate;
+        }
+
+        static public MarkingYear Current
+        {
+            get
+            {
+                return new MarkingYear(MarkingPeriod.Current);
+            }
+        }
+    }
+
+    public class MarkingPeriod : Period
     {
         public MarkingPeriodKey Key { get; set; }
         
- 
         internal string ToCsv()
         {
-            return StartDate.ToShortDateString() + "," + EndDate.ToShortDateString() + "," + Key.Quarter + "," + DaysInQuarter;
+            return StartDate.ToShortDateString() + "," + EndDate.ToShortDateString() + "," + Key.Quarter + "," + DaysIn;
         }
 
         static internal MarkingPeriod FromCsv(string str)
@@ -180,7 +172,7 @@ namespace Highlands.StaticModel
             if (quarter == 1)
                 year++;
             mp.Key = new MarkingPeriodKey(quarter, year);
-            mp.DaysInQuarter = int.Parse(parts[3]);
+            mp.DaysIn = int.Parse(parts[3]);
             return mp;
         }
 
@@ -193,7 +185,7 @@ namespace Highlands.StaticModel
             Key = key;
             StartDate = startDate;
             EndDate = endDate;
-            DaysInQuarter = daysInQuarter;
+            DaysIn = daysInQuarter;
         }
         public Tuple<int, int> SchoolYear
         {
@@ -217,10 +209,6 @@ namespace Highlands.StaticModel
 
         #endregion
 
-        public DateTime StartDate { get; set; }
-
-        public DateTime EndDate { get; set; }
-        public int DaysInQuarter { get; set; }
         public static MarkingPeriod Current
         {
             get
@@ -229,6 +217,5 @@ namespace Highlands.StaticModel
                 return MarkingPeriods.Singleton.SingleOrDefault(m => m.Key.ToString() == key.ToString());
             }
         }
-
     }
 }

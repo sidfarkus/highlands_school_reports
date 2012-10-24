@@ -13,13 +13,14 @@ namespace Highlands.ViewModel
         #region Public  Methods
         static public Gradebook CreateDemo()
         {
+            _rnd = new Random(1116);
             var rv = new Gradebook();
             var firstNames = new List<string>(){"Dan", "Kelly", "Allegra", "Ramsey", "Max", "Lexi", "Indy"};
             var lastNames = new List<string>() { "Alpha","Beta","Gamma","Delta","Epsilon","Zeta","Eta","Theta","Iota","Kappa","Lambda","Mu","Nu","Xi","Omicron","Pi","Rho","Sigma","Tau","Upsilon","Phi","Chi","Psi","Omega"};
             var dobStart = DateTime.Now.AddYears(-14);
             var dobEnd = DateTime.Now.AddYears(-5);
             int iCourse = 1000; 
-            foreach (var quarter in MarkingPeriods.Singleton.OrderByDescending(q => q.ToString()))
+            foreach (var quarter in MarkingPeriods.Singleton.Where(q => q.EndDate <= MarkingPeriod.Current.EndDate).OrderByDescending(q => q.ToString()))
             {
                 foreach(var gradeLevel in Maintenance.GradeLevelShorts)
                     foreach (var subject in Maintenance.Subjects)
@@ -33,14 +34,15 @@ namespace Highlands.ViewModel
                             teacher = RandString(Maintenance.Users.Where(u => u.Role == RoleEnum.SpecialInstructor).Select(t => t.Name).ToList());
                         else
                             teacher = null;
+                        
                         rv.Course.AddCourseRow((iCourse++).ToString(), subject, quarter.ToString(), RandString(Maintenance.Groups), teacher, Maintenance.GradeLevelNumber(gradeLevel));
                     }
             }
    
-            for (int i = 0; i < 100; i++)
+            for (int iStudent = 0; iStudent < 100; iStudent++)
             {
-                var name = firstNames[i % 7] + " " + lastNames[i % (lastNames.Count)];
-                var dob = dobStart.AddDays(i * (dobEnd - dobStart).TotalDays / 100);
+                var name = firstNames[iStudent % 7] + " " + lastNames[iStudent % (lastNames.Count)];
+                var dob = dobStart.AddDays(iStudent * (dobEnd - dobStart).TotalDays / 100);
                 var enrolled = dob.AddYears(5);
                 var gradeLevel = AddGradeLevel(Maintenance.GradeLevelShorts[0], (DateTime.Today.Year - enrolled.Year));
                 if (gradeLevel == null)
@@ -49,24 +51,29 @@ namespace Highlands.ViewModel
                     gradeLevel = Maintenance.GradeLevelShorts.Last();
                 }
 
-                var student = rv.Student.AddStudentRow(Gradebook.MakeStudentKey(name, dob), name, dob, i + " Fake St", "Bel Air, MD 22222", gradeLevel, enrolled, DateTime.MaxValue);
+                var student = rv.Student.AddStudentRow(Gradebook.MakeStudentKey(name, dob), name, dob, iStudent + " Fake St", "Bel Air, MD 22222", gradeLevel, enrolled, DateTime.MaxValue);
 
                 foreach (var course in rv.Course.OrderByDescending(c => c.Quarter))
                 {
-                    var mp = MarkingPeriodKey.Parse(course.Quarter);
-                    var diffYears = MarkingPeriodKey.Current.EndingSchoolYear - mp.EndingSchoolYear;
+                    var mpk = MarkingPeriodKey.Parse(course.Quarter);
+                    var mp = MarkingPeriods.Singleton.Find(mpk);
+                    var diffYears = MarkingPeriodKey.Current.EndingSchoolYear - mpk.EndingSchoolYear;
 
                     if (course.Level == Maintenance.GradeLevelNumber(AddGradeLevel(student.GradeLevel, 0 - diffYears)))
                     {
+                        if (_rnd.NextDouble() < .1)
+                            rv.Attendance.AddAttendanceRow(student, mp.StartDate.AddDays(_rnd.Next(0, 30)), AttendanceStatus.Absent.ToString());
+                        if (_rnd.NextDouble() < .1)
+                            rv.Attendance.AddAttendanceRow(student, mp.StartDate.AddDays(_rnd.Next(0, 30)), AttendanceStatus.Tardy.ToString());
 
-                        if (mp.Equals(MarkingPeriodKey.Current) && _rnd.Next(0, 2) == 0)
+                        if (mpk.Equals(MarkingPeriodKey.Current) && _rnd.Next(0, 2) == 0)
                         {
                             rv.Grade.AddGradeRow(student, course, string.Empty, string.Empty, string.Empty, ApprovalStage.Open.ToString());
                         }
                         else
                         {
                             var stage = ApprovalStage.Office;
-                            if (mp.Equals(MarkingPeriodKey.Current))
+                            if (mpk.Equals(MarkingPeriodKey.Current))
                             {
                                 if (_rnd.Next(0, 2) == 0)
                                     stage = ApprovalStage.Instructor;
@@ -84,13 +91,13 @@ namespace Highlands.ViewModel
                                 else if (course.SubjectName == "Written Expression")
                                     specialGrade = "Paragraph";
                             }
-                            rv.Grade.AddGradeRow(student, course, RandString(Maintenance.LetterGrades.Keys.ToList(), 3), specialGrade, Maintenance.FormatCommentFromList(RandString(Maintenance.Comments)) + " " + (i + @"/100"), stage.ToString());
+                            rv.Grade.AddGradeRow(student, course, RandString(Maintenance.LetterGrades.Keys.ToList(), 3), specialGrade, Maintenance.FormatCommentFromList(RandString(Maintenance.Comments)) + " " + (iStudent + @"/100"), stage.ToString());
                         }
                     }
                 }
                 var quarters = MarkingPeriods.Singleton.OrderByDescending(q => q.ToString());
                 bool withdraw = false;
-                if (i % 33 == 0)
+                if (iStudent % 33 == 0)
                 {
                     quarters = MarkingPeriods.Singleton.OrderBy(q => q.ToString());
                     withdraw = true;
@@ -121,7 +128,46 @@ namespace Highlands.ViewModel
         #endregion
 
         #region Private Methods
-        
+
+        static public DateTime ApproximateStartDate(MarkingPeriodKey mpk)
+        {
+            if (mpk.Quarter == 1)
+                return new DateTime(mpk.EndingSchoolYear - 1, 9, 1);
+            else if (mpk.Quarter == 2)
+                return new DateTime(mpk.EndingSchoolYear - 1, 11, 11);
+            else if (mpk.Quarter == 3)
+                return new DateTime(mpk.EndingSchoolYear, 1, 21);
+            else //if (Quarter == 4)
+                return new DateTime(mpk.EndingSchoolYear, 4, 2);
+        }
+
+        static public DateTime ApproximateEndDate(MarkingPeriodKey mpk)
+        {
+            if (mpk.Quarter == 1)
+                return new DateTime(mpk.EndingSchoolYear - 1, 11, 10);
+            else if (mpk.Quarter == 2)
+                return new DateTime(mpk.EndingSchoolYear, 1, 20);
+            else if (mpk.Quarter == 3)
+                return new DateTime(mpk.EndingSchoolYear, 4, 1);
+            else //if (Quarter == 4)
+                return new DateTime(mpk.EndingSchoolYear, 6, 12);
+        }
+
+        internal static MarkingPeriods DemoMarkingPeriod()
+        {
+            var rv = new MarkingPeriods();
+            for (int year = 2011; year <= 2013; year++)
+            {
+                for (int quarter = 1; quarter <= 4; quarter++)
+                {
+                    var key = new MarkingPeriodKey(quarter, year);
+                    var mp = new MarkingPeriod(key, ApproximateStartDate(key), ApproximateEndDate(key), 45);
+                    rv.Add(mp);
+                }
+            }
+            return rv;
+        }
+
         static Random _rnd = new Random();
         private static string RandString(IList<string> strs)
         {

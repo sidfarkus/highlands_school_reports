@@ -13,5 +13,11 @@ namespace Highlands
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            var test = new Highlands.Tests.TestDemoFactory();
+            test.TestAttendance();
+            test.TestClasses();
+        }
     }
 }

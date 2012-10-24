@@ -89,6 +89,7 @@
     <Compile Include="StaticModel\User.cs" />
     <Compile Include="StaticModel\Maintenance.cs" />
     <Compile Include="StaticModel\MarkingPeriod.cs" />
+    <Compile Include="Tests\TestDemoFactory.cs" />
     <Compile Include="Utils\EnumConverter.cs" />
     <Compile Include="Utils\PDFWriter.cs" />
     <Compile Include="Utils\Utils.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="ViewModel\GradebookViewModel.cs" />
     <Compile Include="ViewModel\GradeViewModel.cs" />
     <Compile Include="ViewModel\HonorRollsViewModel.cs" />
+    <Compile Include="ViewModel\ReportCard.cs" />
     <Compile Include="ViewModel\SDScoreViewModel.cs" />
     <Compile Include="ViewModel\StudentViewModel.cs" />
     <Compile Include="ViewModel\UserViewModel.cs" />

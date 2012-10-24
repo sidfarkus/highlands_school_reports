@@ -81,20 +81,9 @@ namespace Highlands.ViewModel
             }
         }
 
-        public int DaysAbsentThisQuarter
+        public int DaysAttendance(Period p, AttendanceStatus status)
         {
-            get
-            {
-                return _studentRow.GetAttendanceRows().Count(a => a.Date >= MarkingPeriod.Current.StartDate && a.Date <= MarkingPeriod.Current.EndDate && a.State == AttendanceStatus.Absent.ToString());
-            }
-        }
-
-        public int DaysTardyThisQuarter
-        {
-            get
-            {
-                return _studentRow.GetAttendanceRows().Count(a => a.Date >= MarkingPeriod.Current.StartDate && a.Date <= MarkingPeriod.Current.EndDate && a.State == AttendanceStatus.Tardy.ToString());
-            }
+            return _studentRow.GetAttendanceRows().Count(a => a.Date >= p.StartDate && a.Date <= p.EndDate && a.State == status.ToString());
         }
 
         [PDFOutputField("Grade")]
@@ -206,7 +195,6 @@ namespace Highlands.ViewModel
             }
         }
 
-  
         public bool IsValid
         {
             get
@@ -236,113 +224,6 @@ namespace Highlands.ViewModel
             return _studentRow.HasCourse(course.CourseRow, mp);
         }
 
-        public void CreateReportCard(string outFilename, MarkingPeriodKey period)
-        {
-            var currentSubjects = Grades.GroupBy(g => g.Subject)
-                .Where(subject => subject.Any(subGrade => subGrade.IsCurrentForPeriod(period)))
-                .OrderBy(subject => Maintenance.GetSubjectIndex(subject.Key));
-            var gradeReportFields = currentSubjects.Select((subject, i) =>
-            {
-                var thisYearsGrades = subject.Where(subGrade => subGrade.ShouldShowOnReportCard(period))
-                    .Select(subGrade => subGrade.GetGradeReportFields(period, i + 1));
-                return thisYearsGrades.SelectMany(x => x);
-            }).SelectMany(x => x);
-            var outputProperties = gradeReportFields.Concat(GetPDFFields(this))
-                .Concat(GetReportLevelFields(period))
-                .Concat(GetSelfDevFields(period));
-
-            if (outFilename == null)
-            {
-                string tempFileName = "temp" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pdf";
-                PDFWriter.WritePDF(tempFileName, outputProperties.ToDictionary(p => p.Key, p => p.Value));
-                Process.Start(tempFileName);
-            }
-            else
-                PDFWriter.WritePDF(outFilename, outputProperties.ToDictionary(p => p.Key, p => p.Value));
-        }
-
-        private IEnumerable<KeyValuePair<string, string>> GetSelfDevFields(MarkingPeriodKey period)
-        {
-            var sdAreas = Maintenance.SelfDevelopmentAreas;
-            var o = SelfDevelopmentScores.Where(score => MarkingPeriodKey.Parse(score.Quarter).Equals(period));
-            var p = o.Select((s, i) => new[] { 
-                    new KeyValuePair<string, string>("SD" + (i + 1), sdAreas[i]),
-                    new KeyValuePair<string, string>("SDValue" + (i == 10 ? 12 : i + 1), s.Score.ToString())
-                }).SelectMany(x => x);
-            return p;
-        }
-
-        private IEnumerable<KeyValuePair<string, string>> GetReportLevelFields(MarkingPeriodKey period)
-        {
-            var thisQuarter = MarkingPeriods.Singleton.Find(p => p.Key.Equals(period));
-            var thisYear = MarkingPeriods.Singleton.Where(p => {
-                return p.Key.EndingSchoolYear == period.EndingSchoolYear &&
-                       p.Key.Quarter <= period.Quarter;
-            }).Select(p => p.DaysInQuarter).Sum();
-            var yearStart = MarkingPeriods.Singleton.Where(p => p.Key.EndingSchoolYear == period.EndingSchoolYear && p.Key.Quarter == 1)
-                .Select(x => x.StartDate)
-                .FirstOrDefault();
-
-            var quarterRows = _studentRow.GetAttendanceRows().Where(a => a.Date >= thisQuarter.StartDate || a.Date < thisQuarter.StartDate);
-            var yearRows = _studentRow.GetAttendanceRows().Where(a => a.Date >= yearStart);
-            int absentThisQtr = quarterRows.Count(a => a.State == AttendanceStatus.Absent.ToString());
-            int absentThisYear = yearRows.Count(a => a.State == AttendanceStatus.Absent.ToString());
-
-            int tardyThisQtr = quarterRows.Count(a => a.State == AttendanceStatus.Tardy.ToString());
-            int tardyThisYear = yearRows.Count(a => a.State == AttendanceStatus.Tardy.ToString());
-            return new[] { 
-                new KeyValuePair<string, string>(
-                    "StudentAddress",
-                    AddressLine1 + "\n" + AddressLine2),
-                new KeyValuePair<string, string>(
-                    "SchoolYear",
-                    String.Format("{0:MMM dd, yyyy} - {1:MMM dd, yyyy}", yearStart, thisQuarter.EndDate)),
-                new KeyValuePair<string, string>(
-                    "SchoolYearAttendance",
-                    String.Format("{0} - {1}", thisQuarter.SchoolYear.Item1, thisQuarter.SchoolYear.Item2)),
-                new KeyValuePair<string, string>(
-                    "QTR1",
-                    thisQuarter.DaysInQuarter.ToString()),
-                new KeyValuePair<string, string>(
-                    "YR1",
-                    thisYear.ToString()),
-                new KeyValuePair<string, string>(
-                    "QTR2",
-                    absentThisQtr.ToString()),
-                new KeyValuePair<string, string>(
-                    "YR2",
-                    absentThisYear.ToString()),
-                new KeyValuePair<string, string>(
-                    "QTR3",
-                    tardyThisQtr.ToString()),
-                new KeyValuePair<string, string>(
-                    "YR3",
-                    tardyThisYear.ToString()),
-                new KeyValuePair<string, string>(
-                    "MarkingPeriod",
-                    period.QuarterString),
-                new KeyValuePair<string, string>(
-                    "QtrEnding",
-                    thisQuarter != null ? thisQuarter.EndDate.ToShortDateString() : "N/A")
-            };
-        }
-
-        private IEnumerable<KeyValuePair<string, string>> GetPDFFields<T>(T obj)
-        {
-            var outputProperties = typeof(T).GetProperties()
-                .Where(p => p.CanRead && p.GetCustomAttributes(typeof(PDFOutputFieldAttribute), false).Any());
-
-            foreach (var prop in outputProperties)
-            {
-                var val = prop.GetValue(obj, null) ?? "";
-                if (val is DateTime)
-                    val = ((DateTime)val).ToShortDateString();
-                yield return new KeyValuePair<string, string>(
-                    prop.GetCustomAttributes(typeof(PDFOutputFieldAttribute), false).Cast<PDFOutputFieldAttribute>().First().FieldName,
-                    val.ToString());
-            }
-        }
-
         public override string ToString()
         {
             var rv = Name + ", dob-" + DOB.ToShortDateString() + "(" + Age + "yo), " + FormatGradeLevel(GradeLevel) + ", since:" + DateEnrolled.ToShortDateString();
@@ -365,11 +246,6 @@ namespace Highlands.ViewModel
             return years;
         }
 
-        public string GetDefaultReportCardFilename(MarkingPeriodKey period)
-        {
-            return String.Format("{0}_Q{1}_{2}_Report_Card.pdf", Name, period.Quarter, period.EndingSchoolYear);
-        }
-
         internal double Gpa(MarkingPeriod mp)
         {
             var grades = _studentRow.GetGradeRows().Where(g => g.CourseRow.Quarter == mp.Key.ToString());
@@ -389,5 +265,37 @@ namespace Highlands.ViewModel
                 return true;
             return false;
         }
+
+        internal IEnumerable<StudentReport> StudentReports()
+        {
+            var rv = new List<StudentReport>();
+            var gradesByQuarter = _studentRow.GetGradeRows().GroupBy(g => g.CourseRow.Quarter);
+            foreach (var kvp in gradesByQuarter)
+            {
+                var i = new StudentReport();
+                var mp = MarkingPeriods.Singleton.Find(MarkingPeriodKey.Parse(kvp.Key));
+                i.Quarter = mp;
+                i.NumberOfClasses = kvp.Count();
+                i.Gpa = Gpa(mp);
+                i.Stage = (ApprovalStage) kvp.Max(g => (int) Enum.Parse(typeof(ApprovalStage), g.ApprovalStage));
+                i.HonorRoll = HonorRoll(mp);
+                i.DaysAbsent = DaysAttendance(mp, AttendanceStatus.Absent);
+                i.DaysTardy = DaysAttendance(mp, AttendanceStatus.Tardy);
+                i.DaysPresent = mp.DaysIn - i.DaysAbsent - i.DaysTardy;
+                rv.Add(i);
+            }
+            return rv;
+        }
+    }
+    public class StudentReport
+    {
+        public MarkingPeriod Quarter { get; set; }
+        public int NumberOfClasses { get; set; }
+        public double Gpa { get; set; }
+        public ApprovalStage Stage { get; set; }
+        public bool HonorRoll { get; set; }
+        public int DaysTardy { get; set; }
+        public int DaysAbsent { get; set; }
+        public int DaysPresent { get; set; }
     }
 }
