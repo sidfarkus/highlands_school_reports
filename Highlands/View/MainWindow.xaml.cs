@@ -4,6 +4,8 @@ using Highlands.ViewModel;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -27,7 +29,6 @@ namespace Highlands
             GradebookViewModel.Test();
        
             // clear gradebook
-            Title = "Welcome, " + UserViewModel.CurrentUser;
             loginWindow.Reset();
             loginOverlay.Visibility = System.Windows.Visibility.Visible;
         }
@@ -47,6 +48,10 @@ namespace Highlands
             btnExport.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanImportExport);
             btnImport.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanImportExport);
             btnHonorRoll.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanViewHonorRoll);
+            tabClasses.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.HasStudents);
+            
+            staUser.Content = "Welcome, " + UserViewModel.CurrentUser;
+      
         }
 
         private void btnImport_Click(object sender, RoutedEventArgs e)
@@ -97,7 +102,7 @@ namespace Highlands
                 if (sfd.ShowDialog() != true)
                     return;
                 _gradebook.ExportStudents(sfd.FileName);
-            
+                Process.Start(sfd.FileName);     
             }
             catch (Exception exc)
             {
@@ -107,24 +112,46 @@ namespace Highlands
 
         private void btnHonorRoll_Click(object sender, RoutedEventArgs e)
         {
+            var sfd = new SaveFileDialog();
+            sfd.DefaultExt = ".csv";
+            sfd.Filter = "CSV files|*.csv|All Files|*.*";
+            if (sfd.ShowDialog() != true)
+                return; 
+            
+            var outs = new List<string>();
             foreach (var mp in MarkingPeriods.Singleton.OrderByDescending(m => m.StartDate))
             {
                 //var mp = MarkingPeriod.Current;
-                var students = _gradebook.Students.Where(s => s.HonorRoll(mp)).OrderByDescending(s => s.Gpa(mp)).GroupBy(s => s.GradeLevel);
-                var outs = new List<string>();
-                foreach (var kvp in students.OrderBy(s => Maintenance.GradeLevelNumber(s.Key)))
-                {
-                    outs.Add("-" + StudentViewModel.FormatGradeLevel(kvp.Key) + "-");
-                    foreach(var student in kvp)
-                        outs.Add(student.Name + " " + student.Gpa(mp).ToString("0.00"));
-                    outs.Add("");
-                }
+                var students = _gradebook.Students.Where(s => s.HonorRoll(mp)).OrderByDescending(s => s.Gpa(mp));
+                outs.AddRange(AddHonorRollLines(mp, students)); 
                 if (outs.Count() == 0)
                     continue;
 
-                ViewUtils.Mail("", "Honor Roll- " + mp + " " + DateTime.Now.ToString(), string.Join(Environment.NewLine, outs.ToArray()));
-                break;
+                outs.Insert(0, "=For Quarter=");
+                var year = new MarkingYear(mp);
+
+                outs.Add("=For Year To Date=");
+                outs.AddRange(AddHonorRollLines(year, students));
+
+
+                ViewUtils.WriteAndOpen(sfd.FileName, outs);
+                //ViewUtils.Mail("", "Honor Roll " + mp + " " + DateTime.Now, string.Join(Environment.NewLine, outs.ToArray()));
+
+                return;
             }
+            MessageBox.Show("No honor roll found.");
+        }
+
+        private static IList<string> AddHonorRollLines(Period p, IEnumerable<StudentViewModel> students)
+        {
+            var outs = new List<string>();
+            foreach (var kvp in students.OrderBy(s => Maintenance.GradeLevelNumber(s.GradeLevel)).GroupBy(s => s.GradeLevel))
+            {
+                outs.Add("-" + StudentViewModel.FormatGradeLevel(kvp.Key) + "-");
+                foreach (var student in kvp)
+                    outs.Add(student.Name + "," + student.GradeLevel + "," + student.Gpa(p).ToString("0.00"));
+            }
+            return outs;
         }
     }
 }

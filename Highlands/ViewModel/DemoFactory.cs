@@ -19,24 +19,33 @@ namespace Highlands.ViewModel
             var lastNames = new List<string>() { "Alpha","Beta","Gamma","Delta","Epsilon","Zeta","Eta","Theta","Iota","Kappa","Lambda","Mu","Nu","Xi","Omicron","Pi","Rho","Sigma","Tau","Upsilon","Phi","Chi","Psi","Omega"};
             var dobStart = DateTime.Now.AddYears(-14);
             var dobEnd = DateTime.Now.AddYears(-5);
-            int iCourse = 1000; 
+            int iCourse = 1000;
+
+            var homeroomTeachers = new Dictionary<string, string>();
+            int iClassroom = 0;
+            foreach (var gradeLevel in Maintenance.GradeLevelShorts)
+            {
+                homeroomTeachers.Add(gradeLevel,Maintenance.Users.Where(u => u.Role == RoleEnum.ClassroomInstructor).Select(t => t.Name).ToList()[iClassroom++]);
+            }
             foreach (var quarter in MarkingPeriods.Singleton.Where(q => q.EndDate <= MarkingPeriod.Current.EndDate).OrderByDescending(q => q.ToString()))
             {
-                foreach(var gradeLevel in Maintenance.GradeLevelShorts)
+                foreach (var gradeLevel in Maintenance.GradeLevelShorts)
+                {
                     foreach (var subject in Maintenance.Subjects)
                     {
                         var teacher = string.Empty;
                         if (CourseViewModel.ClassroomCourse(subject))
-                            teacher = RandString(Maintenance.Users.Where(u => u.Role == RoleEnum.ClassroomInstructor).Select(t => t.Name).ToList());
+                            teacher = homeroomTeachers[gradeLevel];
                         else if (CourseViewModel.SmallGroupCourse(subject))
                             teacher = RandString(Maintenance.Users.Where(u => u.Role == RoleEnum.SmallGroupInstructor).Select(t => t.Name).ToList());
                         else if (CourseViewModel.SpecialCourse(subject))
                             teacher = RandString(Maintenance.Users.Where(u => u.Role == RoleEnum.SpecialInstructor).Select(t => t.Name).ToList());
                         else
                             teacher = null;
-                        
+
                         rv.Course.AddCourseRow((iCourse++).ToString(), subject, quarter.ToString(), RandString(Maintenance.Groups), teacher, Maintenance.GradeLevelNumber(gradeLevel));
                     }
+                }
             }
    
             for (int iStudent = 0; iStudent < 100; iStudent++)

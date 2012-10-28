@@ -17,26 +17,26 @@ namespace Highlands.ViewModel
         {
             _student = student;
         }
-        public void CreateReportCard(string outFilename, MarkingPeriodKey period)
+        public void CreateReportCard(string outFilename, MarkingPeriod period)
         {
             var currentSubjects = _student.Grades.GroupBy(g => g.Subject)
-                .Where(subject => subject.Any(subGrade => subGrade.IsCurrentForPeriod(period)))
+                .Where(subject => subject.Any(subGrade => subGrade.IsCurrentForPeriod(period.Key)))
                 .OrderBy(subject => Maintenance.GetSubjectIndex(subject.Key));
             var gradeReportFields = currentSubjects.Select((subject, i) =>
             {
                 var thisYearsGrades = subject.Where(subGrade => subGrade.ShouldShowOnReportCard(period))
-                    .Select(subGrade => subGrade.GetGradeReportFields(period, i + 1));
+                    .Select(subGrade => subGrade.GetGradeReportFields(period.Key, i + 1));
                 return thisYearsGrades.SelectMany(x => x);
             }).SelectMany(x => x);
             var outputProperties = gradeReportFields.Concat(GetPDFFields(this))
-                .Concat(GetReportLevelFields(period))
-                .Concat(GetSelfDevFields(period));
+                .Concat(GetReportLevelFields(period.Key))
+                .Concat(GetSelfDevFields(period.Key));
 
             if (outFilename == null)
             {
                 var tempDir = Path.GetTempPath();
                 Directory.CreateDirectory(tempDir);
-                string tempFileName = Path.Combine(tempDir, GetDefaultReportCardFilename(period) + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pdf");
+                string tempFileName = Path.Combine(tempDir, GetDefaultReportCardFilename(period.Key) + "-" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".pdf");
                 PDFWriter.WritePDF(tempFileName, outputProperties.ToDictionary(p => p.Key, p => p.Value));
                 Process.Start(tempFileName);
             }
@@ -126,5 +126,17 @@ namespace Highlands.ViewModel
                     val.ToString());
             }
         }
+    }
+
+    public class StudentReport
+    {
+        public string Quarter { get; set; }
+        public int NumberOfClasses { get; set; }
+        public double Gpa { get; set; }
+        public bool HonorRoll { get; set; }
+        public ApprovalStage Stage { get; set; }
+        public int DaysTardy { get; set; }
+        public int DaysAbsent { get; set; }
+        public int DaysPresent { get; set; }
     }
 }

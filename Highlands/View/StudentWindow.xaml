@@ -21,7 +21,7 @@
                         <RadioButton Click="radAll_Click" IsChecked="True" VerticalAlignment="Center" Margin="3" >All</RadioButton>
                         <CheckBox Name="chkMyClasses" Margin="5" Click="chkMyClasses_Click" IsChecked="True" VerticalAlignment="Center">My Classes Only</CheckBox>
                     </StackPanel>
-                    <DataGrid AutoGenerateColumns="False" Name="dgvGrades" Grid.Row="1"  SelectionMode="Single">
+                    <DataGrid AutoGenerateColumns="False" Name="dgvGrades" Grid.Row="1"  SelectionMode="Single"  IsReadOnly="True" >
                         <DataGrid.RowDetailsTemplate>
                             <DataTemplate>
                                 <Grid Background="LightGray">
@@ -30,26 +30,22 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <StackPanel Orientation="Horizontal">
-                                        <Button Click="btnApprove_Click" Width="90" Margin="3,2,3,2">Approve</Button>
-                                        <Button Click="btnUnApprove_Click" Width="90" Margin="3,2,3,2">UnApprove</Button>
-                                        <Button Click="btnEditGrade_Click" Width="90" Margin="3,2,3,2">Change Grade</Button>
+                                        <Button Name="btnApprove" Click="btnApprove_Click" Width="90" Margin="3,2,3,2" Visibility="{Binding ApproveAllowed}">Approve</Button>
+                                        <Button Click="btnUnApprove_Click" Width="90" Margin="3,2,3,2" Visibility="{Binding UnApproveAllowed}">UnApprove</Button>
+                                        <Button Click="btnEditGrade_Click" Width="90" Margin="3,2,3,2" Visibility="{Binding ChangeGradeAllowed}">Change Grade</Button>
                                         <Button Click="btnEmail_Click" Width="90" Margin="3,2,3,2">Email</Button>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Vertical" Grid.Row="1" Margin="2,2,2,10">
-                                        <TextBlock Margin="3" FontWeight="Bold">Comments:</TextBlock>
-                                        <Border BorderThickness="1" BorderBrush="Black" Margin="2,0,2,2" Padding="5">
-                                            <TextBlock Text="{Binding Comment}" />
-                                        </Border>
                                     </StackPanel>
                                 </Grid>
                             </DataTemplate>
                         </DataGrid.RowDetailsTemplate>
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Subject" Binding="{Binding Subject}" Width="2*" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Grade" Binding="{Binding LetterGrade}"  Width="*" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Special Grade" Binding="{Binding SpecialGrade}"  Width="*" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Marking Period" Binding="{Binding Quarter}"  Width="*" IsReadOnly="True"/>
-                            <DataGridTextColumn Header="Teacher" Binding="{Binding Teacher}"  Width="2*" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Subject" Binding="{Binding Subject}" Width="2*"/>
+                            <DataGridTextColumn Header="Grade" Binding="{Binding LetterGrade}"  Width="*"/>
+                            <DataGridTextColumn Header="Special Grade" Binding="{Binding SpecialGrade}"  Width="*" />
+                            <DataGridTextColumn Header="Marking Period" Binding="{Binding MarkingPeriod}"  Width="*"/>
+                            <DataGridTextColumn Header="Teacher" Binding="{Binding Teacher}"  Width="*"/>
+                            <DataGridTextColumn Header="Stage" Binding="{Binding ApprovalStage}"  Width="*"/>
+                            <DataGridTextColumn Header="Comment" Binding="{Binding Comment}"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
@@ -120,7 +116,6 @@
                     <CheckBox Grid.Row="5" Grid.Column="0" Name="chkWithdrawn" VerticalAlignment="Center"  HorizontalAlignment="Right" Unchecked="CheckBox_Checked" Checked="CheckBox_Checked" >Withdrawn Date:</CheckBox>
                     <DatePicker Name="dtpWithdrawn" IsEnabled="False" Grid.Row="5" Grid.Column="1"  Margin="4"/>
                     <Label VerticalAlignment="Center" HorizontalAlignment="Right"  Grid.Row="6" Grid.Column="0">Attendance:</Label>
-                    <Label Name="staAttendance" Grid.Row="6" Grid.Column="1"  Margin="4" VerticalAlignment="Center" >YTD: </Label>
                     <Button Click="OnSaveUser" HorizontalAlignment="Right" Margin="8,8,15,8" Grid.Row="6" Grid.ColumnSpan="3" Width="80">Save</Button>
                 </Grid>
             </TabItem>
@@ -131,7 +126,19 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Button  Grid.Row="0" x:Name ="genReport" Click="OnGenerateReportCard" Margin="5" HorizontalAlignment="Center" Width="110">Create Report Card PDF</Button>
-                    <DataGrid Name="grdStudentReport" IsReadOnly="True" Grid.Row="1"/>
+                    <DataGrid AutoGenerateColumns="False" Name="grdStudentReport" IsReadOnly="True" Grid.Row="1">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Quarter" Binding="{Binding Quarter}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Classes" Binding="{Binding NumberOfClasses}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="GPA" Binding="{Binding Gpa}" IsReadOnly="True"/>
+                            <DataGridCheckBoxColumn Header="Honor Roll" Binding="{Binding HonorRoll}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Stage" Binding="{Binding Stage}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Tardy" Binding="{Binding DaysTardy}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Absent" Binding="{Binding DaysAbsent}" IsReadOnly="True"/>
+                            <DataGridTextColumn Header="Present" Binding="{Binding DaysPresent}" IsReadOnly="True"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                        
                 </Grid>
             </TabItem>
         </TabControl>

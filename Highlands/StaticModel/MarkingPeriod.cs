@@ -126,11 +126,34 @@ namespace Highlands.StaticModel
         }
     }
 
-    public class Period
+    public class Period : IComparable<Period>, IComparer<Period>
     {
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public int DaysIn { get; set; }
+
+        internal bool ContainsQuarter(Period period)
+        {
+            return (StartDate >= period.StartDate && EndDate <= period.EndDate);
+        }
+
+        #region IComparable<Period> Members
+
+        public int CompareTo(Period other)
+        {
+            return EndDate.CompareTo(other.EndDate);
+        }
+
+        #endregion
+
+        #region IComparer<Period> Members
+
+        public int Compare(Period x, Period y)
+        {
+            return x.EndDate.CompareTo(y.EndDate);
+        }
+
+        #endregion
     }
 
     public class MarkingYear : Period
@@ -152,8 +175,27 @@ namespace Highlands.StaticModel
         }
     }
 
-    public class MarkingPeriod : Period
+    public class MarkingPeriod : Period, IComparable<MarkingPeriod>, IComparer<MarkingPeriod>
     {
+
+        #region IComparable<Period> Members
+
+        public int CompareTo(MarkingPeriod other)
+        {
+            return EndDate.CompareTo(other.EndDate);
+        }
+
+        #endregion
+
+        #region IComparer<Period> Members
+
+        public int Compare(MarkingPeriod x, MarkingPeriod y)
+        {
+            return x.EndDate.CompareTo(y.EndDate);
+        }
+
+        #endregion
+
         public MarkingPeriodKey Key { get; set; }
         
         internal string ToCsv()

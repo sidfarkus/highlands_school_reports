@@ -14,7 +14,9 @@
 
         <DockPanel>
             <StackPanel DockPanel.Dock="Top" Background="LightGray" Orientation="Horizontal">
-                <Button Width="120" Margin="5" Click="OnCreateAllReports">Save Report Cards</Button>
+                <Button Name="btnSaveReportCards" Width="120" Margin="5" Click="OnCreateAllReports">Save Report Cards</Button>
+                <Button Width="120" Margin="5" Click="btnExportGrades_Click">Export Grades</Button>
+                <Button Width="120" Margin="5" IsEnabled="False">Import Grades</Button>
             </StackPanel>
             <DataGrid Name="grd" AutoGenerateColumns="False" SelectionMode="Single" SelectedCellsChanged="SelectionChanged">
                 <DataGrid.GroupStyle>
@@ -46,10 +48,11 @@
                     </GroupStyle>
                 </DataGrid.GroupStyle>
                 <DataGrid.Columns>
-                    <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding StudentName}" Width="3*" />
-                    <DataGridTextColumn IsReadOnly="True" Header="Grade" Binding="{Binding LetterGrade}" Width="*" />
-                    <DataGridTextColumn IsReadOnly="True" Header="Special Grade" Binding="{Binding SpecialGrade}" Width="*" />
-                    <DataGridTextColumn IsReadOnly="True" Header="Approval Status" Binding="{Binding Stage}" Width="2*"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding StudentName}" Width="*" />
+                    <DataGridTextColumn IsReadOnly="True" Header="Grade" Binding="{Binding LetterGrade}"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="Special Grade" Binding="{Binding SpecialGrade}"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="Approval Status" Binding="{Binding Stage}"/>
+                    <DataGridTextColumn IsReadOnly="True" Header="Comment" Binding="{Binding Comment}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>

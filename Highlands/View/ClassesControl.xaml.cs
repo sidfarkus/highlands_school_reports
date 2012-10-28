@@ -1,9 +1,12 @@
 ﻿using Highlands.StaticModel;
 using Highlands.ViewModel;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,7 +34,24 @@ namespace Highlands
 
         private void FillStudents()
         {
+            var rv = FillGrades();
+
+            grd.ItemsSource = rv.ToList();
+            ICollectionView defaultView = CollectionViewSource.GetDefaultView(grd.ItemsSource);
+
+            if (defaultView != null && defaultView.CanGroup == true)
+            {
+                defaultView.GroupDescriptions.Clear();
+                defaultView.GroupDescriptions.Add(new PropertyGroupDescription("ClassName"));
+                //defaultView.GroupDescriptions.Add(new PropertyGroupDescription("Level"));
+                //cvTasks.GroupDescriptions.Add(new PropertyGroupDescription("Complete"));
+            }
+        }
+
+        private Grades FillGrades()
+        {
             var rv = new Grades();
+            btnSaveReportCards.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanExportReportCards);
             var courses = _gradebook.Courses;
             courses = courses.Where(c => c.Teacher == UserViewModel.CurrentUser.Name);
             courses = courses.Where(c => c.Quarter == MarkingPeriodKey.Current.ToString());
@@ -45,17 +65,7 @@ namespace Highlands
                     //rv.Add(new dv() { Grade = grade.LetterGrade, Name = grade.StudentName, Stage = grade.ApprovalStage.ToString() });
                 }
             }
-
-            grd.ItemsSource = rv.ToList();
-            ICollectionView defaultView = CollectionViewSource.GetDefaultView(grd.ItemsSource);
-
-            if (defaultView != null && defaultView.CanGroup == true)
-            {
-                defaultView.GroupDescriptions.Clear();
-                defaultView.GroupDescriptions.Add(new PropertyGroupDescription("ClassName"));
-                //defaultView.GroupDescriptions.Add(new PropertyGroupDescription("Level"));
-                //cvTasks.GroupDescriptions.Add(new PropertyGroupDescription("Complete"));
-            }
+            return rv;
         }
 
         // Requires using System.Collections.ObjectModel; 
@@ -91,7 +101,7 @@ namespace Highlands
             {
                 get
                 {
-                    return _grade.Subject + " " + _grade.Level + " " + _grade.Group + " " + _grade.Quarter;
+                    return _grade.Subject + " " + _grade.Level + " " + _grade.Group + " " + _grade.MarkingPeriod;
                 }
             }
             public string LetterGrade
@@ -115,13 +125,25 @@ namespace Highlands
                     return _grade.ApprovalStage.ToString();
                 }
             }
+            public string Comment
+            {
+                get
+                {
+                    return _grade.Comment;
+                }
+            }
 
+            internal string ToCsv()
+            {
+                return StudentName + "," + ClassName + "," + LetterGrade + "," + SpecialGrade + "," + Stage + "," + Comment;
+            }
         }
         public GradebookViewModel _gradebook;
 
         internal void Refresh(GradebookViewModel gradebook)
         {
             _gradebook = gradebook;
+
             FillStudents();
         }
 
@@ -185,7 +207,7 @@ namespace Highlands
                     {
                         var report = new ReportCard(student);
                         var filename = System.IO.Path.Combine(dialog.FileName, report.GetDefaultReportCardFilename(MarkingPeriod.Current.Key) + ".pdf");
-                        report.CreateReportCard(filename, MarkingPeriod.Current.Key);
+                        report.CreateReportCard(filename, MarkingPeriod.Current);
                         exported++;
                     }
                     else
@@ -199,6 +221,32 @@ namespace Highlands
                 }
             }
 
+        }
+
+        private void btnExportGrades_Click(object sender, RoutedEventArgs e)
+        {
+            var grades = FillGrades();
+            try
+            {
+                var sfd = new SaveFileDialog();
+                sfd.DefaultExt = ".csv";
+                sfd.Filter = "CSV files|*.csv|All Files|*.*";
+                sfd.FileName = "Grades-" + UserViewModel.CurrentUser.Name + "-" + DateTime.Now.ToString("yyyyMMdd HHmmss") + ".csv";
+                if (sfd.ShowDialog() != true)
+                    return;
+
+                var outs = new List<string>();
+                foreach (var grade in grades)
+                    outs.Add(grade.ToCsv());
+
+                File.WriteAllLines(sfd.FileName, outs.ToArray());
+                
+                Process.Start(sfd.FileName);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
         }
     }
 }

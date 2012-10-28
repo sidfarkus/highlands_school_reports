@@ -76,14 +76,14 @@ namespace Highlands.ViewModel
         {
             if (allStudents == null)
                 return Enumerable.Empty<StudentViewModel>();
-            return allStudents.Where(s => s.Grades.Any(g => MarkingPeriodKey.Parse(g.Quarter).Equals(currentQuarter)));
+            return allStudents.Where(s => s.Grades.Any(g => g.MarkingPeriod.Equals(currentQuarter)));
         }
 
         private IEnumerable<StudentViewModel> HonorRollsStudents(MarkingPeriodKey currentQuarter)
         {
             if (allStudents == null)
                 return Enumerable.Empty<StudentViewModel>();
-            return allStudents.Where(s => s.Grades.Any(g => MarkingPeriodKey.Parse(g.Quarter).Equals(currentQuarter)));
+            return allStudents.Where(s => s.Grades.Any(g => g.MarkingPeriod.Equals(currentQuarter)));
         }
 
 

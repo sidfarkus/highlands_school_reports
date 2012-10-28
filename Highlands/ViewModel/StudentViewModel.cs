@@ -246,15 +246,15 @@ namespace Highlands.ViewModel
             return years;
         }
 
-        internal double Gpa(MarkingPeriod mp)
+        internal double Gpa(Period p)
         {
-            var grades = _studentRow.GetGradeRows().Where(g => g.CourseRow.Quarter == mp.Key.ToString());
+             var grades = _studentRow.GetGradeRows().Where(g => p.ContainsQuarter(g.CourseRow.MarkingPeriod));
             return grades.Average(g => Maintenance.GradePoint(g.LetterGrade));
         }
 
-        internal bool HonorRoll(MarkingPeriod mp)
+        internal bool HonorRoll(Period p)
         {
-            var grades = _studentRow.GetGradeRows().Where(g => g.CourseRow.Quarter == mp.Key.ToString());
+            var grades = _studentRow.GetGradeRows().Where(g => g.CourseRow.MarkingPeriod == p);
             if (grades.Any(g => Maintenance.GradePoint(g.LetterGrade) < 1.0))
                 return false;
             if (grades.Count() == 0)
@@ -274,7 +274,7 @@ namespace Highlands.ViewModel
             {
                 var i = new StudentReport();
                 var mp = MarkingPeriods.Singleton.Find(MarkingPeriodKey.Parse(kvp.Key));
-                i.Quarter = mp;
+                i.Quarter = mp.ToString();
                 i.NumberOfClasses = kvp.Count();
                 i.Gpa = Gpa(mp);
                 i.Stage = (ApprovalStage) kvp.Max(g => (int) Enum.Parse(typeof(ApprovalStage), g.ApprovalStage));
@@ -287,15 +287,5 @@ namespace Highlands.ViewModel
             return rv;
         }
     }
-    public class StudentReport
-    {
-        public MarkingPeriod Quarter { get; set; }
-        public int NumberOfClasses { get; set; }
-        public double Gpa { get; set; }
-        public ApprovalStage Stage { get; set; }
-        public bool HonorRoll { get; set; }
-        public int DaysTardy { get; set; }
-        public int DaysAbsent { get; set; }
-        public int DaysPresent { get; set; }
-    }
+
 }

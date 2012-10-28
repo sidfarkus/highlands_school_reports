@@ -59,6 +59,8 @@ namespace Highlands
             _studentName = studentName;
             _grade = grade;
 
+            IsEnabled = (RightsEnum.Success == UserViewModel.CurrentUser.CanEdit(_grade));
+     
             if (CourseViewModel.HasSpecialGrade(grade.Subject))
             {
                 entSpecialGrade.Visibility = System.Windows.Visibility.Visible;
@@ -71,7 +73,7 @@ namespace Highlands
             cmbComment.SelectedIndex = 0;
 
             staStudent.Content = studentName;
-            staCourse.Content = _grade.Subject + " for " + _grade.Quarter + " " + _grade.Group + " with " + _grade.Teacher;
+            staCourse.Content = _grade.Subject + " for " + _grade.MarkingPeriod + " " + _grade.Group + " with " + _grade.Teacher;
             cmbLetterGrade.Text = _grade.LetterGrade;
             entSpecialGrade.Text = _grade.SpecialGrade;
 
@@ -111,6 +113,12 @@ namespace Highlands
 
         private void btnSave_Click(object sender, RoutedEventArgs e)
         {
+            if (RightsEnum.Success != UserViewModel.CurrentUser.CanEdit(_grade))
+            {
+                MessageBox.Show("User can not edit this grade at this stage.");
+                return;
+            }
+
             var diffs = new List<Change>();
             if (_grade.Comment != staComment.Text)
                 diffs.Add(new Change(_grade, "Comment", _grade.Comment, staComment.Text));

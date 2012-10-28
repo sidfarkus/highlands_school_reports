@@ -140,6 +140,10 @@ namespace Highlands.ViewModel
 
             if (HasClassroomRights)
                 return RightsEnum.Success;
+
+            if (grade.ApprovalStage == ApprovalStage.Instructor)
+                return RightsEnum.UserError;
+    
             if (Name == grade.Teacher)
                 return RightsEnum.Success;
 

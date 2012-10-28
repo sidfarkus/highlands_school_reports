@@ -38,6 +38,7 @@ namespace Highlands
         public void LoadStudent(StudentViewModel student)
         {
             _student = student;
+            
             nameHeader.Text = student.Name;
             noStudentOverlay.Visibility = System.Windows.Visibility.Hidden;
             var currentUser = UserViewModel.CurrentUser;
@@ -57,16 +58,18 @@ namespace Highlands
             if (_student.DateWithdrawn.HasValue)
                 dtpWithdrawn.SelectedDate = _student.DateWithdrawn.Value;
             chkWithdrawn.IsChecked = _student.DateWithdrawn.HasValue;
-            staAttendance.Content = 
-                "Absence Qtr: " + _student.DaysAttendance(MarkingPeriod.Current, AttendanceStatus.Absent) + 
-                " Tardy Qtr: " + _student.DaysAttendance(MarkingPeriod.Current, AttendanceStatus.Tardy); 
+
             Maintenance.GradeLevelShorts.ForEach(o => cmbGradeLevel.Items.Add(o));
             cmbGradeLevel.Text = _student.GradeLevel;
 
             dgvGrades.ItemsSource = Grades;
             dgvSelfDevelopment.ItemsSource = SDScores;
 
-             grdStudentReport.ItemsSource = _student.StudentReports();
+            grdStudentReport.ItemsSource = _student.StudentReports();
+            
+            genReport.Visibility = ViewUtils.IsVisible(UserViewModel.CurrentUser.CanExportReportCards);
+
+
             /*
            cmbMarkingPeriod.ItemsSource = 
                 MarkingPeriods.Singleton.OrderByDescending(q => q.EndDate).Where(q => student.AttendedDuring(q));
@@ -155,13 +158,13 @@ namespace Highlands
             }
             if (_range == ShowRange.ThisQuarter)
             {
-                subsetGrades = subsetGrades.Where(g => g.Quarter == MarkingPeriodKey.Current.ToString());
-                subsetSDScores = subsetSDScores.Where(g => g.Quarter == MarkingPeriodKey.Current.ToString());
+                subsetGrades = subsetGrades.Where(g => g.MarkingPeriod.Equals(MarkingPeriodKey.Current));
+                subsetSDScores = subsetSDScores.Where(g => g.Quarter.Equals(MarkingPeriodKey.Current));
             }
             else if (_range == ShowRange.ThisYear)
             {
-                subsetGrades = subsetGrades.Where(g => g.Quarter.Contains("2012"));
-                subsetSDScores = subsetSDScores.Where(g => g.Quarter.Contains("2012"));
+                subsetGrades = subsetGrades.Where(g => g.MarkingPeriod.ToString().Contains("2012"));
+                subsetSDScores = subsetSDScores.Where(g => g.Quarter.ToString().Contains("2012"));
             }
 
             _grades.Clear();
@@ -242,11 +245,11 @@ namespace Highlands
             var report = (StudentReport) grdStudentReport.SelectedItem;
             MarkingPeriod mp = MarkingPeriod.Current;
             if (report != null)
-                mp = report.Quarter;
+                mp = MarkingPeriods.Singleton.Find(MarkingPeriodKey.Parse(report.Quarter));
             try
             {
                 var reportCard = new ReportCard(_student);
-                reportCard.CreateReportCard(null, mp.Key);
+                reportCard.CreateReportCard(null, mp);
             }
             catch (System.IO.IOException)
             {

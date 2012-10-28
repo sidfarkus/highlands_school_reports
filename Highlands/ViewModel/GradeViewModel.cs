@@ -3,6 +3,7 @@ using Highlands.StaticModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 
 namespace Highlands.ViewModel
 {
@@ -28,11 +29,11 @@ namespace Highlands.ViewModel
                 return _gradeRow.CourseRow.Level;
             }
         }
-        public string Quarter
+        public MarkingPeriod MarkingPeriod
         {
             get
             {
-                return _gradeRow.CourseRow.Quarter;
+                return _gradeRow.CourseRow.MarkingPeriod;
             }
         }
         public string Group
@@ -83,16 +84,15 @@ namespace Highlands.ViewModel
             }
         }
 
-        public bool IsCurrentForPeriod(MarkingPeriodKey period)
+        public bool IsCurrentForPeriod(MarkingPeriodKey periodKey)
         {
-            return MarkingPeriodKey.Parse(Quarter).Equals(period);
+            return MarkingPeriod.Key.Equals(periodKey);
         }
 
-        public bool ShouldShowOnReportCard(MarkingPeriodKey period)
+        public bool ShouldShowOnReportCard(MarkingPeriod period)
         {
-            var thisPeriod = MarkingPeriodKey.Parse(Quarter);
-            return thisPeriod.EndingSchoolYear == period.EndingSchoolYear &&
-                thisPeriod.Quarter <= period.Quarter;
+           return MarkingPeriod.Key.EndingSchoolYear == period.Key.EndingSchoolYear &&
+                MarkingPeriod.EndDate <= period.EndDate;
         }
 
         internal void Save(System.Collections.Generic.List<StaticModel.Change> diffs)
@@ -115,7 +115,7 @@ namespace Highlands.ViewModel
         public IEnumerable<KeyValuePair<string, string>> GetGradeReportFields(MarkingPeriodKey period, int rowIndex)
         {
             yield return new KeyValuePair<string, string>(
-                 string.Format(MarkingPeriodKey.Parse(Quarter).Quarter + "Row{0}", rowIndex),
+                 string.Format(MarkingPeriodKey.Parse(MarkingPeriod.ToString()).Quarter + "Row{0}", rowIndex),
                  LetterGrade + (!string.IsNullOrEmpty(SpecialGrade) ? "\n" + SpecialGrade : ""));
 
             if (IsCurrentForPeriod(period))
@@ -137,6 +137,29 @@ namespace Highlands.ViewModel
             return new CourseViewModel(_gradeRow.CourseRow).ToString();
         }
 
+        public Visibility UnApproveAllowed
+        {
+            get
+            {
+                return ViewUtils.IsVisible(UserViewModel.CurrentUser.CanUnApprove(this) == RightsEnum.Success);
+            }
+        }
+        
+        public Visibility ChangeGradeAllowed
+        {
+            get
+            {
+                return ViewUtils.IsVisible(UserViewModel.CurrentUser.CanEdit(this) == RightsEnum.Success);
+            }
+        }
+
+        public Visibility ApproveAllowed
+        {
+            get
+            {
+                return ViewUtils.IsVisible(UserViewModel.CurrentUser.CanApprove(this) == RightsEnum.Success);
+            }
+        }
         public ApprovalStage ApprovalStage
         {
             get
@@ -180,7 +203,7 @@ namespace Highlands.ViewModel
             return
                 "Student: " + _gradeRow.StudentRow.Name + Environment.NewLine +
                 "Course: " + Subject + Environment.NewLine +
-                "Quarter: " + Quarter + Environment.NewLine + 
+                "Quarter: " + MarkingPeriod + Environment.NewLine + 
                 "Stage: " + ApprovalStage + Environment.NewLine;
         }
 

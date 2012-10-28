@@ -15,9 +15,9 @@ namespace Highlands
     {
         public App()
         {
-            var test = new Highlands.Tests.TestDemoFactory();
-            test.TestAttendance();
-            test.TestClasses();
+            //var test = new Highlands.Tests.TestDemoFactory();
+            //test.TestAttendance();
+            //test.TestClasses();
         }
     }
 }

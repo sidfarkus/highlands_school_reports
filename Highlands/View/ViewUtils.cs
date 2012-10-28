@@ -3,6 +3,8 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows;
+using System.IO;
+using System.Diagnostics;
 
 namespace Highlands
 {
@@ -96,6 +98,18 @@ namespace Highlands
             }
         }
 
+        static public void WriteAndOpen(string filename, IList<string> lines)
+        {
+            try
+            {
+                File.WriteAllLines(filename, lines.ToArray());
+                Process.Start(filename);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message, "Error");
+            }
+        }
     }
 }
 

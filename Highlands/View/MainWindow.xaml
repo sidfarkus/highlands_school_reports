@@ -11,6 +11,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <ToolBar ToolBarTray.IsLocked="True">
+                <Label Name="staUser" VerticalAlignment="Center"/>
                 <Button Name="btnHonorRoll" Click="btnHonorRoll_Click" Width="80" Margin="3">Honor Roll</Button>
                 <Separator/>
                 <Button Name="btnImport" Click="btnImport_Click" Width="80" Margin="3">Import Students</Button>

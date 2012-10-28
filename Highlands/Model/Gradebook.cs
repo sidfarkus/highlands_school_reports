@@ -286,6 +286,18 @@ namespace Highlands.Model
                 }
             }
         }
+        partial class CourseRow
+        {
+            public MarkingPeriod MarkingPeriod 
+            {
+                get
+                {
+                    var key = MarkingPeriodKey.Parse(Quarter);
+                    return MarkingPeriods.Singleton.Find(key);
+                }
+            }
+        }
+
         partial class StudentRow
         {
             internal bool HasTeacher(string teacher)

@@ -1,5 +1,7 @@
-﻿using Highlands.ViewModel;
+﻿using Highlands.StaticModel;
+using Highlands.ViewModel;
 using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -21,6 +23,8 @@ namespace Highlands
         public void Reset()
         {
             ViewUtils.ReadFromConfig(cmbUserName);
+            if (cmbUserName.Items.Count == 0)
+                Maintenance.Users.ToList().ForEach(u => cmbUserName.Items.Add(u.Name));
             entPassword.Password = "";
             entConfirmPassword.Password = "";
             UserViewModel.Reset();

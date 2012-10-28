@@ -26,6 +26,8 @@
             <RowDefinition  Height="Auto"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
+            <Label VerticalAlignment="Center">Find Student Name:</Label>
+            <TextBox Name="entStudent" VerticalAlignment="Center" HorizontalAlignment="Right" Width="180" TextChanged="TextBox_TextChanged"/>
             <Label VerticalAlignment="Center">Grade Level:</Label>
             <ComboBox Name="cmbGradeLevel" MinWidth="50"  Margin="5" SelectionChanged="cmbGradeLevel_SelectionChanged">All</ComboBox>
             <Label VerticalAlignment="Center">Quarter:</Label>
@@ -34,10 +36,6 @@
             <ComboBox Name="cmbCourse" MinWidth="75"  Margin="5" SelectionChanged="cmbCourse_SelectionChanged">All</ComboBox>
             <CheckBox Name="chkMyStudents" IsChecked="True" VerticalAlignment="Center" Margin="5" Click="chkMyStudents_Click">My Students Only</CheckBox>
         </StackPanel>
-        <Grid HorizontalAlignment="Right" Margin="0,0,5,0">
-            <Label VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,190,0">Find Student Name:</Label>
-            <TextBox Name="entStudent" VerticalAlignment="Center" HorizontalAlignment="Right" Width="180" TextChanged="TextBox_TextChanged"/>
-        </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*" MinWidth="300"/>

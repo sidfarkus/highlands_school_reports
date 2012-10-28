@@ -245,30 +245,32 @@ namespace Highlands.StaticModel
                     _users = User.ParseUserStrings(ReadArrayFromFile("users"));
                     if (_users == null)
                     {
-                        var rv  =
-                            new List<string> { "I. Jones", "R. Jacobi", "I. Jasper", "S. Jackson", "M. Jeffers", "R. Jewell", "S. Jordan", "M. Judd", "R. Juliet", "S. Jakes", "I.  Kaiser", "R. Kaufman", "I. Kavanaugh", "S. Kaynard", "M. Keach", "R. Kellog", "S. Kelsey", "M. Kelso", "R. Kendall", "S. Kimble", "S. Lackey", "S. Lacy", "S. Ladd", "S. Lahey", "S. Laing", "S. Laird", "S. Lake", "S. Lalor", "S. Lam", "S. Lamb", "S. Lambert", "S. Lambourne", "S. Lamma", "S. Lamport", "S. Lancaster", "S. Meese", "S. Mouse", "S. Nightingale", "T.  O'Rourke" };
                         _users = new List<User>();
+                        
+                        foreach (RoleEnum role in Enum.GetValues(typeof(RoleEnum)))
+                            _users.Add(new User(role.ToString(), role, role.ToString() + "@highlands.com", null));
+
+                        var rv =
+                            new List<string> { 
+                                "I. Cabbell", "R. Cazenove", "I. Cearn", "S. Ceeley", "M. Chad", "R. Cilly", "S. Clack", "M. Clynch", "R. Coad", "S. Cozens", 
+                                "I. Galbraith", "R. Gardner", "I. Garrison", "S. Gaskell", "M. Geddes", "R. Gerber", "S. Gonzalez", "M. Guthrie", "R. Guzman", 
+                                "S. Salisbury", "S. Sanchez", "S. Schafer", "S. Schmidt", "S. Schubert", "S. Scranton", "S. Sedgwick", "S. Sewall", "S. Shannon", "S. Sherwood", "S. Shrewsbury", "S. Smith", "S. Spalding", "S. Sweeney",
+                                "S. Abel", "S. Aaron" };
                         foreach (var name in rv)
                         {
                             var parts = name.Split(" ".ToCharArray());
                             RoleEnum role = RoleEnum.None;
-                            if (parts[1].StartsWith("J"))
+                            if (parts[1].StartsWith("C"))
                                 role = RoleEnum.ClassroomInstructor;
-                            else if (parts[1].StartsWith("K"))
+                            else if (parts[1].StartsWith("G"))
                                 role = RoleEnum.SmallGroupInstructor;
-                            else if (parts[1].StartsWith("L"))
+                            else if (parts[1].StartsWith("S"))
                                 role = RoleEnum.SpecialInstructor;
-                            else if (parts[1].StartsWith("M"))
+                            else if (parts[1].StartsWith("A"))
                                 role = RoleEnum.Admin;
-                            else if (parts[1].StartsWith("N"))
-                                role = RoleEnum.Nurse;
-                            else if (parts[1].StartsWith("O"))
-                                role = RoleEnum.SuperUser;
                             _users.Add(new User(name, role, parts[1] + "@highlands.com" , null));
                         }
                         
-                        foreach (RoleEnum role in Enum.GetValues(typeof(RoleEnum)))
-                            _users.Add(new User(role.ToString(), role, role.ToString() + "@highlands.com", null));
                         _users.Add(new User("password", RoleEnum.SuperUser, "password@highlands.com", User.Hash("password", "password")));
                         
                         WriteArrayToFile("users", User.ComposeUserStrings(_users));
