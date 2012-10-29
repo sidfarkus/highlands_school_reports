@@ -135,7 +135,12 @@ namespace Highlands
 
             internal string ToCsv()
             {
-                return StudentName + "," + ClassName + "," + LetterGrade + "," + SpecialGrade + "," + Stage + "," + Comment;
+                return StudentName + "," + _grade.Subject + "," + _grade.Level + "," + _grade.Group + "," + _grade.MarkingPeriod + "," + LetterGrade + "," + SpecialGrade + "," + Stage + "," + Comment;
+            }
+
+            internal static string CsvHeaders()
+            {
+                return "Student" + "," + "Subject" + "," + "Level" + "," + "Group" + "," + "Quarter" + "," + "Grade" + "," + "Second" + "," + "Stage" + "," + "Comment";
             }
         }
         public GradebookViewModel _gradebook;
@@ -231,11 +236,13 @@ namespace Highlands
                 var sfd = new SaveFileDialog();
                 sfd.DefaultExt = ".csv";
                 sfd.Filter = "CSV files|*.csv|All Files|*.*";
+                sfd.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 sfd.FileName = "Grades-" + UserViewModel.CurrentUser.Name + "-" + DateTime.Now.ToString("yyyyMMdd HHmmss") + ".csv";
                 if (sfd.ShowDialog() != true)
                     return;
 
                 var outs = new List<string>();
+                outs.Add(StudentByClass.CsvHeaders());
                 foreach (var grade in grades)
                     outs.Add(grade.ToCsv());
 
