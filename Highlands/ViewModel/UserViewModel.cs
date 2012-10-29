@@ -249,16 +249,22 @@ namespace Highlands.ViewModel
 
         internal RightsEnum CanUnApprove(GradeViewModel grade)
         {
-            if (grade.ApprovalStage == ApprovalStage.Office)
-                return RightsEnum.StageError;
-            if (grade.ApprovalStage == ApprovalStage.None || grade.ApprovalStage == ApprovalStage.Open)
-                return RightsEnum.StageError;
-            if (grade.ApprovalStage == ApprovalStage.Classroom && HasOfficeRights)
-                return RightsEnum.Success;
-            if (grade.ApprovalStage == ApprovalStage.Instructor && HasClassroomRights)
-                return RightsEnum.Success;
-
-            return RightsEnum.UserError;
+            var rv = RightsEnum.None;
+            if (grade.ApprovalStage == ApprovalStage.Open)
+                rv = RightsEnum.StageError;
+            else if (_user.Role == RoleEnum.SuperUser)
+                rv = RightsEnum.Success;
+            else if (grade.ApprovalStage == ApprovalStage.Office)
+                rv = RightsEnum.StageError;
+            else if (grade.ApprovalStage == ApprovalStage.None || grade.ApprovalStage == ApprovalStage.Open)
+                rv = RightsEnum.StageError;
+            else if (grade.ApprovalStage == ApprovalStage.Classroom && HasOfficeRights)
+                rv = RightsEnum.Success;
+            else if (grade.ApprovalStage == ApprovalStage.Instructor && HasClassroomRights)
+                rv = RightsEnum.Success;
+            else
+                rv = RightsEnum.UserError;
+            return rv;
         }
 
         public bool CanViewGrades

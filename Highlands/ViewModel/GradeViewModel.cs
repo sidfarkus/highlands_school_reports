@@ -2,12 +2,13 @@
 using Highlands.StaticModel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 
 namespace Highlands.ViewModel
 {
-    public class GradeViewModel
+    public class GradeViewModel : INotifyPropertyChanged
     {
         Gradebook.GradeRow _gradeRow;
         public GradeViewModel(Gradebook.GradeRow gradeRow)
@@ -110,6 +111,7 @@ namespace Highlands.ViewModel
             var change = new Change(this, "Approval", oldStage.ToString(), newStage.ToString());
             ApprovalStage = newStage;
             Save(new List<Change>() { change });
+            ChangeStage();
         }
 
         public IEnumerable<KeyValuePair<string, string>> GetGradeReportFields(MarkingPeriodKey period, int rowIndex)
@@ -169,6 +171,7 @@ namespace Highlands.ViewModel
             set
             {
                 _gradeRow.ApprovalStage = value.ToString();
+                Changed("ApprovalStage");
             }
         }
 
@@ -185,9 +188,16 @@ namespace Highlands.ViewModel
             var oldStage = ApprovalStage;
             var newStage = (ApprovalStage)((int)ApprovalStage - 1);
             var change = new Change(this, "Unapproval", oldStage.ToString(), newStage.ToString());
-            ChangeLog.LogDiff(change);
             ApprovalStage = newStage;
-            
+            Save(new List<Change>() { change });
+            ChangeStage();
+        }
+
+        private void ChangeStage()
+        {
+            Changed("ApproveAllowed");
+            Changed("UnApproveAllowed");
+            Changed("ChangeGradeAllowed");
         }
 
         internal UserViewModel TeacherVm 
@@ -228,5 +238,21 @@ namespace Highlands.ViewModel
                 return rv;
             }
         }
+
+        #region INotifyPropertyChanged Members
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void Changed(string prop)
+        {
+            if (PropertyChanged != null)
+            {
+
+                PropertyChanged(this, new PropertyChangedEventArgs(prop));
+            }
+        }
+        
+        #endregion
     }
 }

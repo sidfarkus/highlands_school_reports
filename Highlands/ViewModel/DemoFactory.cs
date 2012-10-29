@@ -47,7 +47,8 @@ namespace Highlands.ViewModel
                     }
                 }
             }
-   
+
+            var extraComments = new List<string>() { "", "always", "never", "great", "usually", "best" };
             for (int iStudent = 0; iStudent < 100; iStudent++)
             {
                 var name = firstNames[iStudent % 7] + " " + lastNames[iStudent % (lastNames.Count)];
@@ -100,7 +101,7 @@ namespace Highlands.ViewModel
                                 else if (course.SubjectName == "Written Expression")
                                     specialGrade = "Paragraph";
                             }
-                            rv.Grade.AddGradeRow(student, course, RandString(Maintenance.LetterGrades.Keys.ToList(), 3), specialGrade, Maintenance.FormatCommentFromList(RandString(Maintenance.Comments)) + " " + (iStudent + @"/100"), stage.ToString());
+                            rv.Grade.AddGradeRow(student, course, RandString(Maintenance.LetterGrades.Keys.ToList(), 3), specialGrade, Maintenance.FormatCommentFromList(RandString(Maintenance.Comments)) + " " + RandString(extraComments), stage.ToString());
                         }
                     }
                 }

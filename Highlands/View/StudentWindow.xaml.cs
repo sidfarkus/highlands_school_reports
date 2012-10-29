@@ -273,7 +273,7 @@ namespace Highlands
                 return;
 
             grade.UnApprove();
-            dgvGrades.ItemsSource = Grades;
+            //dgvGrades.ItemsSource = Grades;
         }
 
         private void btnEmail_Click(object sender, RoutedEventArgs e)
